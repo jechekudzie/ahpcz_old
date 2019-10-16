@@ -1,0 +1,17 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class DiscreditedInstitutionsTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $discredited_institutions = include __DIR__.'/DiscreditedInstitutionsSeeder.php';
+        DB::table('discredited_institutions')->insert($discredited_institutions);
+    }
+}
