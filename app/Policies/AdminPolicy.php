@@ -58,13 +58,13 @@ class AdminPolicy
     //Approval Policies
     public function officerApproval(User $user)
     {
-        return $user->role_id === 4 ||$user->role_id == 1;
+        return $user->role_id === 4 || $user->role_id == 1;
     }
 
     public function accountantApproval(User $user)
     {
 
-        if ($user->role_id == 5 ||$user->role_id == 1) {
+        if ($user->role_id == 5 || $user->role_id == 1) {
             return true;
         }
     }
@@ -73,7 +73,7 @@ class AdminPolicy
     public function MemberApproval(User $user)
     {
 
-        if ($user->role_id == 6 ||$user->role_id == 1) {
+        if ($user->role_id == 6 || $user->role_id == 1) {
             return true;
         }
     }
@@ -82,7 +82,7 @@ class AdminPolicy
     public function registrarApproval(User $user)
     {
 
-        if ($user->role_id == 7 ||$user->role_id == 1) {
+        if ($user->role_id == 7 || $user->role_id == 1) {
             return true;
         }
     }

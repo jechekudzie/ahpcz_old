@@ -38,12 +38,14 @@ class PractitionersController extends Controller
 
     public function __construct()
     {
-        $this->middleware('verified');
+        $this->middleware('auth');
 
     }
 
     public function index()
     {
+
+
         $practitioners = Practitioner::whereApproval_status(1)->get()->sortBy('first_name');
         $pendings = Practitioner::whereApproval_status(0)->get()->sortBy('first_name');
         return view('admin.practitioners.index', compact('practitioners','pendings'));
@@ -179,7 +181,7 @@ class PractitionersController extends Controller
 
         $professionals = Document::whereIn('document_category_id', [8, 9, 10, 11])->get();
 
-        //$internship = Document::whereIn('document_category_id',[])->get();
+        $internship = Document::whereIn('document_category_id',[])->get();
 
         $current_status = "";
         $year = date('Y');
@@ -205,7 +207,7 @@ class PractitionersController extends Controller
 
         return view('admin.practitioners.show', compact(
             'practitioner', 'educations', 'identifications', 'professionals',
-            'internship', 'registration_fee', 'registration_fee', 'current_status','cd_points_status'));
+            'internship', 'registration_fee', 'registration_fee', 'current_status'));
     }
 
     /**

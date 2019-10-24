@@ -302,12 +302,10 @@
             </div>
 
         </div>
+    </div>
+@endsection
 
-
-    @endsection
-
-    @section('plugins-js')
-
+@section('plugins-js')
         <!-- This is data table -->
             <script src="{{asset('assets/node_modules/datatables/jquery.dataTables.min.js')}}"></script>
             <!-- start - This is for export functionality only -->

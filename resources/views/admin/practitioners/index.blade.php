@@ -180,10 +180,46 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if($pending->approval_status  == 1)
-                                                        {{'Approved'}}
+                                                    @if(
+                                                    $pending->registration_officer == 0
+                                                    && $pending->accountant == 0
+                                                    && $pending->member == 0
+                                                    && $pending->registrar == 0
+                                                    )
+                                                        {{'Pending Registration Officer Approval'}}
+                                                    @elseif(
+                                                    $pending->registration_officer == 1
+                                                    && $pending->accountant == 0
+                                                    && $pending->member == 0
+                                                    && $pending->registrar == 0
+                                                    )
+                                                        {{'Pending Accountant Approval'}}
+
+                                                    @elseif(
+                                                    $pending->registration_officer == 1
+                                                    && $pending->accountant == 1
+                                                    && $pending->member == 0
+                                                    && $pending->registrar == 0
+                                                    )
+                                                        {{'Pending Member Approval'}}
+                                                    @elseif(
+
+                                                    $pending->registration_officer == 1
+                                                    && $pending->accountant == 1
+                                                    && $pending->member == 1
+                                                    && $pending->registrar == 0
+                                                    )
+                                                        {{'Pending Registrar Approval'}}
+                                                    @elseif(
+
+                                                    $pending->registration_officer == 1
+                                                    && $pending->accountant == 1
+                                                    && $pending->member == 1
+                                                    && $pending->registrar == 1
+                                                    )
+                                                        {{'Application Approved '}}
                                                     @else
-                                                        {{'Pending Approval'}}
+                                                        {{'Application disapproved'}}
                                                     @endif
                                                 </td>
 

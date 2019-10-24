@@ -21,7 +21,7 @@
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active">Approve</li>
+                        <li class="breadcrumb-item active">Disapprove</li>
                     </ol>
                 </div>
             </div>
@@ -41,14 +41,14 @@
                                     @include('errors')
                                 @endif
 
-                                @if(session('message'))
+                                @if(!empty($message))
                                     <div class="alert alert-success alert-rounded"><i
-                                            class="fa fa-check-circle"></i> {{session('message')}}
+                                            class="fa fa-check-circle"></i> {{$message}}
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span></button>
                                     </div>
                                 @endif
-                                <h4 class="card-title">Application Approval
+                                <h4 class="card-title">Application Disapproval
                                     For {{$practitioner->first_name.' '.$practitioner->last_name}}</h4>
                                 <h6 class="card-subtitle">Please note that the approval decision cannot be
                                     reversed.</h6>
@@ -59,9 +59,9 @@
                         <div class="row">
                             <div class="col-2"></div>
                             <div class="col-8">
-                                @if(auth()->user()->role_id == 4)
-                                    <h3>Registration Officer Approval</h3>
-                                    <form action="/admin/practitioners/approval/{{$practitioner->id}}/officer"
+                                @can('officerApproval')
+                                    <h3>Registration Officer Disapproval</h3>
+                                    <form action="/admin/practitioners/disapproval/{{$practitioner->id}}/officer"
                                           method="post" class="m-t-40" novalidate>
                                         {{csrf_field()}}
                                         <div class="form-group">
@@ -83,10 +83,10 @@
 
 
                                     </form>
-                                @endif
-                                @if(auth()->user()->role_id == 5)
-                                    <h3>Accountant Approval</h3>
-                                    <form action="/admin/practitioners/approval/{{$practitioner->id}}/accountant"
+                                @endcan
+                                @can('accountantApproval')
+                                    <h3>Accountant Disapproval</h3>
+                                    <form action="/admin/practitioners/disapproval/{{$practitioner->id}}/accountant"
                                           method="post" class="m-t-40" novalidate>
                                         {{csrf_field()}}
                                         <div class="form-group">
@@ -108,38 +108,11 @@
 
 
                                     </form>
-                                @endif
+                                @endcan
 
-                                @if(auth()->user()->role_id == 6)
-                                    <h3>Committee Member Approval</h3>
-                                    <form action="/admin/practitioners/approval/{{$practitioner->id}}/member"
-                                          method="post"
-                                          class="m-t-40" novalidate>
-                                        {{csrf_field()}}
-                                        <div class="form-group">
-                                            <h5>Comments <span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                            <textarea name="comment" class="form-control" required
-                                                      data-validation-required-message="This field is required">{{old('comment')}}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="controls">
-                                                <input type="submit" name="add_profession"
-                                                       class="btn btn-rounded btn btn-block btn-success"
-                                                       value="Approve Application">
-                                            </div>
-
-                                        </div>
-
-
-                                    </form>
-                                @endif
-
-                                @if(auth()->user()->role_id == 7)
-                                    <h3>Registrar Approval</h3>
-                                    <form action="/admin/practitioners/approval/{{$practitioner->id}}/registrar"
+                                @can('MemberApproval')
+                                    <h3>Committee Member Disapproval</h3>
+                                    <form action="/admin/practitioners/disapproval/{{$practitioner->id}}/member"
                                           method="post" class="m-t-40" novalidate>
                                         {{csrf_field()}}
                                         <div class="form-group">
@@ -161,7 +134,32 @@
 
 
                                     </form>
-                                @endif
+                                @endcan
+                                @can('registrarApproval')
+                                    <h3>Registrar Disapproval</h3>
+                                    <form action="/admin/practitioners/disapproval/{{$practitioner->id}}/registrar"
+                                          method="post" class="m-t-40" novalidate>
+                                        {{csrf_field()}}
+                                        <div class="form-group">
+                                            <h5>Comments <span class="text-danger">*</span></h5>
+                                            <div class="controls">
+                                            <textarea name="comment" class="form-control" required
+                                                      data-validation-required-message="This field is required">{{old('comment')}}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <input type="submit" name="add_profession"
+                                                       class="btn btn-rounded btn btn-block btn-success"
+                                                       value="Approve Application">
+                                            </div>
+
+                                        </div>
+
+
+                                    </form>
+                                @endcan
                             </div>
 
                         </div>

@@ -43,7 +43,7 @@
 
                                 @if(!empty($message))
                                     <div class="alert alert-success alert-rounded"><i
-                                                class="fa fa-check-circle"></i> {{$message}}
+                                            class="fa fa-check-circle"></i> {{$message}}
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span></button>
                                     </div>
@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="col-2"></div>
                             <div class="col-8">
-                                @can('officerApproval')
+                                @if(auth()->user()->role_id == 4)
                                     <h3>Registration Officer Disapproval</h3>
                                     <form action="/admin/practitioners/disapproval/{{$practitioner->id}}/officer"
                                           method="post" class="m-t-40" novalidate>
@@ -83,8 +83,8 @@
 
 
                                     </form>
-                                @endcan
-                                @can('accountantApproval')
+                                @endif
+                                @if(auth()->user()->role_id == 5)
                                     <h3>Accountant Disapproval</h3>
                                     <form action="/admin/practitioners/disapproval/{{$practitioner->id}}/accountant"
                                           method="post" class="m-t-40" novalidate>
@@ -108,9 +108,9 @@
 
 
                                     </form>
-                                @endcan
+                                @endif
 
-                                @can('MemberApproval')
+                                @if(auth()->user()->role_id == 6)
                                     <h3>Committee Member Disapproval</h3>
                                     <form action="/admin/practitioners/disapproval/{{$practitioner->id}}/member"
                                           method="post" class="m-t-40" novalidate>
@@ -134,8 +134,8 @@
 
 
                                     </form>
-                                @endcan
-                                @can('registrarApproval')
+                                @endif
+                                @if(auth()->user()->role_id == 7)
                                     <h3>Registrar Disapproval</h3>
                                     <form action="/admin/practitioners/disapproval/{{$practitioner->id}}/registrar"
                                           method="post" class="m-t-40" novalidate>
@@ -159,7 +159,7 @@
 
 
                                     </form>
-                                @endcan
+                                @endif
                             </div>
 
                         </div>

@@ -13,7 +13,7 @@
 
                 <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                 @can('updatePractitioner')
-                    <a href="practitioners/create" class="btn btn-success"><i
+                    <a href="/admin/practitioners/create" class="btn btn-success"><i
                                 class="fa fa-plus-circle"></i> Add
                         Practitioner
                     </a>

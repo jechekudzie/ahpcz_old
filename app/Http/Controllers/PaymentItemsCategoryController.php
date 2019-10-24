@@ -13,10 +13,10 @@ class PaymentItemsCategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('verified');
-    }
+    }*/
 
     public function index()
     {

@@ -22,7 +22,7 @@ class RegistrationController extends Controller
 
     public function __construct()
     {
-        $this->middleware('verified');
+        $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.

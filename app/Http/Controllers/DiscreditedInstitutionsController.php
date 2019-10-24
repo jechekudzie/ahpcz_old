@@ -13,14 +13,14 @@ class DiscreditedInstitutionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct()
+   /* public function __construct()
     {
         $this->middleware('verified');
-    }
+    }*/
 
     public function index()
     {
-        
+
     }
 
     /**
@@ -43,7 +43,7 @@ class DiscreditedInstitutionsController extends Controller
      */
     public function store(Request $request)
     {
-        
+
 
         DiscreditedInstitution::create(request()->validate([
             'name' => ['required']
@@ -111,5 +111,5 @@ class DiscreditedInstitutionsController extends Controller
         return redirect('/admin/accredited_institutions')->with('message','Discredited Institution deleted successfully.');
 
     }
-    
+
 }

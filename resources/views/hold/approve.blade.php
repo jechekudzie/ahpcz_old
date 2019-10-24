@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="col-2"></div>
                             <div class="col-8">
-                                @if(auth()->user()->role_id == 4)
+                                @can('officerApproval')
                                     <h3>Registration Officer Approval</h3>
                                     <form action="/admin/practitioners/approval/{{$practitioner->id}}/officer"
                                           method="post" class="m-t-40" novalidate>
@@ -83,8 +83,9 @@
 
 
                                     </form>
-                                @endif
-                                @if(auth()->user()->role_id == 5)
+                                @endcan
+
+                                @can('accountantApproval')
                                     <h3>Accountant Approval</h3>
                                     <form action="/admin/practitioners/approval/{{$practitioner->id}}/accountant"
                                           method="post" class="m-t-40" novalidate>
@@ -108,9 +109,9 @@
 
 
                                     </form>
-                                @endif
+                                @endcan
 
-                                @if(auth()->user()->role_id == 6)
+                                @can('MemberApproval')
                                     <h3>Committee Member Approval</h3>
                                     <form action="/admin/practitioners/approval/{{$practitioner->id}}/member"
                                           method="post"
@@ -135,9 +136,9 @@
 
 
                                     </form>
-                                @endif
+                                @endcan
 
-                                @if(auth()->user()->role_id == 7)
+                                @can('registrarApproval')
                                     <h3>Registrar Approval</h3>
                                     <form action="/admin/practitioners/approval/{{$practitioner->id}}/registrar"
                                           method="post" class="m-t-40" novalidate>
@@ -161,7 +162,7 @@
 
 
                                     </form>
-                                @endif
+                                @endcan
                             </div>
 
                         </div>
