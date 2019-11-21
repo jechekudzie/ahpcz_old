@@ -39,7 +39,7 @@ class PractitionerQualificationsController extends Controller
         $qualification_categories = QualificationCategory::all()->sortBy('name');
         return view('admin.practitioner_qualifications.create',
             compact('practitioner', 'professions',
-                'qualification_categories','provinces'));
+                'qualification_categories'));
     }
 
     /**

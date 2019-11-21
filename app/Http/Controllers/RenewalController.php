@@ -94,6 +94,16 @@ class RenewalController extends Controller
     //Store initial payment and create yearly subscription
     public function store(Practitioner $practitioner)
     {
+
+        $payment = request()->validate([
+            'payment_date' => 'required',
+            'renewal_period_id' => 'required',
+            'payment_channel_id' => 'required',
+            'amount_paid' => 'required',
+            'receipt_number' => ['required','digits_between:4,8','numeric','unique:payments'],
+            'pop' => 'nullable',
+        ]);
+
         /** get @var $renewal_fee */
         $renewal_fee = RenewalFee::where('renewal_category_id', '=', $practitioner->renewal_category_id, 'AND', 'profession_id', '=', $practitioner->profession_id)->first();
 
@@ -137,14 +147,9 @@ class RenewalController extends Controller
             $renewal = $practitioner->addRenewal($renewals);
             $month = date('m');
             $day = date('d');
-            $payment = request()->validate([
-                'payment_date' => 'required',
-                'renewal_period_id' => 'required',
-                'payment_channel_id' => 'required',
-                'amount_paid' => 'required',
-                'receipt_number' => ['required', 'alpha_num', 'min:8', 'max:8', 'unique:payments'],
-                'pop' => 'nullable',
-            ]);
+
+            //add attributes to payments
+
             $payment['month'] = $month;
             $payment['day'] = $day;
             $payment['practitioner_id'] = $practitioner->id;
@@ -244,7 +249,6 @@ class RenewalController extends Controller
     public function makePayment(Renewal $renewal)
     {
 
-        $payment_item_id = request('payment_item_id');
 
         $payment = request()->validate([
 
@@ -252,12 +256,16 @@ class RenewalController extends Controller
             'amount_invoiced' => ['required'],
             'amount_paid' => ['required'],
             'payment_date' => ['required'],
-            'receipt_number' => ['required', 'alpha_num', 'min:8', 'max:8'],
+            'receipt_number' => ['required','digits_between:4,8','numeric','unique:payments'],
             'payment_item_category_id' => 'required',
             'payment_item_id' => 'required',
             'pop' => 'nullable',
         ]);
 
+        //get payment type
+        $payment_item_id = request('payment_item_id');
+
+        //assign month and day
         $month = date('m');
         $day = date('d');
 

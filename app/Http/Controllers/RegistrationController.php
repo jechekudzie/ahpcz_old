@@ -24,15 +24,6 @@ class RegistrationController extends Controller
     {
         $this->middleware('auth');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     public function paymentsRequirementUpdate(Practitioner $practitioner)
     {
@@ -75,10 +66,10 @@ class RegistrationController extends Controller
      */
     public function create(Practitioner $practitioner)
     {
-        //it will only redirect if practitioner already have somethinh in renewals table
-        if (count($practitioner->renewals)) {
+        //it will only redirect if practitioner already have something in renewals table
+        $count = count($practitioner->renewals);
+        if ($count > 0) {
             return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/checkPaymentStatusRegistration');
-
         }
 
         //if above condition is not met, it will fetch the create file
@@ -109,6 +100,14 @@ class RegistrationController extends Controller
     public function store(Practitioner $practitioner)
     {
 
+        $payment = request()->validate([
+            'payment_date' => 'required',
+            'renewal_period_id' => 'required',
+            'payment_channel_id' => 'required',
+            'amount_paid' => 'required',
+            'receipt_number' => ['required','digits_between:4,8','numeric','unique:payments'],
+            'pop' => 'nullable',
+        ]);
 
         /** @var  $registration_fee */
         //set values
@@ -152,14 +151,9 @@ class RegistrationController extends Controller
             $renewal = $practitioner->addRenewal($renewals);
             $month = date('m');
             $day = date('d');
-            $payment = request()->validate([
-                'payment_date' => 'required',
-                'renewal_period_id' => 'required',
-                'payment_channel_id' => 'required',
-                'amount_paid' => 'required',
-                'receipt_number' => ['required', 'alpha_num', 'min:8', 'max:8', 'unique:payments'],
-                'pop' => 'nullable',
-            ]);
+
+
+
             $payment['month'] = $month;
             $payment['day'] = $day;
             /*$payment['amount_invoiced'] = $registration_fee->fee;*/
@@ -180,48 +174,4 @@ class RegistrationController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

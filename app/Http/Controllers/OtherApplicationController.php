@@ -58,7 +58,7 @@ class OtherApplicationController extends Controller
     public function show(OtherApplication $otherApplication)
     {
         //
-        return view('admin.practitioner_other_apps.show', compact('','otherApplication'));
+        return view('admin.practitioner_other_apps.show', compact('otherApplication'));
 
     }
 

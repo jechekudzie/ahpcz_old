@@ -38,8 +38,8 @@
                             <div class="col-2">
                             </div>
                             <div class="col-8">
-                                @if($errors->any())
-                                    @include('errors')
+                                @if ($errors->any())
+                                    <ul>{!! implode('', $errors->all('<li style="color:red">:message</li>')) !!}</ul>
                                 @endif
                                 @if (session('message'))
                                     <div class="alert alert-success alert-rounded col-md-12"><i
