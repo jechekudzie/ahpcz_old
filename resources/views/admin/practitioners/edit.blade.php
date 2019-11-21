@@ -258,13 +258,13 @@
                                                             <select class="custom-select form-control"
                                                                     id="professional_qualifications"
                                                                     name='professional_qualification_id'>
-                                                                <option value='0'>Select Professional Qualification
-                                                                </option>
+                                                                <option value='0'>Select Professional Qualification</option>
 
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <input type="hidden" id="pq_id" value="{{$practitioner->professional_qualification_id}}">
+                                                    <input type="hidden" id="profession_value" value="{{$practitioner->profession_id}}">
 
                                                 </div>
                                                 <div class="row">
@@ -507,7 +507,7 @@
         });
 
         $(document).ready(function () {
-            var profession_id = $("#profession_id").val();
+            var profession_id = $("#profession_value").val();
 
             var pq_id = $("#pq_id").val();
 

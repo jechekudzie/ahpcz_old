@@ -87,6 +87,7 @@ class DynamicDataController extends Controller
         foreach ($professional_qualifications as $professional_qualification) {
             if($professional_qualification->id == $pq_id){
 
+
                 $response .= '<option value=' . $professional_qualification->id . ' selected>' . $professional_qualification->name . '</option>';
 
             }else{

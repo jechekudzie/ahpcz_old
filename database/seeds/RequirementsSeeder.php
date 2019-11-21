@@ -145,6 +145,15 @@ $requirements = [
         'created_at' => now(),
         'updated_at' => now()
     ],
+    [
+        'name' => 'Affidavit',
+        'group' => 'professional',
+        'created_at' => now(),
+        'updated_at' => now()
+    ],
+
+
+
 
 
 ];
