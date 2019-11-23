@@ -64,7 +64,7 @@ class ApplicationSubmitted extends Notification
     {
         return [
             'id'=>$this->practitioner->id,
-            'comment'=>"",
+            'comment'=>"New application has been submitted",
         ];
     }
 }

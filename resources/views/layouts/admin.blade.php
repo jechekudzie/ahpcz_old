@@ -1,4 +1,21 @@
-<!DOCTYPE html>
+<?php
+
+use App\Practitioner;
+use Carbon\CarbonInterval;
+
+function getDifference($created_at, $now)
+{
+    $days = $created_at->diffInDays($now);
+    $hours = $created_at->diffInHours($now->subDays($days));
+    $minutes = $created_at->diffInMinutes($now->subHours($hours));
+    $seconds = $created_at->diffInSeconds($now->subMinutes($minutes));
+
+    return CarbonInterval::days($days)->hours($hours)->minutes($minutes)->seconds($seconds)->forHumans();
+}
+
+?>
+
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -68,9 +85,6 @@
                                             href="javascript:void(0)"><i class="ti-menu"></i></a></li>
                     <li class="nav-item"><a class="nav-link sidebartoggler d-none waves-effect waves-dark"
                                             href="javascript:void(0)"><i class="icon-menu"></i></a></li>
-                    <!-- ============================================================== -->
-                    <!-- Search -->
-                    <!-- ============================================================== -->
 
                 </ul>
                 <!-- ============================================================== -->
@@ -78,12 +92,52 @@
                 <!-- ============================================================== -->
 
                 <ul class="navbar-nav my-lg-0">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">({{count(auth()->user()->unreadNotifications)}}) <i class="ti-email"></i>
+                            <div class="notify"><span class="heartbit"></span> <span class="point"></span></div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
+                            <ul>
+                                <li>
+                                    <div class="drop-title">Notifications
+                                        ({{count(auth()->user()->unreadNotifications)}})
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="message-center">
+                                        <!-- Message -->
+                                        @foreach (auth()->user()->unreadNotifications as $notification)
+                                            <a href="/admin/practitioners/{{$notification->data['id']}}/read">
+                                                <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
+                                                <div class="mail-contnet">
+                                                    <h5>Luanch Admin</h5> <span class="mail-desc">
+                                                        @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
+                                                    </span>
+
+                                                    <span class="time">{{getDifference($notification->created_at,now())}} ago</span>
+
+                                                </div>
+
+                                            </a>
+                                        @endforeach
+
+                                    </div>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-center link" href="javascript:void(0);"> <strong>Check all
+                                            notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     <li class="nav-item dropdown u-pro">
                         <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href=""
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                              <span
-                                     class="hidden-md-down">{{auth()->user()->name}} &nbsp;<i
-                                         class="fa fa-angle-down"></i></span> </a>
+                                 class="hidden-md-down">{{auth()->user()->name}} &nbsp;<i
+                                     class="fa fa-angle-down"></i></span> </a>
                         <div class="dropdown-menu dropdown-menu-right animated flipInY">
                             <!-- text-->
                             <a href="javascript:void(0)" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
@@ -124,7 +178,7 @@
                 <ul id="sidebarnav">
 
                     <li><a class="waves-effect waves-dark" href="#" aria-expanded="false"><i
-                                    class="fa fa-bank"></i><span class="hide-menu">Home</span> </a>
+                                class="fa fa-bank"></i><span class="hide-menu">Home</span> </a>
 
                     </li>
 
@@ -143,11 +197,11 @@
 
                     <li><a class=" waves-effect waves-dark two-column" href="javascript:void(0)"
                            aria-expanded="false"><i class="fa fa-graduation-cap"></i><span
-                                    class="hide-menu">Students </span></a>
+                                class="hide-menu">Students </span></a>
                     </li>
 
                     <li><a class=" waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
-                                    class="fa fa-pie-chart"></i><span class="hide-menu">Reports</span></a>
+                                class="fa fa-pie-chart"></i><span class="hide-menu">Reports</span></a>
                         <ul aria-expanded="false" class="collapse">
                             <li><a href="form-basic.php">Practitioner</a></li>
                             <li><a href="form-layout.php">Students</a></li>
@@ -158,14 +212,14 @@
 
                     <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/index"
                            aria-expanded="false"><i
-                                    class="fa fa-certificate"></i><span class="hide-menu">Certificate Collection</span></a>
+                                class="fa fa-certificate"></i><span class="hide-menu">Certificate Collection</span></a>
                     </li>
                     @can('admin')
                         <li><a class="waves-effect waves-dark" href="/admin/" aria-expanded="false"><i
-                                        class="ti-settings"></i><span class="hide-menu">Administration</span></a></li>
+                                    class="ti-settings"></i><span class="hide-menu">Administration</span></a></li>
 
                         <li><a class=" waves-effect waves-dark" href="/admin/users" aria-expanded="false"><i
-                                        class="fa fa-users"></i><span class="hide-menu">Manage System Users</span></a>
+                                    class="fa fa-users"></i><span class="hide-menu">Manage System Users</span></a>
 
                     @endcan
                 </ul>
