@@ -243,7 +243,12 @@ Route::post('/admin/practitioners/disapproval/{practitioner}/registrar', 'Practi
 Route::get('/admin/practitioners/read/{practitioner}/{notification_id}', 'PractitionerUpdateController@viewNotification');
 
 //get the notifications and open in as a message page, put a link there to go app if possible
-Route::get('/admin/practitioners/{$notification}/read', 'PractitionerUpdateController@viewNotification');
+Route::get('/admin/notification/inbox', 'MessagesController@inbox');
+Route::get('/admin/{notification}/read', 'MessagesController@read');
+Route::post('/admin/notification/reply', 'MessagesController@reply');
+Route::get('/admin/notification/unread', 'MessagesController@unread');
+Route::get('/admin/notification/compose', 'MessagesController@compose');
+Route::post('/admin/notification/send', 'MessagesController@send');
 
 //practitioner certificates
 Route::get('/admin/practitioners/certificate/index', 'PractitionerCertificateController@index');

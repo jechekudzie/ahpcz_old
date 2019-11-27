@@ -65,6 +65,9 @@ class ApplicationSubmitted extends Notification
         return [
             'id'=>$this->practitioner->id,
             'comment'=>"New application has been submitted",
+            'title' =>'New Practitioner Application',
+            'sender' => auth()->user()
+
         ];
     }
 }

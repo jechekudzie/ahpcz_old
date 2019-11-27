@@ -109,10 +109,10 @@ function getDifference($created_at, $now)
                                     <div class="message-center">
                                         <!-- Message -->
                                         @foreach (auth()->user()->unreadNotifications as $notification)
-                                            <a href="/admin/practitioners/{{$notification->data['id']}}/read">
+                                            <a href="/admin/{{$notification->id}}/read">
                                                 <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
                                                 <div class="mail-contnet">
-                                                    <h5>Luanch Admin</h5> <span class="mail-desc">
+                                                    <h5>{{$notification->data['sender']['name']}}</h5> <span class="mail-desc">
                                                         @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
                                                     </span>
 
@@ -126,7 +126,7 @@ function getDifference($created_at, $now)
                                     </div>
                                 </li>
                                 <li>
-                                    <a class="nav-link text-center link" href="javascript:void(0);"> <strong>Check all
+                                    <a class="nav-link text-center link" href="{{url('/admin/notification/inbox')}}"> <strong>View all
                                             notifications</strong> <i class="fa fa-angle-right"></i> </a>
                                 </li>
                             </ul>

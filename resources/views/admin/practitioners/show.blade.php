@@ -837,6 +837,7 @@
                                                                 As Read</a>
                                                             <span class="date">@if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif</span>
                                                         </li>
+                                                        </li>
                                                     @endif
                                                 @endforeach
                                             @endif
