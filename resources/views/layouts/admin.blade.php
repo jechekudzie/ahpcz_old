@@ -313,7 +313,7 @@ function countPendingItems(){
                                 class="fa fa-certificate"></i><span class="hide-menu">Certificate Collection ({{countCertificates()}})</span></a></li>
 
                     <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/pending"
-                           aria-expanded="false"><i class="fa fa-certificate"></i><span class="hide-menu"> {{date('Y')}} Out-standings ({{countPendingItems()}})</span></a>
+                           aria-expanded="false"><i class="fa fa-certificate"></i><span class="hide-menu"> Out-standings ({{countPendingItems()}})</span></a>
                     </li>
                     @can('admin')
                         <li><a class="waves-effect waves-dark" href="/admin/" aria-expanded="false"><i

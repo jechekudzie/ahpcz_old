@@ -103,7 +103,7 @@
                                             </td>
 
 
-                                            <td> {{number_format($shortfall['shortfall'],2)}}</td>
+                                            <td> {{number_format($shortfall['shortfall'],2)}}%</td>
 
                                             <td>
                                                 <a href="/admin/practitioners/{{$pending_renewal->practitioner->id}}">View </a>

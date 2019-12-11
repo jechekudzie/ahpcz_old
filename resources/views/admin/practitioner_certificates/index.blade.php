@@ -103,7 +103,7 @@
                                                     {{'Up to date'}}
                                                 @endif
                                             </td>
-                                            <td>{{number_format($shortfall['shortfall'],2)}}</td>
+                                            <td>{{number_format($shortfall['shortfall'],2)}}%</td>
 
                                             <td>{{$complete_renewal->created_at->format('d F Y')}}</td>
                                             <td>
