@@ -52,10 +52,10 @@
                                     <h4 class="font-bold">{{$practitioner->first_name .' '.$practitioner->last_name}}
                                         ,</h4>
                                     <p class="text-muted m-l-30">
-                                        @if(count($practitioner->contact)){{$practitioner->contact->physical_address}}@endif
-                                        <br/> @if(count($practitioner->contact->city_id)){{$practitioner->contact->city->name .' '.$practitioner->contact->province->name}}@endif
+                                        @if($practitioner->contact){{$practitioner->contact->physical_address}}@endif
+                                        <br/> @if($practitioner->contact->city_id){{$practitioner->contact->city->name .' '.$practitioner->contact->province->name}}@endif
                                         ,
-                                        <br/> @if(count($practitioner->contact)){{$practitioner->contact->primary_number}}@endif
+                                        <br/> @if($practitioner->contact){{$practitioner->contact->primary_number}}@endif
                                     </p>
                                     <p class="m-t-30"><b>Invoice Date :</b> <i
                                                 class="fa fa-calendar"></i> {{date('d F Y')}}</p>
@@ -76,13 +76,6 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td class="text-center">{{date('Y')}}</td>
-                                        <td>{{'Current Renewal Fee'}}</td>
-                                        <td class="text-right">1</td>
-                                        <td class="text-right"> {{number_format($fee,2)}}</td>
-                                        <td class="text-right"> {{number_format($fee,2)}}</td>
-                                    </tr>
                                     @if(count($practitioner->payments))
                                         @foreach($practitioner->payments as $payment)
                                             @if($payment->balance > 0)
@@ -96,6 +89,13 @@
                                             @endif
                                         @endforeach
                                     @endif
+                                    <tr>
+                                        <td class="text-center">#</td>
+                                        <td>{{'Current Renewal Fee'}}</td>
+                                        <td class="text-right">1</td>
+                                        <td class="text-right"> {{number_format($fee,2)}}</td>
+                                        <td class="text-right"> {{number_format($fee,2)}}</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>

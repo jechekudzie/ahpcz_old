@@ -124,6 +124,8 @@ class RegistrationController extends Controller
         $renewals['renewal_category_id'] = $practitioner->renewal_category_id;
         $renewals['payment_type_id'] = 2;//registration type
         $renewals['balance'] = $renewal_balance;
+        $renewals['cdpoints'] = 1;
+        $renewals['placement'] = 1;
 
         /** check renewal balance to update status either paid or owing @var $renewal_balance */
         if ($renewal_balance > 0) {
@@ -139,9 +141,8 @@ class RegistrationController extends Controller
 
         $cdpoints = $practitioner->profession->cdpoint;
 
-        if ($cdpoints->points <= 0) {
-            $renewals['cdpoints'] = 1;
-        }
+
+
 
         /**check if renewal with the same renewal period/year already exist with the same practitioner*/
         $check_renewal = Renewal::whereRenewal_period_idAndPractitioner_id($renewal_period_id, $practitioner->id)->first();

@@ -65,7 +65,7 @@ function getDiff($created_at, $now)
                                             @endforeach
                                             </tbody>
                                         </table>
-                                        {{auth()->user()->notifications()->paginate(1)->links()}}
+                                        {{auth()->user()->notifications()->paginate(10)->links()}}
                                     </div>
                                 </div>
                             </div>

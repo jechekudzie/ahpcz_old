@@ -309,6 +309,20 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Manage System Users</h5>
+                            <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
+                                <span class="display-5 text-success"><i class="fa fa-users"></i></span>
+                                <a href="/admin/users" class="link display-5 ml-auto">3</a>
+                            </div>
+                            <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
+                                <a href="/admin/users" class="btn btn-warning btn-block"><i class="fa fa-pencil"></i> Manage System Users</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- column -->
             </div>
         </div>

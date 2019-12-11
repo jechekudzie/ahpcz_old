@@ -34,6 +34,7 @@ class AccountsDisapproval extends Notification
     public function via($notifiable)
     {
         return ['database'];
+        //return ['database','mail'];
     }
 
     /**
@@ -45,9 +46,9 @@ class AccountsDisapproval extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->replyTo('register@ahpcz.co.zw')
-            ->from('register@ahpcz.co.zw')
-            ->subject('New Application - ' . $this->practitioner->first_name.' '.$this->practitioner->last_name)
+            ->replyTo(auth()->user()->email)
+            ->from(auth()->user()->email)
+            ->subject('Application Disapproved - ' . $this->practitioner->first_name.' '.$this->practitioner->last_name)
             ->line('New application has been disapproved by accounts, view the application\'s comments section for more details.')
             ->line('Applicant Profession: '. $this->practitioner->profession->name. ' and Professional Qualification: ' .$this->practitioner->professionalQualification->name)
             ->line('You can view application details on the link below.')
@@ -66,6 +67,8 @@ class AccountsDisapproval extends Notification
         return [
             'id'=>$this->practitioner->id,
             'comment'=>$this->comment,
+            'title'=>'Application disapproval for '.$this->practitioner->first_name.' '.$this->practitioner->last_name.'\'s Application' ,
+            'sender'=>auth()->user(),
         ];
     }
 }

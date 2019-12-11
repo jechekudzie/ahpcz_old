@@ -48,7 +48,7 @@ class PractitionersController extends Controller
 
         $practitioners = Practitioner::whereApproval_status(1)->get()->sortBy('first_name');
         $pendings = Practitioner::whereApproval_status(0)->get()->sortBy('first_name');
-        return view('admin.practitioners.index', compact('practitioners','pendings'));
+        return view('admin.practitioners.index', compact('practitioners', 'pendings'));
     }
 
     /**
@@ -62,7 +62,7 @@ class PractitionersController extends Controller
         //
         $titles = Title::all()->sortBy('name');
         $genders = Gender::all()->sortBy('name');
-        $professions = Profession::whereNotIn('id',[19])->get()->sortBy('name');
+        $professions = Profession::whereNotIn('id', [19])->get()->sortBy('name');
         $qualification_categories = QualificationCategory::all()->sortBy('name');
 
 
@@ -181,7 +181,7 @@ class PractitionersController extends Controller
 
         $professionals = Document::whereIn('document_category_id', [8, 9, 10, 11])->get();
 
-        $internship = Document::whereIn('document_category_id',[])->get();
+        $internship = Document::whereIn('document_category_id', [])->get();
 
         $current_status = "";
         $year = date('Y');
@@ -225,7 +225,7 @@ class PractitionersController extends Controller
         $provinces = Province::all()->sortBy('name');
         $nationalities = Nationality::all()->sortBy('name');
         $cities = City::all()->sortBy('name');
-        $professions = Profession::whereNotIn('id',[19])->get()->sortBy('name');
+        $professions = Profession::whereNotIn('id', [19])->get()->sortBy('name');
         $qualification_categories = QualificationCategory::all()->sortBy('name');
         $renewal_categories = RenewalCategory::all()->sortBy('name');
         $payment_methods = PaymentMethod::all()->sortBy('name');
@@ -307,9 +307,29 @@ class PractitionersController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Practitioner $practitioner)
     {
         //
+        return view('admin.practitioners.delete', compact('practitioner'));
+    }
+
+    public function destroy(Practitioner $practitioner)
+    {
+        //
+
+        $practitioner->contact()->delete();
+        $practitioner->practitionerQualification()->delete();
+        $practitioner->documents()->delete();
+        $practitioner->employer()->delete();
+        $practitioner->practitionerExperience()->delete();
+        $practitioner->renewals()->delete();
+        $practitioner->cdPoints()->delete();
+        $practitioner->payments()->delete();
+        $practitioner->practitionerRequirements()->delete();
+        $practitioner->otherApplications()->delete();
+        $practitioner->delete();
+
+        return redirect('/admin/practitioners')->with('message', 'Practitioner deleted successfully.');
     }
 
 

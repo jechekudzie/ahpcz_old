@@ -107,6 +107,7 @@ Route::get('/admin/practitioner_applications/{practitioner}/{application}', 'Pra
 /*---------------------*/
 /*Start Of Practitioner Registration*/
 Route::resource('/admin/practitioners', 'PractitionersController');
+Route::get('/admin/practitioners/{practitioner}/delete', 'PractitionersController@delete');
 /*End Of Practitioner Registration*/
 
 //practitioner_qualifications
@@ -252,6 +253,7 @@ Route::post('/admin/notification/send', 'MessagesController@send');
 
 //practitioner certificates
 Route::get('/admin/practitioners/certificate/index', 'PractitionerCertificateController@index');
+Route::get('/admin/practitioners/certificate/pending', 'PractitionerCertificateController@pending');
 
 
 Auth::routes(['verify' => true]);

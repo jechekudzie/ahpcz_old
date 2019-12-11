@@ -1,6 +1,7 @@
 <?php
 
 use App\Practitioner;
+use App\Renewal;
 use Carbon\CarbonInterval;
 
 function getDifference($created_at, $now)
@@ -11,6 +12,92 @@ function getDifference($created_at, $now)
     $seconds = $created_at->diffInSeconds($now->subMinutes($minutes));
 
     return CarbonInterval::days($days)->hours($hours)->minutes($minutes)->seconds($seconds)->forHumans();
+}
+
+function countTasks()
+{
+    $user_role = auth()->user()->role_id;
+    $count = 0;
+    if ($user_role == 4) {
+        $count = Practitioner::whereRegistration_officerOrRegistration_officerAndAccountantAndMember(0, 1, 1, 1)->count();
+    }
+
+    if ($user_role == 5) {
+        $count = Practitioner::whereRegistration_officerAndAccountant(1, 0)->count();
+
+    }
+
+    if ($user_role == 6) {
+        $count = Practitioner::whereRegistration_officerAndAccountantAndMember(1, 1, 0)->count();
+
+    }
+
+    if ($user_role == 7) {
+        $count = Practitioner::whereRegistration_officerAndAccountantAndMemberAndRegistrar(2, 1, 1, 0)->count();
+
+    }
+
+    if ($user_role == 3) {
+
+        $count = 0;
+    }
+    if ($user_role == 2) {
+
+        $count = 0;
+    }
+    if ($user_role == 1) {
+
+        $count = 0;
+    }
+
+    echo $count;
+}
+
+function countCertificates(){
+
+    $current_year = date('Y');
+    $no_shortfalls = [];
+    $percentage = 0;
+    $count_certificates = 0;
+    $complete_renewals = Renewal::where('renewal_period_id', '>=', $current_year)->get();
+    foreach ($complete_renewals as $complete_renewal) {
+
+        $total = count($complete_renewal->practitioner->practitionerRequirements);
+        $checked = count($complete_renewal->practitioner->practitionerRequirements->where('status', '1'));
+        $percentage = ($checked / $total) * 100;
+
+        if ($percentage == 100 && ($complete_renewal->cdpoints == 1) && ($complete_renewal->placement == 1)) {
+            $no_shortfalls[] = array('shortfall' => $percentage, 'renewal_id' => $complete_renewal->id);
+        }
+
+    }
+
+    $count_certificates = count($no_shortfalls);
+
+    echo $count_certificates;
+}
+
+
+function countPendingItems(){
+    $year = date('Y');
+    $shortfalls = [];
+    $percentage = 0;
+    $count_pending = 0;
+    $renewals = Renewal::where('renewal_period_id', '>=', $year)->get();
+    foreach ($renewals as $renewal) {
+
+        $total = count($renewal->practitioner->practitionerRequirements);
+        $checked = count($renewal->practitioner->practitionerRequirements->where('status', '1'));
+        $percentage = ($checked / $total) * 100;
+
+        if ($percentage < 100 || ($renewal->cdpoints == 0) || ($renewal->placement == 0)) {
+            $shortfalls[] = array('shortfall' => $percentage, 'renewal_id' => $renewal->id);
+        }
+
+    }
+    $count_pending = count($shortfalls);
+
+    echo $count_pending;
 }
 
 ?>
@@ -95,15 +182,18 @@ function getDifference($created_at, $now)
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">({{count(auth()->user()->unreadNotifications)}}) <i class="ti-email"></i>
+                           aria-haspopup="true" aria-expanded="false">({{count(auth()->user()->unreadNotifications)}})
+                            <i class="ti-email"></i>
                             <div class="notify"><span class="heartbit"></span> <span class="point"></span></div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
                             <ul>
                                 <li>
-                                    <div class="drop-title">Notifications
-                                        ({{count(auth()->user()->unreadNotifications)}})
-                                    </div>
+                                    <a href="/admin/notification/inbox">
+                                        <div class="drop-title">Notifications
+                                            ({{count(auth()->user()->unreadNotifications)}})
+                                        </div>
+                                    </a>
                                 </li>
                                 <li>
                                     <div class="message-center">
@@ -112,7 +202,8 @@ function getDifference($created_at, $now)
                                             <a href="/admin/{{$notification->id}}/read">
                                                 <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
                                                 <div class="mail-contnet">
-                                                    <h5>{{$notification->data['sender']['name']}}</h5> <span class="mail-desc">
+                                                    <h5>{{$notification->data['sender']['name']}}</h5> <span
+                                                        class="mail-desc">
                                                         @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
                                                     </span>
 
@@ -126,7 +217,8 @@ function getDifference($created_at, $now)
                                     </div>
                                 </li>
                                 <li>
-                                    <a class="nav-link text-center link" href="{{url('/admin/notification/inbox')}}"> <strong>View all
+                                    <a class="nav-link text-center link" href="{{url('/admin/notification/inbox')}}">
+                                        <strong>View all
                                             notifications</strong> <i class="fa fa-angle-right"></i> </a>
                                 </li>
                             </ul>
@@ -177,22 +269,22 @@ function getDifference($created_at, $now)
             <nav class="sidebar-nav">
                 <ul id="sidebarnav">
 
-                    <li><a class="waves-effect waves-dark" href="#" aria-expanded="false"><i
+                    <li><a class="waves-effect waves-dark" href="/" aria-expanded="false"><i
                                 class="fa fa-bank"></i><span class="hide-menu">Home</span> </a>
 
                     </li>
 
 
                     <li><a class=" waves-effect waves-dark" href="/admin/practitioners" aria-expanded="false">
-                            <i class="fa fa-user-md"></i><span class="hide-menu">Practitioners ({{count(auth()->user()->unreadNotifications)}})
+                            <i class="fa fa-user-md"></i><span class="hide-menu">Practitioners
 
                             </span></a>
-                        <ul aria-expanded="false" class="collapse">
+                        {{--<ul aria-expanded="false" class="collapse">
                             <li><a href="/admin/practitioner_applications"> <i class="fa fa-file"> </i> Practitioner
                                     Applications
                                 </a>
                             </li>
-                        </ul>
+                        </ul>--}}
                     </li>
 
                     <li><a class=" waves-effect waves-dark two-column" href="javascript:void(0)"
@@ -203,23 +295,31 @@ function getDifference($created_at, $now)
                     <li><a class=" waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
                                 class="fa fa-pie-chart"></i><span class="hide-menu">Reports</span></a>
                         <ul aria-expanded="false" class="collapse">
-                            <li><a href="form-basic.php">Practitioner</a></li>
-                            <li><a href="form-layout.php">Students</a></li>
-                            <li><a href="form-addons.php">Users</a></li>
+                            <li><a href="#">Practitioner</a></li>
+                            <li><a href="#">Students</a></li>
+                            <li><a href="#">Users</a></li>
 
                         </ul>
                     </li>
 
+                    <li><a class="waves-effect waves-dark" href="/admin/practitioner_applications"
+                           aria-expanded="false"><i
+                                class="fa fa-tasks"></i><span
+                                class="hide-menu">My Tasks ({{countTasks()}})</span></a>
+                    </li>
+
                     <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/index"
                            aria-expanded="false"><i
-                                class="fa fa-certificate"></i><span class="hide-menu">Certificate Collection</span></a>
+                                class="fa fa-certificate"></i><span class="hide-menu">Certificate Collection ({{countCertificates()}})</span></a></li>
+
+                    <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/pending"
+                           aria-expanded="false"><i class="fa fa-certificate"></i><span class="hide-menu"> {{date('Y')}} Out-standings ({{countPendingItems()}})</span></a>
                     </li>
                     @can('admin')
                         <li><a class="waves-effect waves-dark" href="/admin/" aria-expanded="false"><i
-                                    class="ti-settings"></i><span class="hide-menu">Administration</span></a></li>
+                                    class="ti-settings"></i><span class="hide-menu">Administration</span></a>
+                        </li>
 
-                        <li><a class=" waves-effect waves-dark" href="/admin/users" aria-expanded="false"><i
-                                    class="fa fa-users"></i><span class="hide-menu">Manage System Users</span></a>
 
                     @endcan
                 </ul>

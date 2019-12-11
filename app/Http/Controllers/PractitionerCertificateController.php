@@ -7,85 +7,62 @@ use Illuminate\Http\Request;
 
 class PractitionerCertificateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $current_year = date('Y');
+        $no_shortfalls = [];
+        $percentage = 0;
+        $complete_renewals = Renewal::where('renewal_period_id', '>=', $current_year)->get();
+        foreach ($complete_renewals as $complete_renewal) {
 
+            $total = count($complete_renewal->practitioner->practitionerRequirements);
+            $checked = count($complete_renewal->practitioner->practitionerRequirements->where('status', '1'));
+            $percentage = ($checked / $total) * 100;
+
+            if ($percentage == 100 && ($complete_renewal->cdpoints == 1) && ($complete_renewal->placement == 1)) {
+                $no_shortfalls[] = array('shortfall' => $percentage, 'renewal_id' => $complete_renewal->id);
+            }
+
+        }
+
+        return view('admin.practitioner_certificates.index', compact('no_shortfalls'));
+    }
+
+
+    public function pending()
+    {
         $year = date('Y');
+        $shortfalls = [];
+        $percentage = 0;
+        $pending_renewals = Renewal::where('renewal_period_id', '>=', $year)->get();
+        foreach ($pending_renewals as $pending_renewal) {
 
-        $certificates = Renewal::whereRenewal_period_idAndCdpointsAndCertificate($year,1,0)->get();
+            $total = count($pending_renewal->practitioner->practitionerRequirements);
+            $checked = count($pending_renewal->practitioner->practitionerRequirements->where('status', '1'));
+            $percentage = ($checked / $total) * 100;
 
-        return view('admin.practitioner_certificates.index',compact('certificates'));
+            if ($percentage < 100 || ($pending_renewal->cdpoints == 0) || ($pending_renewal->placement == 0)) {
+                $shortfalls[] = array('shortfall' => $percentage, 'renewal_id' => $pending_renewal->id);
+            }
+
+        }
+
+
+        return view('admin.practitioner_certificates.pendings', compact('shortfalls'));
+
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store()
     {
         //
+        /* $practitioner = $practitionerRequirement->practitioner;
+         $total = count($practitioner->practitionerRequirements);
+         $checked = count($practitioner->practitionerRequirements->where('status','1'));
+
+         $percentage =  ($checked/$total) * 100;
+         echo number_format($percentage,2).'%';*/
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

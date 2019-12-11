@@ -17,12 +17,14 @@ class Renewal extends Model
     public function practitioner(){
 
         return $this->belongsTo(Practitioner::class);
+
     }
 
     public function renewalPeriod(){
 
         return $this->belongsTo(RenewalPeriod::class);
     }
+
     public function practitionerBalances(){
         return $this->hasMany(PractitionerBalance::class);
     }

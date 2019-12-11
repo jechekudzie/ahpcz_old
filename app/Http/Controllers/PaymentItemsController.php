@@ -27,7 +27,7 @@ class PaymentItemsController extends Controller
         $payment_items = PaymentItem::all()->sortBy('name');
         $payment_item_categories = PaymentItemCategory::all()->sortBy('name');
 
-        return view('admin.payment_items.index',compact('payment_items','payment_item_fees','payment_item_categories'));
+        return view('admin.payment_items.index',compact('payment_items','payment_item_categories'));
 
     }
 

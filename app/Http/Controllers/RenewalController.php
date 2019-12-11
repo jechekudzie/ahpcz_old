@@ -444,6 +444,8 @@ class RenewalController extends Controller
         $renewal_fee = RenewalFee::whereRenewal_category_idAndProfession_id($practitioner->renewal_category_id, $practitioner->profession_id)->first();
 
         $fee = ($renewal_fee->fee * $vat->vat) + $renewal_fee->fee;
+
+
         return view('admin.practitioner_payments.renewal_invoice_balances', compact('practitioner', 'fee'));
     }
 

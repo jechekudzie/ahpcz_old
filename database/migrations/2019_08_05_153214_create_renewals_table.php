@@ -23,8 +23,8 @@ class CreateRenewalsTable extends Migration
             $table->double('balance',8,2)->nullable();
             $table->unsignedInteger('renewal_status_id');
             $table->unsignedInteger('payment_type_id');
-            $table->unsignedInteger('cdpoints')->nullable();
-            $table->unsignedInteger('placement')->nullable();
+            $table->unsignedInteger('cdpoints')->default(0);
+            $table->unsignedInteger('placement')->default(0);
             $table->unsignedInteger('certificate')->default(0);
             $table->timestamps();
         });

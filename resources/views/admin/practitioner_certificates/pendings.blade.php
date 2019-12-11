@@ -47,7 +47,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive m-t-40">
-                            <h4 class="card-title">Ready for certificate collection</h4>
+                            <h4 class="card-title">{{date('Y')}} outstanding issues</h4>
                             <table id="renewals"
                                    class="display nowrap table table-hover table-striped table-bordered"
                                    cellspacing="0" width="100%">
@@ -56,11 +56,10 @@
                                     <th>Practitioner</th>
                                     <th>Registration Number</th>
                                     <th>Period</th>
-                                    <th>Status</th>
+                                    <th>Payment</th>
                                     <th>CPD Points</th>
                                     <th>Placement</th>
                                     <th>Compliance</th>
-                                    <th>Renewal Date</th>
                                     <th>view</th>
 
                                 </tr>
@@ -70,44 +69,44 @@
                                     <th>Practitioner</th>
                                     <th>Registration Number</th>
                                     <th>Period</th>
-                                    <th>Status</th>
+                                    <th>Payment</th>
                                     <th>CPD Points</th>
                                     <th>Placement</th>
                                     <th>Compliance</th>
-                                    <th>Renewal Date</th>
                                     <th>view</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
 
-                                @foreach($no_shortfalls as $shortfall)
-                                    @if($complete_renewal = \App\Renewal::find($shortfall['renewal_id']))
+                                @foreach($shortfalls as $shortfall)
+                                    @if($pending_renewal = \App\Renewal::find($shortfall['renewal_id']))
                                         <tr>
-                                            <td>{{$complete_renewal->practitioner->first_name.' '.$complete_renewal->practitioner->last_name}}</td>
-                                            <td>{{$complete_renewal->practitioner->registration_number}}</td>
-                                            <td>{{$complete_renewal->renewal_period_id}}</td>
+                                            <td>{{$pending_renewal->practitioner->first_name.' '.$pending_renewal->practitioner->last_name}}</td>
+                                            <td>{{$pending_renewal->practitioner->registration_number}}</td>
+                                            <td>{{$pending_renewal->renewal_period_id}}</td>
                                             <td>
-                                                {{$complete_renewal->renewalStatus->name}}
+                                                {{$pending_renewal->renewalStatus->name}}
                                             </td>
                                             <td>
-                                                @if($complete_renewal->cdpoints == null)
+                                                @if($pending_renewal->cdpoints == 0)
                                                     {{'Pending Cd Points'}}
                                                 @else
                                                     {{'Up to date'}}
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($complete_renewal->placement == 0)
+                                                @if($pending_renewal->placement == 0)
                                                     {{'Pending Placement'}}
                                                 @else
                                                     {{'Up to date'}}
                                                 @endif
                                             </td>
-                                            <td>{{number_format($shortfall['shortfall'],2)}}</td>
 
-                                            <td>{{$complete_renewal->created_at->format('d F Y')}}</td>
+
+                                            <td> {{number_format($shortfall['shortfall'],2)}}</td>
+
                                             <td>
-                                                <a href="/admin/practitioners/{{$complete_renewal->id}}">View </a>
+                                                <a href="/admin/practitioners/{{$pending_renewal->practitioner->id}}">View </a>
 
                                             </td>
 

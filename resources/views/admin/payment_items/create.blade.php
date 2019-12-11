@@ -60,7 +60,7 @@
                                     {{csrf_field()}}
 
                                     <div class="form-group">
-                                        <h5>Provinces <span class="text-danger">*</span></h5>
+                                        <h5>Payment Item Category <span class="text-danger">*</span></h5>
                                         <div class="controls">
                                             <select name="payment_item_category_id" id="select" required class="form-control selectpicker" data-live-search="true">
                                                 <option value="">Choose Category</option>

@@ -33,6 +33,7 @@ class ApplicationSubmitted extends Notification
     public function via($notifiable)
     {
         return ['database'];
+        //return ['database','mail'];
     }
 
     /**
@@ -44,8 +45,8 @@ class ApplicationSubmitted extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->replyTo('register@ahpcz.co.zw')
-            ->from('register@ahpcz.co.zw')
+            ->replyTo(auth()->user()->email)
+            ->from(auth()->user()->email)
             ->subject('New Application - ' . $this->practitioner->first_name.' '.$this->practitioner->last_name)
             ->line('New application has been submitted, awaiting review and payment:')
             ->line('Applicant Profession: '. $this->practitioner->profession->name. ' and Professional Qualification: ' .$this->practitioner->professionalQualification->name)

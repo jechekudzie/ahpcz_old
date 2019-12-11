@@ -87,7 +87,7 @@ class Practitioner extends Model
     public function documents()
     {
 
-        return $this->hasMany(Document::class);
+        return $this->hasMany(Document::class,'document_owner');
     }
 
     public function employer()
@@ -110,8 +110,8 @@ class Practitioner extends Model
 
     public function renewals()
     {
-
         return $this->hasMany(Renewal::class);
+
     }
 
     //CPD points

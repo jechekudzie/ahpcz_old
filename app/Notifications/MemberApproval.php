@@ -35,6 +35,7 @@ class MemberApproval extends Notification
     public function via($notifiable)
     {
         return ['database'];
+        //return ['database','mail'];
     }
 
     /**
@@ -46,15 +47,13 @@ class MemberApproval extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->replyTo('register@ahpcz.co.zw')
-            ->from('register@ahpcz.co.zw')
+            ->replyTo(auth()->user()->email)
+            ->from(auth()->user()->email)
             ->subject('New Application - ' . $this->practitioner->first_name.' '.$this->practitioner->last_name)
             ->line('New application has been approved by Committee member, awaiting your review and approval:')
             ->line('Applicant Profession: '. $this->practitioner->profession->name. ' and Professional Qualification: ' .$this->practitioner->professionalQualification->name)
             ->line('You can view application details on the link below.')
             ->action('View Application Details', url('/admin/practitioners/' . $this->practitioner->id));
-
-
 
     }
 
@@ -69,6 +68,8 @@ class MemberApproval extends Notification
         return [
             'id'=>$this->practitioner->id,
             'comment'=>$this->comment,
+            'title'=>'Registration approval for '.$this->practitioner->first_name.' '.$this->practitioner->last_name.'\'s Application' ,
+            'sender'=>auth()->user(),
         ];
     }
 }

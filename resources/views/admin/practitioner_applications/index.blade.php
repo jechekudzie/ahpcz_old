@@ -8,7 +8,7 @@
 <?php
 use App\Practitioner;use Carbon\CarbonInterval;
 
-function getDifference($created_at, $now)
+function getDiffApp($created_at, $now)
 {
 
     $days = $created_at->diffInDays($now);
@@ -73,7 +73,7 @@ function getDifference($created_at, $now)
 
                                     <div class="card">
                                         <div class="card-body">
-                                            <h4 class="card-title">New Applications</h4>
+                                            <h4 class="card-title">Applications pending your action</h4>
                                             <div class="table-responsive m-t-40">
                                                 <table id="subscriptions"
                                                        class="display table table-hover table-striped table-bordered"
@@ -83,7 +83,6 @@ function getDifference($created_at, $now)
                                                         <th>Practitioner</th>
                                                         <th>Profession</th>
                                                         <th>Professional Qualification</th>
-                                                        <th>Application Date</th>
                                                         <th>Pending Duration</th>
                                                         <th>Status</th>
                                                         <th>Actions</th>
@@ -94,7 +93,6 @@ function getDifference($created_at, $now)
                                                         <th>Practitioner</th>
                                                         <th>Profession</th>
                                                         <th>Professional Qualification</th>
-                                                        <th>Application Date</th>
                                                         <th>Pending Duration</th>
                                                         <th>Status</th>
                                                         <th>Actions</th>
@@ -102,29 +100,26 @@ function getDifference($created_at, $now)
                                                     </tfoot>
                                                     <tbody>
 
-                                                    @foreach (auth()->user()->unreadNotifications as $notification)
-                                                        @if($application  = $practitioner->find($notification->data['id']))
+                                                    @foreach ($practitioners as $application)
+
                                                             <tr>
                                                                 <td>{{$application->first_name.' '.$application->last_name}}</td>
                                                                 <td>{{$application->profession->name}}</td>
                                                                 <td>{{$application->professionalQualification->name}}</td>
-                                                                <td>{{$application->created_at}}</td>
-                                                                <td>{{ getDifference($application->created_at,now()) }}
+                                                                <td>{{ getDiffApp($application->updated_at,now()) }}
                                                                     ago
                                                                 </td>
                                                                 <td>
                                                                     @if(
-                                                                    $application->registration_officer == 0
-                                                                    && $application->accountant == 0
-                                                                    && $application->member == 0
-                                                                    && $application->registrar == 0
-                                                                    )
+                                                    $application->registration_officer == 0
+
+                                                    )
                                                                         {{'Pending Registration Officer Approval'}}
+
                                                                     @elseif(
                                                                     $application->registration_officer == 1
                                                                     && $application->accountant == 0
-                                                                    && $application->member == 0
-                                                                    && $application->registrar == 0
+
                                                                     )
                                                                         {{'Pending Accountant Approval'}}
 
@@ -132,23 +127,33 @@ function getDifference($created_at, $now)
                                                                     $application->registration_officer == 1
                                                                     && $application->accountant == 1
                                                                     && $application->member == 0
-                                                                    && $application->registrar == 0
+
                                                                     )
                                                                         {{'Pending Member Approval'}}
-                                                                    @elseif(
 
+                                                                    @elseif(
                                                                     $application->registration_officer == 1
                                                                     && $application->accountant == 1
                                                                     && $application->member == 1
+                                                                    )
+                                                                        {{'Check before signing'}}
+
+                                                                    @elseif(
+                                                                    $application->registration_officer == 2
+                                                                    && $application->accountant == 1
+                                                                    && $application->member == 1
                                                                     && $application->registrar == 0
+
                                                                     )
                                                                         {{'Pending Registrar Approval'}}
+
                                                                     @elseif(
 
                                                                     $application->registration_officer == 1
                                                                     && $application->accountant == 1
                                                                     && $application->member == 1
                                                                     && $application->registrar == 1
+                                                                    && $application->approval_status == 1
                                                                     )
                                                                         {{'Application Approved '}}
                                                                     @else
@@ -157,20 +162,11 @@ function getDifference($created_at, $now)
                                                                 </td>
 
                                                                 <td>
-                                                                    {{--<a href="/admin/practitioner_applications/{{$application->id}}/{{$notification->id}}">View</a>--}}
+                                                                    <a href="/admin/practitioners/{{$application->id}}">View</a>
 
-                                                                    @if(
-                                                                    $notification->type == 'App\Notifications\RegistrarApproval' || $notification->type =='App\Notifications\AccountsDisapproval'
-                                                                    || $notification->type == 'App\Notifications\MemberDisapproval' || $notification->type =='App\Notifications\RegistrarDisapproval'
-                                                                    )
-                                                                    <a href="/admin/practitioners/read/{{$application->id}}/{{$notification->id}}">View</a>
-                                                                        @else
-                                                                        <a href="/admin/practitioners/{{$application->id}}">View</a>
-                                                                    @endif
                                                                 </td>
 
                                                             </tr>
-                                                        @endif
                                                     @endforeach
 
 

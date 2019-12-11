@@ -79,7 +79,7 @@ function getDiff($created_at, $now)
 
                                         @if($userNotification->data['id'] != null)
                                             <a href="/admin/practitioners/{{$userNotification->data['id']}}"
-                                               class="btn btn-warning btn-sm" target="_blank">View Application</a>
+                                               class="btn btn-warning btn-sm">View Application</a>
                                         @endif
                                     </div>
                                     <div>

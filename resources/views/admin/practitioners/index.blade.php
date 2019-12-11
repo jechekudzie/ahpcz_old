@@ -11,7 +11,7 @@
                 <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                 @can('updatePractitioner')
                     <a href="practitioners/create" class="btn btn-success"><i
-                                class="fa fa-plus-circle"></i> Add
+                            class="fa fa-plus-circle"></i> Add
                         Practitioner
                     </a>
                 @endcan
@@ -42,12 +42,13 @@
                     <ul class="nav nav-tabs customtab" role="tablist">
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#approved"
                                                 role="tab"><span
-                                        class="hidden-sm-up"><i class="ti-home"></i></span> <span
-                                        class="hidden-xs-down"> Practitioners</span></a></li>
+                                    class="hidden-sm-up"><i class="ti-home"></i></span> <span
+                                    class="hidden-xs-down"> Practitioners</span></a></li>
 
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pending" role="tab"><span
-                                        class="hidden-sm-up"><i class="ti-user"></i></span> <span
-                                        class="hidden-xs-down">Pending Approval</span></a></li>
+                                    class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                    class="hidden-xs-down">Applications Pending Approval ({{$pending_apps = \App\Practitioner::where("approval_status","=",0)->count()}})</span></a>
+                        </li>
 
 
                     </ul>
@@ -70,6 +71,9 @@
                                             <th>Accredited Institution</th>
                                             <th>Status</th>
                                             <th>view</th>
+                                            @can('updatePractitioner')
+                                                <th>Delete</th>
+                                            @endcan
                                         </tr>
                                         </thead>
                                         <tfoot>
@@ -83,6 +87,9 @@
                                             <th>Accredited Institution</th>
                                             <th>Status</th>
                                             <th>view</th>
+                                            @can('updatePractitioner')
+                                                <th>Delete</th>
+                                            @endcan
                                         </tr>
                                         </tfoot>
                                         <tbody>
@@ -116,6 +123,10 @@
                                                 </td>
 
                                                 <td><a href="/admin/practitioners/{{$practitioner->id}}"> View</a></td>
+                                                @can('updatePractitioner')
+                                                    <td><a href="/admin/practitioners/{{$practitioner->id}}/delete">
+                                                            Delete</a></td>
+                                                @endcan
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -142,6 +153,9 @@
                                             <th>Accredited Institution</th>
                                             <th>Status</th>
                                             <th>view</th>
+                                            @can('updatePractitioner')
+                                                <th>Delete</th>
+                                            @endcan
                                         </tr>
                                         </thead>
                                         <tfoot>
@@ -155,6 +169,9 @@
                                             <th>Accredited Institution</th>
                                             <th>Status</th>
                                             <th>view</th>
+                                            @can('updatePractitioner')
+                                                <th>Delete</th>
+                                            @endcan
                                         </tr>
                                         </tfoot>
                                         <tbody>
@@ -182,16 +199,14 @@
                                                 <td>
                                                     @if(
                                                     $pending->registration_officer == 0
-                                                    && $pending->accountant == 0
-                                                    && $pending->member == 0
-                                                    && $pending->registrar == 0
+
                                                     )
                                                         {{'Pending Registration Officer Approval'}}
+
                                                     @elseif(
                                                     $pending->registration_officer == 1
                                                     && $pending->accountant == 0
-                                                    && $pending->member == 0
-                                                    && $pending->registrar == 0
+
                                                     )
                                                         {{'Pending Accountant Approval'}}
 
@@ -199,23 +214,33 @@
                                                     $pending->registration_officer == 1
                                                     && $pending->accountant == 1
                                                     && $pending->member == 0
-                                                    && $pending->registrar == 0
+
                                                     )
                                                         {{'Pending Member Approval'}}
-                                                    @elseif(
 
+                                                    @elseif(
                                                     $pending->registration_officer == 1
                                                     && $pending->accountant == 1
                                                     && $pending->member == 1
+                                                    )
+                                                        {{'Pending Registration Officer Approval'}}
+
+                                                    @elseif(
+                                                    $pending->registration_officer == 2
+                                                    && $pending->accountant == 1
+                                                    && $pending->member == 1
                                                     && $pending->registrar == 0
+
                                                     )
                                                         {{'Pending Registrar Approval'}}
+
                                                     @elseif(
 
                                                     $pending->registration_officer == 1
                                                     && $pending->accountant == 1
                                                     && $pending->member == 1
                                                     && $pending->registrar == 1
+                                                    && $pending->approval_status == 1
                                                     )
                                                         {{'Application Approved '}}
                                                     @else
@@ -224,6 +249,10 @@
                                                 </td>
 
                                                 <td><a href="/admin/practitioners/{{$pending->id}}"> View</a></td>
+                                                @can('updatePractitioner')
+                                                    <td><a href="/admin/practitioners/{{$pending->id}}/delete">
+                                                            Delete</a></td>
+                                                @endcan
                                             </tr>
                                         @endforeach
                                         </tbody>
@@ -240,34 +269,34 @@
 @endsection
 
 @section('plugins-js')
-            <script src="{{asset('assets/node_modules/datatables/jquery.dataTables.min.js')}}"></script>
-            <!-- start - This is for export functionality only -->
-            <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-            <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-            <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-            <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-            <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-            <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-            <!-- end - This is for export functionality only -->
-            <script>
+    <script src="{{asset('assets/node_modules/datatables/jquery.dataTables.min.js')}}"></script>
+    <!-- start - This is for export functionality only -->
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+    <!-- end - This is for export functionality only -->
+    <script>
 
-                $('#practitioners').DataTable({
-                    order: [],
-                    dom: 'Bfrtip',
+        $('#practitioners').DataTable({
+            order: [],
+            dom: 'Bfrtip',
 
-                    buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
-                });
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
 
-                $('#pendings').DataTable({
-                    order: [],
-                    dom: 'Bfrtip',
+        $('#pendings').DataTable({
+            order: [],
+            dom: 'Bfrtip',
 
-                    buttons: [
-                        'copy', 'csv', 'excel', 'pdf', 'print'
-                    ]
-                });
-            </script>
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+    </script>
 @endsection

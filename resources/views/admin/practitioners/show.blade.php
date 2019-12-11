@@ -833,8 +833,8 @@
                                                 @foreach (auth()->user()->unreadNotifications as $notification)
                                                     @if ($practitioner->id == $notification->data['id'])
                                                         <li>
-                                                            <a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
-                                                                As Read</a>
+                                                            {{--<a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
+                                                                As Read</a>--}}
                                                             <span class="date">@if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif</span>
                                                         </li>
                                                         </li>
