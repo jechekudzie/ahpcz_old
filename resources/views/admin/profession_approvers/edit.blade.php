@@ -11,8 +11,9 @@
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="col-md-8 align-self-center">
-                <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
-
+                @can('admin')
+                    <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
+                @endcan
                 <a href="/admin/profession_approvers" class="btn btn-success"></i> All Committee Member</a>
 
 

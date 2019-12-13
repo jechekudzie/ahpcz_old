@@ -28,8 +28,9 @@ function getDiffApp($created_at, $now)
         <!-- ============================================================== -->
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
-
+                @can('admin')
+                    <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
+                @endcan
             </div>
 
             <div class="col-md-7 align-self-center text-right">

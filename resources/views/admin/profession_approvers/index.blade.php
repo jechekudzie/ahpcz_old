@@ -9,8 +9,9 @@
         <!-- Bread crumb and right sidebar toggle -->
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
-            </div>
+                @can('admin')
+                    <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
+                @endcan            </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">

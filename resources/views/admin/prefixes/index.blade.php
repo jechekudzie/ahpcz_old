@@ -9,7 +9,9 @@
         <!-- Bread crumb and right sidebar toggle -->
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                 <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
+                @can('admin')
+                    <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
+                @endcan
                  <a href="registration_fees/create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add Practitioner Registration Fee</a>
             </div>
             <div class="col-md-7 align-self-center text-right">
