@@ -94,6 +94,7 @@ class PractitionersController extends Controller
             'professional_qualification_id' => ['required'],
             'commencement_date' => ['required'],
             'completion_date' => ['required'],
+            'registration_number' => ['nullable'],
 
         ],
             [

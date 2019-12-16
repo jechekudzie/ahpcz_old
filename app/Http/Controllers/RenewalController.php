@@ -149,7 +149,6 @@ class RenewalController extends Controller
             $day = date('d');
 
             //add attributes to payments
-
             $payment['month'] = $month;
             $payment['day'] = $day;
             $payment['practitioner_id'] = $practitioner->id;
@@ -194,11 +193,22 @@ class RenewalController extends Controller
             ) {
                 $practitioner->update([
                     'approval_status' => 1,
-                    'registration_officer' => 1,
+                    'registration_officer' => 2,
                     'accountant' => 1,
                     'member' => 1,
                     'registrar' => 1
                 ]);
+            }
+
+
+            $practitioner_requirements = $practitioner->practitionerRequirements;
+            foreach ($practitioner_requirements as $practitioner_requirement){
+
+                $practitioner_requirement->update([
+                    'status'=>1,
+                    'member_status'=>1
+                ]);
+
             }
 
             //end of payment update
@@ -227,6 +237,19 @@ class RenewalController extends Controller
                 return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Payment completed successfully.');
             }
 
+
+            //update the practitioner requirements
+            $practitioner_requirements = $practitioner->practitionerRequirements;
+            foreach ($practitioner_requirements as $practitioner_requirement){
+
+                $practitioner_requirement->update([
+                    'status'=>1,
+                    'member_status'=>1
+                ]);
+
+            }
+
+
         } else {
             return back()->with('message', 'A renewal subscription for the selected period is already active, not that if this a regular payment click the payment link to proceed');
         }
@@ -248,7 +271,6 @@ class RenewalController extends Controller
     //make and store renewals payments
     public function makePayment(Renewal $renewal)
     {
-
 
         $payment = request()->validate([
 

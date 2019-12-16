@@ -66,7 +66,7 @@ function countCertificates(){
         $checked = count($complete_renewal->practitioner->practitionerRequirements->where('status', '1'));
         $percentage = ($checked / $total) * 100;
 
-        if ($percentage == 100 && ($complete_renewal->cdpoints == 1) && ($complete_renewal->placement == 1)) {
+        if ($percentage == 100 && ($complete_renewal->renewal_status_id == 1) && ($complete_renewal->cdpoints == 1) && ($complete_renewal->placement == 1)) {
             $no_shortfalls[] = array('shortfall' => $percentage, 'renewal_id' => $complete_renewal->id);
         }
 
@@ -90,7 +90,7 @@ function countPendingItems(){
         $checked = count($renewal->practitioner->practitionerRequirements->where('status', '1'));
         $percentage = ($checked / $total) * 100;
 
-        if ($percentage < 100 || ($renewal->cdpoints == 0) || ($renewal->placement == 0)) {
+        if ($percentage < 100 || ($renewal->renewal_status_id != 1) || ($renewal->cdpoints == 0) || ($renewal->placement == 0)) {
             $shortfalls[] = array('shortfall' => $percentage, 'renewal_id' => $renewal->id);
         }
 

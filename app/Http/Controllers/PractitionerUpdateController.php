@@ -101,23 +101,25 @@ class PractitionerUpdateController extends Controller
             }
         }
         //get the member role
-        $user = User::whereRole_id(6)->first();
+        //$user = User::whereRole_id(6)->first();
 
         $profession = $practitioner->profession_id;
 
         $profession_approvers = ProfessionApprover::whereProfession_id($profession)->get();
 
+
         //forward application to members and copy registration officer
         foreach ($profession_approvers as $profession_approver) {
+
             $profession_approver->user->notify(
                 new AccountsApproval($practitioner, $comment)
             );
         }
         //copy registration officer
-        $reg_officer = User::whereRole_id(4)->first();
+        /*$reg_officer = User::whereRole_id(4)->first();
         $reg_officer->notify(
             new AccountsApproval($practitioner, $comment)
-        );
+        );*/
 
         return back()->with('message', 'Application has been approved successfully.');
     }

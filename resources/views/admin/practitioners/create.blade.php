@@ -162,6 +162,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="wphoneNumber2"> Registration Number:</label>
+                                                            <input type="text" class="form-control"
+                                                                   name="registration_number">
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                             </section>
