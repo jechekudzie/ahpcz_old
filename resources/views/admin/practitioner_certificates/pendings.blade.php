@@ -83,7 +83,7 @@
                                     @if($pending_renewal = \App\Renewal::find($shortfall['renewal_id']))
                                         <tr>
                                             <td>{{$pending_renewal->practitioner->first_name.' '.$pending_renewal->practitioner->last_name}}</td>
-                                            <td>{{$pending_renewal->practitioner->registration_number}}</td>
+                                            <td>{{$pending_renewal->practitioner->profession->prefix->name.str_pad($pending_renewal->practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}</td>
                                             <td>{{$pending_renewal->renewal_period_id}}</td>
                                             <td>
                                                 {{$pending_renewal->renewalStatus->name}}

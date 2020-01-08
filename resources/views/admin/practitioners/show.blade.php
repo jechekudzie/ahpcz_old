@@ -39,15 +39,15 @@
                         <h4>Registration Number :
                             @if($practitioner->registration_number == null)
                                 {{$practitioner->prefix.' (No Registration Number)'}} <a
-                                        href="/admin/practitioners/generate_reg/{{$practitioner->profession_id}}/{{$practitioner->id}}">Generate</a>
+                                    href="/admin/practitioners/generate_reg/{{$practitioner->profession_id}}/{{$practitioner->id}}">Generate</a>
                             @else
                                 {{$practitioner->prefix.str_pad($practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}
                             @endif
                         </h4>
                         <h6 style="font-size: 20px;" class="card-subtitle">Current Status
                             <code>{{$current_status}}</code> @can('updatePractitioner')<a
-                                    href="/admin/practitioners/{{$practitioner->id}}/cdpoints"
-                                    class="btn btn-success btn-xs">Add CPD Points & Placement</a>@endcan</h6>
+                                href="/admin/practitioners/{{$practitioner->id}}/cdpoints"
+                                class="btn btn-success btn-xs">Add CPD Points & Placement</a>@endcan</h6>
                     </div>
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs customtab" role="tablist">
@@ -55,20 +55,20 @@
                                                 role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span>
                                 <span class="hidden-xs-down">Personal Details</span></a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#contacts" role="tab"><span
-                                        class="hidden-sm-up"><i class="ti-user"></i></span> <span
-                                        class="hidden-xs-down">Contact</span></a></li>
+                                    class="hidden-sm-up"><i class="ti-user"></i></span> <span
+                                    class="hidden-xs-down">Contact</span></a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#qualifications"
                                                 role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span>
                                 <span class="hidden-xs-down">Qualification</span></a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#documents" role="tab"><span
-                                        class="hidden-sm-up"><i class="ti-email"></i></span> <span
-                                        class="hidden-xs-down">Documents</span></a>
+                                    class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                    class="hidden-xs-down">Documents</span></a>
 
                         </li>
 
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#intern" role="tab"><span
-                                        class="hidden-sm-up"><i class="ti-email"></i></span> <span
-                                        class="hidden-xs-down">Internship</span></a>
+                                    class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                    class="hidden-xs-down">Internship</span></a>
                         </li>
 
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#employment_history"
@@ -82,8 +82,8 @@
                         </li>
 
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#apps" role="tab"><span
-                                        class="hidden-sm-up"><i class="ti-email"></i></span> <span
-                                        class="hidden-xs-down">Applications</span></a>
+                                    class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                    class="hidden-xs-down">Applications</span></a>
 
                         </li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#renewal"
@@ -104,7 +104,7 @@
                                         <div class="profile-avatar">
                                             <img src="{{asset('profiles/user.png')}}" alt="">
                                             <a href="#" class="btn btn-block btn-success"><i
-                                                        class="fa fa-envelope"></i> Send Message</a>
+                                                    class="fa fa-envelope"></i> Send Message</a>
                                             <h4 style="text-align: center;">
                                                 <strong>{{ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}}</strong>
                                             </h4>
@@ -189,10 +189,12 @@
                                         <div class="col-md-4 col-xs-6 b-r"><strong>Accredited Institution</strong>
                                             <br>
                                             <p class="text-muted">
-                                                @if($practitioner->qualification_category_id==1)
-                                                    {{$practitioner->accreditedInstitution->name}}
-                                                @else
-                                                    {{ucwords($practitioner->institution)}}
+                                                @if($practitioner->qualification_category_id == null)
+                                                    @if($practitioner->qualification_category_id==1)
+                                                        {{$practitioner->accreditedInstitution->name}}
+                                                    @else
+                                                        {{ucwords($practitioner->institution)}}
+                                                    @endif
                                                 @endif
                                             </p>
                                         </div>
@@ -214,7 +216,7 @@
                                             <p class="text-muted">
                                                 @if($practitioner->registration_number == null)
                                                     {{$practitioner->prefix.' (No Registration Number)'}} <a
-                                                            href="/admin/practitioners/generate_reg/{{$practitioner->profession_id}}/{{$practitioner->id}}">Generate</a>
+                                                        href="/admin/practitioners/generate_reg/{{$practitioner->profession_id}}/{{$practitioner->id}}">Generate</a>
                                                 @else
                                                     {{$practitioner->prefix.str_pad($practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}
                                                 @endif
@@ -297,23 +299,36 @@
 
                                                 <div class="card-content">
 
-                                                        <ul class="dot-list">
-                                                                <li>
-                                                                    <a href="/admin/practitioners/qualifications/{{$practitioner->id}}/showprimary">{{$practitioner->professionalQualification->name}}</a>
-                                                                    @if($practitioner->qualification_category_id==1)
-                                                                        <span class="date">{{$practitioner->accreditedInstitution->name}}</span>
-                                                                        <i style="color: black;font-weight: bolder;padding-right: 5px">Commencement date </i> <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span><br/>
-                                                                        <i style="color: black;font-weight: bolder;padding-right: 45px">Completion date  </i> <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
+                                                    <ul class="dot-list">
+                                                        <li>
+                                                            <a href="/admin/practitioners/qualifications/{{$practitioner->id}}/showprimary">@if($practitioner->qualification_category_id !=null){{$practitioner->professionalQualification->name}}@endif</a>
+                                                            @if($practitioner->qualification_category_id != null)
+                                                                @if($practitioner->qualification_category_id == 1)
+                                                                    <span
+                                                                        class="date">{{$practitioner->accreditedInstitution->name}}</span>
+                                                                    <i style="color: black;font-weight: bolder;padding-right: 5px">Commencement
+                                                                        date </i>
+                                                                    <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
+                                                                    <br/>
+                                                                    <i style="color: black;font-weight: bolder;padding-right: 45px">Completion
+                                                                        date </i>
+                                                                    <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
 
-                                                                    @else
-                                                                        <span class="date">{{ucwords($practitioner->institution)}}</span>
-                                                                        <i style="color: black;font-weight: bolder;padding-right: 5px">Commencement date </i> <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span><br/>
-                                                                        <i style="color: black;font-weight: bolder;padding-right: 45px">Completion date  </i> <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
+                                                                @else
+                                                                    <span
+                                                                        class="date">{{ucwords($practitioner->institution)}}</span>
+                                                                    <i style="color: black;font-weight: bolder;padding-right: 5px">Commencement
+                                                                        date </i>
+                                                                    <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
+                                                                    <br/>
+                                                                    <i style="color: black;font-weight: bolder;padding-right: 45px">Completion
+                                                                        date </i>
+                                                                    <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
+                                                                @endif
+                                                            @endif
 
-                                                                    @endif
-
-                                                                </li>
-                                                        </ul>
+                                                        </li>
+                                                    </ul>
                                                 </div>
 
                                                 <div class="card-content">
@@ -323,14 +338,20 @@
                                                                 <li>
                                                                     <a href="/admin/practitioners/qualifications/{{$practitioner_qualification->id}}/show">{{$practitioner_qualification->professionalQualification->name}}</a>
                                                                     @if($practitioner_qualification->qualification_category_id == 1)
-                                                                        <span class="date">{{$practitioner_qualification->accreditedInstitution->name}}</span>
-                                                                        <span class="date">Commencement date: {{date("d F Y",strtotime($practitioner->commencement_date))}}</span>
-                                                                        <span class="date">Completion date  : {{date("d F Y",strtotime($practitioner->completion_date))}}</span>
+                                                                        <span
+                                                                            class="date">{{$practitioner_qualification->accreditedInstitution->name}}</span>
+                                                                        <span
+                                                                            class="date">Commencement date: {{date("d F Y",strtotime($practitioner->commencement_date))}}</span>
+                                                                        <span
+                                                                            class="date">Completion date  : {{date("d F Y",strtotime($practitioner->completion_date))}}</span>
 
                                                                     @else
-                                                                        <span class="date">{{ucwords($practitioner->institution)}}</span>
-                                                                        <span class="date">Commencement date: {{date("d F Y",strtotime($practitioner->commencement_date))}}</span>
-                                                                        <span class="date">Completion date  : {{date("d F Y",strtotime($practitioner->completion_date))}}</span>
+                                                                        <span
+                                                                            class="date">{{ucwords($practitioner->institution)}}</span>
+                                                                        <span
+                                                                            class="date">Commencement date: {{date("d F Y",strtotime($practitioner->commencement_date))}}</span>
+                                                                        <span
+                                                                            class="date">Completion date  : {{date("d F Y",strtotime($practitioner->completion_date))}}</span>
 
                                                                     @endif
 
@@ -371,13 +392,14 @@
                                                             <li>
                                                                 <a href="/{{$identification->path}}"
                                                                    target="_blank">{{$identification->documentCategory->name}}</a>
-                                                                <span class="date">{{$identification->documentCategory->group}}</span>
+                                                                <span
+                                                                    class="date">{{$identification->documentCategory->group}}</span>
                                                                 <span class="">
-                                                                    <a href="/admin/practitioners/documents/{{$identification->id}}/edit">
-                                                                        <i class="fa fa-pencil"></i> Edit
-                                                                    </a>
+                        <a href="/admin/practitioners/documents/{{$identification->id}}/edit">
+                            <i class="fa fa-pencil"></i> Edit
+                        </a>
 
-                                                                </span>
+                    </span>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -395,10 +417,11 @@
                                                             <li>
                                                                 <a href="/{{$education->path}}"
                                                                    target="_blank">{{$education->documentCategory->name}}</a>
-                                                                <span class="date">{{$education->documentCategory->group}}</span>
+                                                                <span
+                                                                    class="date">{{$education->documentCategory->group}}</span>
                                                                 <span class=""><a
-                                                                            href="/admin/practitioners/documents/{{$education->id}}/edit"><i
-                                                                                class="fa fa-pencil"></i>Edit</a> </span>
+                                                                        href="/admin/practitioners/documents/{{$education->id}}/edit"><i
+                                                                            class="fa fa-pencil"></i>Edit</a> </span>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -416,11 +439,12 @@
                                                             <li>
                                                                 <a href="/{{$professional->path}}"
                                                                    target="_blank">{{$professional->documentCategory->name}}</a>
-                                                                <span class="date">{{$professional->documentCategory->group}}</span>
+                                                                <span
+                                                                    class="date">{{$professional->documentCategory->group}}</span>
                                                                 <span class=""><a
-                                                                            href="/admin/practitioners/documents/{{$professional->id}}/edit"><i
-                                                                                class="fa fa-pencil"></i> Edit</a>
-                                                                </span>
+                                                                        href="/admin/practitioners/documents/{{$professional->id}}/edit"><i
+                                                                            class="fa fa-pencil"></i> Edit</a>
+                    </span>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -594,14 +618,15 @@
                         </div>
                         <div class="tab-pane p-20" id="apps" role="tabpanel">
 
-                                <a href="/admin/practitioners/apps/{{$practitioner->id}}/create"
-                                   class="btn btn-success btn-sm">Create Other Applications
-                                </a>
+                            <a href="/admin/practitioners/apps/{{$practitioner->id}}/create"
+                               class="btn btn-success btn-sm">Create Other Applications
+                            </a>
 
                             <div class="table-responsive">
                                 <h4 class="card-title">Other application Documents</h4>
                                 <table id="others_apps"
-                                       class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                       class="display nowrap table table-hover table-striped table-bordered"
+                                       cellspacing="0" width="100%">
                                     <thead>
                                     <tr>
                                         <th>Application form</th>
@@ -632,13 +657,16 @@
                                                     {{date("d F Y",strtotime($others_apps->application_date))}}
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/practitioners/apps/{{$others_apps->practitioner->id}}/edit">Edit application</a>
+                                                    <a href="/admin/practitioners/apps/{{$others_apps->practitioner->id}}/edit">Edit
+                                                        application</a>
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/practitioners/docs/{{$others_apps->id}}/create">Add Documents</a>
+                                                    <a href="/admin/practitioners/docs/{{$others_apps->id}}/create">Add
+                                                        Documents</a>
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/practitioners/apps/{{$others_apps->id}}/show">View Application</a>
+                                                    <a href="/admin/practitioners/apps/{{$others_apps->id}}/show">View
+                                                        Application</a>
                                                 </td>
 
                                             </tr>
@@ -664,23 +692,6 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <div class="d-flex no-block align-items-center">
-                                                            <div>
-                                                                <h3><i class="fa fa-dollar"></i></h3>
-                                                                @if(count($practitioner->payments))
-                                                                    <p class="text-muted">RENEWALS BALANCE</p>
-                                                                @else
-                                                                    <p class="text-muted"> REGISTRATION BALANCE</p>
-                                                                @endif
-                                                            </div>
-                                                            <div class="ml-auto">
-                                                                @if(count($practitioner->payments))
-                                                                    <h2 class="counter text-purple">{{number_format($fee =  $practitioner->payments->sum('balance'),2)}}</h2>
-                                                                @else
-                                                                    <h2 class="counter text-cyan">{{number_format($fee = ($registration_fee->fee * 0.15) + $registration_fee->fee,2)}}</h2>
-                                                                @endif
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="progress">
@@ -700,22 +711,7 @@
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <div class="d-flex no-block align-items-center">
-                                                                <div>
-                                                                    <h3><i class="fa fa-dollar"></i></h3>
-                                                                    <p class="text-muted">TOTAL BALANCE</p>
-                                                                </div>
-                                                                <div class="ml-auto">
 
-                                                                    @if(count($practitioner->payments))
-                                                                        <h2 class="counter text-purple">{{number_format($practitioner->payments->sum('balance'),2)}}</h2>
-
-                                                                    @else
-                                                                        <h2 class="counter text-cyan">{{number_format($fee = ($registration_fee->fee * 0.15 )+ $registration_fee->fee,2)}}</h2>
-                                                                    @endif
-
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="progress">
@@ -776,14 +772,14 @@
                                                                     {{$renewal->renewalStatus->name}}
                                                                 </td>
                                                                 <td>
-                                                                    @if($renewal->cdpoints == null)
+                                                                    @if($renewal->cdpoints == 0)
                                                                         {{'Pending Cd Points'}}
                                                                     @else
                                                                         {{'Up to date'}}
                                                                     @endif
                                                                 </td>
                                                                 <td>
-                                                                    @if($renewal->placement == null)
+                                                                    @if($renewal->placement == 0)
                                                                         {{'Pending Placement'}}
                                                                     @else
                                                                         {{'Up to date'}}
@@ -836,7 +832,8 @@
                                                         <li>
                                                             {{--<a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
                                                                 As Read</a>--}}
-                                                            <span class="date">@if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif</span>
+                                                            <span
+                                                                class="date">@if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif</span>
                                                         </li>
                                                         </li>
                                                     @endif
@@ -869,7 +866,7 @@
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
     <!-- end - This is for export functionality only -->
-<script>
+    <script>
         $('#renewals').DataTable({
             order: [],
             dom: 'Bfrtip',

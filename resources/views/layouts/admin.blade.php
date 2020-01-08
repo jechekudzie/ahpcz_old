@@ -330,7 +330,6 @@ function countPendingItems(){
     </aside>
     <br/>
     <br/>
-    <br/>
 
     <div class="page-wrapper">
 
@@ -342,8 +341,6 @@ function countPendingItems(){
     <footer class="footer">
         ©{{date('Y')}} Allied Health Practitioners Council
     </footer>
-
-</div>
 
 <script src="{{asset('assets/node_modules/jquery/jquery-3.2.1.min.js')}}"></script>
 <script src="{{asset('dist/js/dashboard1.js')}}"></script>
@@ -358,11 +355,9 @@ function countPendingItems(){
 <script src="{{asset('dist/js/sidebarmenu.js')}}"></script>
 <!--Custom JavaScript -->
 <script src="{{asset('dist/js/custom.min.js')}}"></script>
-<!-- ============================================================== -->
 
-<!-- This page plugins -->
 @yield('plugins-js')
-
+</div>
 </body>
 
 </html>

@@ -107,6 +107,8 @@ Route::get('/admin/practitioner_applications/{practitioner}/{application}', 'Pra
 /*---------------------*/
 /*Start Of Practitioner Registration*/
 Route::resource('/admin/practitioners', 'PractitionersController');
+Route::get('/admin/practitioners/renewal/create', 'PractitionersController@createForRenew');
+Route::post('/admin/practitioners/renewal/store', 'PractitionersController@practitionerRenewStore');
 Route::get('/admin/practitioners/{practitioner}/delete', 'PractitionersController@delete');
 /*End Of Practitioner Registration*/
 

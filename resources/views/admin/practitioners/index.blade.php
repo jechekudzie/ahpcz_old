@@ -1,5 +1,4 @@
 @extends('layouts.admin')
-@section('title','AHPCZ - Practitioner')
 @section('plugins-css')
 
 @section('content')
@@ -7,14 +6,12 @@
 
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
-                @can('admin')
-                    <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
-                @endcan
+
                 @can('updatePractitioner')
                     <a href="practitioners/create" class="btn btn-success"><i
-                            class="fa fa-plus-circle"></i> Add
-                        Practitioner
-                    </a>
+                            class="fa fa-plus-circle"></i> Add Practitioner</a>
+                    <a href="/admin/practitioners/renewal/create" class="btn btn-success"><i
+                            class="fa fa-plus-circle"></i> Add Practitioner For Renewal</a>
                 @endcan
             </div>
             <div class="col-md-7 align-self-center text-right">
@@ -106,13 +103,15 @@
                                                     @endif
                                                 </td>
                                                 <td>{{$practitioner->profession->name}}</td>
-                                                <td>{{$practitioner->professionalQualification->name}}</td>
-                                                <td>{{$practitioner->qualificationCategory->name}}</td>
+                                                <td> @if($practitioner->professional_qualification_id !=null){{$practitioner->professionalQualification->name}}@endif</td>
+                                                <td>@if($practitioner->qualification_category_id!=null){{$practitioner->qualificationCategory->name}}@endif</td>
                                                 <td>
-                                                    @if($practitioner->qualification_category_id == 1)
-                                                        {{$practitioner->accreditedInstitution->name}}
-                                                    @else
-                                                        {{$practitioner->institution}}
+                                                    @if($practitioner->qualification_category_id!=null)
+                                                        @if($practitioner->qualification_category_id == 1)
+                                                            {{$practitioner->accreditedInstitution->name}}
+                                                        @else
+                                                            {{$practitioner->institution}}
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td>
@@ -188,13 +187,15 @@
                                                     @endif
                                                 </td>
                                                 <td>{{$pending->profession->name}}</td>
-                                                <td>{{$pending->professionalQualification->name}}</td>
-                                                <td>{{$pending->qualificationCategory->name}}</td>
+                                                <td>@if($pending->professional_qualification_id !=null){{$pending->professionalQualification->name}}@endif</td>
+                                                <td>@if($pending->qualification_category_id !=null){{$pending->qualificationCategory->name}}@endif</td>
                                                 <td>
-                                                    @if($pending->qualification_category_id == 1)
-                                                        {{$pending->accreditedInstitution->name}}
-                                                    @else
-                                                        {{$pending->institution}}
+                                                    @if($pending->qualification_category_id !=null)
+                                                        @if($pending->qualification_category_id == 1)
+                                                            {{$pending->accreditedInstitution->name}}
+                                                        @else
+                                                            {{$pending->institution}}
+                                                        @endif
                                                     @endif
                                                 </td>
                                                 <td>
@@ -267,7 +268,7 @@
             </div>
         </div>
     </div>
-@endsection
+@stop
 
 @section('plugins-js')
     <script src="{{asset('assets/node_modules/datatables/jquery.dataTables.min.js')}}"></script>
@@ -300,4 +301,4 @@
             ]
         });
     </script>
-@endsection
+@stop

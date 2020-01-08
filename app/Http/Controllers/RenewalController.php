@@ -94,7 +94,6 @@ class RenewalController extends Controller
     //Store initial payment and create yearly subscription
     public function store(Practitioner $practitioner)
     {
-
         $payment = request()->validate([
             'payment_date' => 'required',
             'renewal_period_id' => 'required',

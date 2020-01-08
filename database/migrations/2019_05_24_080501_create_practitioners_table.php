@@ -27,7 +27,7 @@ class CreatePractitionersTable extends Migration
             $table->integer('registration_certificate')->default(0);
             $table->unsignedInteger('register_category_id')->nullable();
             $table->unsignedBigInteger('profession_id');
-            $table->unsignedBigInteger('qualification_category_id');
+            $table->unsignedBigInteger('qualification_category_id')->nullable();
             $table->unsignedBigInteger('renewal_category_id')->nullable();
             $table->unsignedBigInteger('payment_method_id')->nullable();
 
