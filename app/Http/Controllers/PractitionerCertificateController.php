@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class PractitionerCertificateController extends Controller
 {
+
+    //displays all up to date certificate
     public function index()
     {
         $current_year = date('Y');
@@ -28,7 +30,7 @@ class PractitionerCertificateController extends Controller
         return view('admin.practitioner_certificates.index', compact('no_shortfalls'));
     }
 
-
+    //display all pending
     public function pending()
     {
         $year = date('Y');
@@ -51,6 +53,33 @@ class PractitionerCertificateController extends Controller
         return view('admin.practitioner_certificates.pendings', compact('shortfalls'));
 
     }
+
+    public function collection(Renewal $renewal)
+    {
+        return view('admin.practitioner_certificates.collection', compact('renewal'));
+
+    }
+
+    public function signOff(Renewal $renewal)
+    {
+        $renewal->update([
+           'certificate'=> 1
+        ]);
+
+        return redirect('/admin/practitioners/'.$renewal->practitioner->id)->with('message','Certificate has been signed off  and is now ready for collection.');
+
+    }
+
+    public function collect(Renewal $renewal)
+    {
+        $renewal->update([
+            'certificate'=> 2
+        ]);
+
+        return redirect('/admin/practitioners/'.$renewal->practitioner->id)->with('message','Certificate has been issued to the practitioner.');
+
+    }
+
 
     public function store()
     {

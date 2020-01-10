@@ -63,7 +63,7 @@
                                     <th>Placement</th>
                                     <th>Compliance</th>
                                     <th>Renewal Date</th>
-                                    <th>view</th>
+                                    <th>Action</th>
 
                                 </tr>
                                 </thead>
@@ -77,7 +77,7 @@
                                     <th>Placement</th>
                                     <th>Compliance</th>
                                     <th>Renewal Date</th>
-                                    <th>view</th>
+                                    <th>Action</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
@@ -109,6 +109,28 @@
 
                                             <td>{{$complete_renewal->created_at->format('d F Y')}}</td>
                                             <td>
+                                                @if($complete_renewal->certificate == 0)
+                                                    @if(auth()->user()->role_id == 7)
+                                                        <a href="/admin/practitioners/certificate/collection/{{$complete_renewal->id}}">Sign
+                                                            Off </a> ||
+                                                    @else
+                                                        {{'Pending Sign Off'}} ||
+                                                    @endif
+                                                @endif
+
+                                                @if($complete_renewal->certificate == 1)
+                                                    @if(auth()->user()->role_id == 4)
+                                                        <a href="/admin/practitioners/certificate/collection/{{$complete_renewal->id}}">Collection
+                                                        </a> ||
+                                                    @else
+                                                        {{'Pending Collection'}} ||
+                                                    @endif
+                                                @endif
+
+                                                @if($complete_renewal->certificate == 2)
+                                                    Collected ||
+                                                @endif
+
                                                 <a href="/admin/practitioners/{{$complete_renewal->practitioner->id}}">View </a>
 
                                             </td>

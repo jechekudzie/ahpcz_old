@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','AHPCZ - Create Nationality')
+@section('title','AHPCZ')
 @section('plugins-css')
 
 @endsection

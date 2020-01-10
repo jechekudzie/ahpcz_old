@@ -68,8 +68,6 @@
                                                 @foreach($professions as $profession)
                                                 <option value="{{$profession->id}}">{{$profession->name}}</option>
                                                 @endforeach
-
-
                                             </select>
                                         </div>
                                     </div>
@@ -77,6 +75,18 @@
                                         <h5> Prefix <span class="text-danger">*</span></h5>
                                         <div class="controls">
                                             <input type="text" name="name" value="{{old('name')}}" class="form-control"
+                                                   required
+                                                   data-validation-required-message="This field is required">
+                                        </div>
+                                        <div class="form-control-feedback">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group">
+                                        <h5> Last Registration Number Issued <span class="text-danger">*</span></h5>
+                                        <div class="controls">
+                                            <input type="text" name="last_reg" value="{{old('last_reg')}}" class="form-control"
                                                    required
                                                    data-validation-required-message="This field is required">
                                         </div>

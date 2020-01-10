@@ -103,7 +103,6 @@
                                                 @endif
                                             </td>
 
-
                                             <td> {{number_format($shortfall['shortfall'],2)}}%</td>
 
                                             <td>

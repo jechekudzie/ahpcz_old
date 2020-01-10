@@ -207,6 +207,7 @@ Route::get('/admin/practitioners/generate_reg/{profession_id}/{practitioner}', '
 
 //professional qualification
 Route::get('/admin/get_pq/{profession_id}', 'DynamicDataController@professionalQualifications');
+
 Route::get('/admin/get_pq/{profession_id}/{pq_id}', 'DynamicDataController@professionalQualificationsEdit');
 //
 Route::get('/admin/get_ai/{professional_qualification_id}', 'DynamicDataController@accreditedInstitutions');
@@ -256,6 +257,9 @@ Route::post('/admin/notification/send', 'MessagesController@send');
 //practitioner certificates
 Route::get('/admin/practitioners/certificate/index', 'PractitionerCertificateController@index');
 Route::get('/admin/practitioners/certificate/pending', 'PractitionerCertificateController@pending');
+Route::get('/admin/practitioners/certificate/collection/{renewal}', 'PractitionerCertificateController@collection');
+Route::patch('/admin/practitioners/certificate/signoff/{renewal}', 'PractitionerCertificateController@signOff');
+Route::patch('/admin/practitioners/certificate/collect/{renewal}', 'PractitionerCertificateController@collect');
 
 
 Auth::routes(['verify' => true]);

@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Accreditation;
 use App\AccreditedInstitution;
+use App\Profession;
 use App\ProfessionalQualification;
 use Illuminate\Http\Request;
 
 class AccreditedQualificationsController extends Controller
 {
 
-   /* public function __construct()
-    {
-        $this->middleware('verified');
-    }*/
+    /* public function __construct()
+     {
+         $this->middleware('verified');
+     }*/
 
     public function index()
     {
@@ -32,10 +33,11 @@ class AccreditedQualificationsController extends Controller
     public function create()
     {
         //
+        $professions = Profession::all()->sortBy('name');
         $professionalQualifications = ProfessionalQualification::all()->sortBy('name');
         $accredited_institutions = AccreditedInstitution::all()->sortBy('name');
 
-        return view('admin.accredited_qualification.create', compact('professionalQualifications', 'accredited_institutions'));
+        return view('admin.accredited_qualification.create', compact('professionalQualifications', 'accredited_institutions', 'professions'));
 
     }
 
@@ -72,15 +74,18 @@ class AccreditedQualificationsController extends Controller
     {
         $accreditation = Accreditation::find($data);
 
+        $professions = Profession::all()->sortBy('name');
         $professionalQualifications = ProfessionalQualification::all()->sortBy('name');
         $accredited_institutions = AccreditedInstitution::all()->sortBy('name');
 
-        return view('admin.accredited_qualification.edit', compact('accreditation', 'professionalQualifications', 'accredited_institutions'));
+        return view('admin.accredited_qualification.edit', compact('accreditation', 'professionalQualifications', 'accredited_institutions', 'professions'
+        ));
 
     }
 
 
-    public function show($data){
+    public function show($data)
+    {
 
         $accreditation = Accreditation::find($data);
         return view('admin.accredited_qualification.show', compact('accreditation'));
