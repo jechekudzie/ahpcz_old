@@ -117,10 +117,6 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <?php
-                                                    $year = date('Y');
-
-                                                    ?>
                                                     @if($practitioner->currentRenewal)
                                                         @if (($practitioner->currentRenewal->renewal_status_id == 1) && ($practitioner->currentRenewal->cdpoints == 1) && ($practitioner->currentRenewal->placement == 1))
                                                             {{'Compliant'}}

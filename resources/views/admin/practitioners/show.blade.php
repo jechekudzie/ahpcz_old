@@ -44,8 +44,18 @@
                                 {{$practitioner->prefix.str_pad($practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}
                             @endif
                         </h4>
-                        <h6 style="font-size: 20px;" class="card-subtitle">Current Status
-                            <code>{{$current_status}}</code> @can('updatePractitioner')<a
+                        <h6 style="font-size: 20px;" class="card-subtitle">Current Status:
+                            <code>
+                                @if($practitioner->currentRenewal)
+                                    @if (($practitioner->currentRenewal->renewal_status_id == 1) && ($practitioner->currentRenewal->cdpoints == 1) && ($practitioner->currentRenewal->placement == 1))
+                                        {{'Compliant'}}
+                                    @else
+                                        {{'Not Compliant'}}
+                                    @endif
+                                @else
+                                    {{'Not Compliant'}}
+                                @endif
+                            </code> @can('updatePractitioner')<a
                                 href="/admin/practitioners/{{$practitioner->id}}/cdpoints"
                                 class="btn btn-success btn-xs">Add CPD Points & Placement</a>@endcan</h6>
                     </div>
