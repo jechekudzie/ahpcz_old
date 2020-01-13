@@ -63,20 +63,20 @@ class PractitionerCertificateController extends Controller
     public function signOff(Renewal $renewal)
     {
         $renewal->update([
-           'certificate'=> 1
+            'certificate' => 1
         ]);
 
-        return redirect('/admin/practitioners/'.$renewal->practitioner->id)->with('message','Certificate has been signed off  and is now ready for collection.');
+        return redirect('/admin/practitioners/' . $renewal->practitioner->id)->with('message', 'Certificate has been signed off  and is now ready for collection.');
 
     }
 
     public function collect(Renewal $renewal)
     {
         $renewal->update([
-            'certificate'=> 2
+            'certificate' => 2
         ]);
 
-        return redirect('/admin/practitioners/'.$renewal->practitioner->id)->with('message','Certificate has been issued to the practitioner.');
+        return redirect('/admin/practitioners/' . $renewal->practitioner->id)->with('message', 'Certificate has been issued to the practitioner.');
 
     }
 

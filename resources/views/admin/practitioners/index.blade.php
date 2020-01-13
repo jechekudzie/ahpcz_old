@@ -65,7 +65,7 @@
                                             <th>Registration Number</th>
                                             <th>Profession</th>
                                             <th>Professional Qualification</th>
-                                            <th>Qualification Category</th>
+                                            {{--<th>Qualification Category</th>--}}
                                             <th>Accredited Institution</th>
                                             <th>Status</th>
                                             <th>view</th>
@@ -81,7 +81,7 @@
                                             <th>Registration Number</th>
                                             <th>Profession</th>
                                             <th>Professional Qualification</th>
-                                            <th>Qualification Category</th>
+                                            {{--<th>Qualification Category</th>--}}
                                             <th>Accredited Institution</th>
                                             <th>Status</th>
                                             <th>view</th>
@@ -104,7 +104,9 @@
                                                 </td>
                                                 <td>{{$practitioner->profession->name}}</td>
                                                 <td> @if($practitioner->professional_qualification_id !=null){{$practitioner->professionalQualification->name}}@endif</td>
+{{--
                                                 <td>@if($practitioner->qualification_category_id!=null){{$practitioner->qualificationCategory->name}}@endif</td>
+--}}
                                                 <td>
                                                     @if($practitioner->qualification_category_id!=null)
                                                         @if($practitioner->qualification_category_id == 1)
@@ -115,10 +117,18 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if($practitioner->approval_status  == 1)
-                                                        {{'Approved'}}
+                                                    <?php
+                                                    $year = date('Y');
+
+                                                    ?>
+                                                    @if($practitioner->currentRenewal)
+                                                        @if (($practitioner->currentRenewal->renewal_status_id == 1) && ($practitioner->currentRenewal->cdpoints == 1) && ($practitioner->currentRenewal->placement == 1))
+                                                            {{'Compliant'}}
+                                                        @else
+                                                            {{'Not Compliant'}}
+                                                        @endif
                                                     @else
-                                                        {{'Pending Approval'}}
+                                                        {{'Not Compliant'}}
                                                     @endif
                                                 </td>
 
