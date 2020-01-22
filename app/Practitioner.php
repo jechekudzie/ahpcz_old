@@ -78,7 +78,6 @@ class Practitioner extends Model
 
     public function contact()
     {
-
         return $this->hasOne(PractitionerContact::class);
     }
 

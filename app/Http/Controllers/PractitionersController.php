@@ -11,6 +11,7 @@ use App\Nationality;
 use App\Notifications\ApplicationSubmitted;
 use App\PaymentMethod;
 use App\Practitioner;
+use App\PractitionerContact;
 use App\PractitionerCpdpoint;
 use App\Prefix;
 use App\Profession;
