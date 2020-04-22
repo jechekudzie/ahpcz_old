@@ -435,6 +435,7 @@ class RenewalController extends Controller
             $yearly_placement['renewal_period_id'] = request('renewal_period_id');
             $yearly_placement['practitioner_id'] = $practitioner->id;
             $yearly_placement['path'] = $path;
+
             //get set placement status for that profession
             $placement = $practitioner->profession->cdpoint;
             //get submitted cd points
@@ -456,6 +457,12 @@ class RenewalController extends Controller
         }
 
 
+    }
+
+    //view placement letter
+    public function viewPlacement($id){
+        $placement = PractitionerPlacement::find($id);
+        return view('admin.practitioner_placement.view',compact('placement'));
     }
 
     //invoice balance

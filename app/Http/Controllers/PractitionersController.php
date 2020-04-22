@@ -432,7 +432,6 @@ class PractitionersController extends Controller
     public function destroy(Practitioner $practitioner)
     {
         //
-
         $practitioner->contact()->delete();
         $practitioner->practitionerQualification()->delete();
         $practitioner->documents()->delete();
@@ -448,10 +447,5 @@ class PractitionersController extends Controller
         return redirect('/admin/practitioners')->with('message', 'Practitioner deleted successfully.');
     }
 
-    public function other(Practitioner $practitioner)
-    {
-        //
-        return view('admin.practitioners.other', compact('practitioner'));
-    }
 }
 

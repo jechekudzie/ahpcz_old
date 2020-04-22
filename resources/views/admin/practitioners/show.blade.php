@@ -7,9 +7,9 @@
         <div class="row page-titles">
 
             <div class="col-md-5 align-self-center">
-                @can('admin')
-                    <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
-                @endcan
+                {{-- @can('admin')
+                     <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
+                 @endcan--}}
                 <a href="/admin/practitioners" class="btn btn-success"></i> All Practitioners</a>
             </div>
 
@@ -57,7 +57,7 @@
                                 @endif
                             </code> @can('updatePractitioner')<a
                                 href="/admin/practitioners/{{$practitioner->id}}/cdpoints"
-                                class="btn btn-success btn-xs">Add CPD Points & Placement</a>@endcan</h6>
+                                class="btn btn-success btn-xs">Add CPD Points</a>@endcan</h6>
                     </div>
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs customtab" role="tablist">
@@ -466,13 +466,71 @@
                             </div>
                         </div>
                         <div class="tab-pane p-20" id="intern" role="tabpanel">
-                            <a href="/admin/practitioners/documents/{{$practitioner->id}}/create"
-                               class="btn btn-success btn-sm">Add Internship</a>
+                            {{-- <a href="/admin/practitioners/documents/{{$practitioner->id}}/create"
+                                class="btn btn-success btn-sm">Add Internship</a>--}}
 
                             <a href="/admin/practitioners/{{$practitioner->id}}/createPlacement"
                                class="btn btn-success btn-sm">Add Placement</a>
-                            <br/>
-                            <br/>
+                            <div class="card-body">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive m-t-40">
+                                            <h4 class="card-title">Internship Placement</h4>
+                                            <table id="placements"
+                                                   class="display nowrap table table-hover table-striped table-bordered"
+                                                   cellspacing="0" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Period</th>
+                                                    <th>Status</th>
+                                                    <th>Renewal Date</th>
+                                                    <th>view</th>
+
+                                                </tr>
+                                                </thead>
+                                                <tfoot>
+                                                <tr>
+                                                    <th>Period</th>
+                                                    <th>Status</th>
+                                                    <th>Renewal Date</th>
+                                                    <th>view</th>
+
+                                                </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                @if(count($practitioner->renewals))
+                                                    @foreach($practitioner->renewals as $renewal)
+                                                        <tr>
+                                                            <td>{{$period = $renewal->renewal_period_id}}</td>
+                                                            <td>
+                                                                @if($renewal->placement == 0)
+                                                                    {{'Pending Placement'}}
+                                                                @else
+                                                                    {{'Up to date'}}
+                                                                @endif
+                                                            </td>
+                                                            <td>{{$renewal->created_at->format('d F Y')}}</td>
+                                                            <td>
+                                                                @if($practitioner_placement = \App\PractitionerPlacement::where('renewal_period_id',$renewal->renewal_period_id)->first())
+                                                                    <a target="_blank"
+                                                                       href="/{{$practitioner_placement->path}}">View
+                                                                        Placement Letter </a>
+                                                                @else
+                                                                    {{'Pending placement letter'}}
+                                                                @endif
+                                                            </td>
+
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                         </div>
                         <div class="tab-pane p-20" id="employment_history" role="tabpanel">
@@ -644,7 +702,6 @@
                                         <th>Edit</th>
                                         <th>Add Documents</th>
                                         <th>View</th>
-
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -657,13 +714,11 @@
                                     </tr>
                                     </tfoot>
                                     <tbody>
-                                    @if($practitioner->otherApplications)
+                                        @if($practitioner->otherApplications)
                                         @foreach($practitioner->otherApplications as $others_apps)
                                             <tr>
                                                 <td>{{$others_apps->paymentItem->name}}</td>
-
                                                 <td>
-
                                                     {{date("d F Y",strtotime($others_apps->application_date))}}
                                                 </td>
                                                 <td>
@@ -672,20 +727,22 @@
                                                 </td>
                                                 <td>
                                                     <a href="/admin/practitioners/docs/{{$others_apps->id}}/create">Add
-                                                        Documents</a>
+                                                        Documents
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <a href="/admin/practitioners/apps/{{$others_apps->id}}/show">View
-                                                        Application</a>
+                                                        Application
+                                                    </a>
                                                 </td>
 
                                             </tr>
                                         @endforeach
                                     @endif
-
                                     </tbody>
                                 </table>
                             </div>
+
                         </div>
                         <div class="tab-pane p-20" id="renewal" role="tabpanel">
                             @can('updatePractitionerPayment')
@@ -878,6 +935,15 @@
     <!-- end - This is for export functionality only -->
     <script>
         $('#renewals').DataTable({
+            order: [],
+            dom: 'Bfrtip',
+
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+        
+        $('#placements').DataTable({
             order: [],
             dom: 'Bfrtip',
 

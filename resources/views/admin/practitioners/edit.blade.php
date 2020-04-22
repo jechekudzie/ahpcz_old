@@ -488,6 +488,19 @@
             format: 'YYYY-MM-DD'
         });
 
+        // MAterial Date picker
+        $('#commencement_date').bootstrapMaterialDatePicker({
+            weekStart: 0,
+            time: false,
+            format: 'YYYY-MM-DD'
+        });
+
+        $('#completion_date').bootstrapMaterialDatePicker({
+            weekStart: 0,
+            time: false,
+            format: 'YYYY-MM-DD'
+        });
+
 
         $(document).ready(function () {
             var province_id = $("#provinces").val();
