@@ -6,6 +6,8 @@ use App\City;
 use App\Document;
 use App\DocumentCategory;
 use App\Gender;
+use App\Http\Resources\PractitionerResource;
+use App\Http\Resources\PractitionerResourceCollection;
 use App\MaritalStatus;
 use App\Nationality;
 use App\Notifications\ApplicationSubmitted;
@@ -25,6 +27,7 @@ use App\Requirement;
 use App\Shortfall;
 use App\Title;
 use App\User;
+use http\Env\Response;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
 use PhpParser\Comment\Doc;
@@ -37,19 +40,31 @@ class PractitionersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('auth');
 
-    }
+    }*/
 
-    public function index()
+    public function index(Request $request)
     {
+        $practitioners = Practitioner::all();
+        $users = User::all();
+
+        if( $request->is('api/admin/practitioners'))
+        {
+            return response()->json([
+                'practitioners' => $practitioners->toArray(),
+                'users' => $users->toArray()
+            ]);
+
+        }else{
+
+            return view('admin.practitioners.index', compact('practitioners'));
+
+        }
 
 
-        $practitioners = Practitioner::whereApproval_status(1)->get()->sortBy('first_name');
-        $pendings = Practitioner::whereApproval_status(0)->get()->sortBy('first_name');
-        return view('admin.practitioners.index', compact('practitioners', 'pendings'));
     }
 
     /**
@@ -279,12 +294,6 @@ class PractitionersController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function show(Practitioner $practitioner)
     {
         $registration_fee = 0;
@@ -326,12 +335,6 @@ class PractitionersController extends Controller
             'internship', 'registration_fee', 'registration_fee', 'current_status'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Practitioner $practitioner)
     {
 

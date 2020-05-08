@@ -270,6 +270,9 @@ Route::resource('/admin/users', 'SystemUsersController');
 Route::get('/home', 'HomeController@index')->name('home');
 
 
+Route::get('/test', 'HomeController@index')->name('home');
+
+
 
 //System Reports
 

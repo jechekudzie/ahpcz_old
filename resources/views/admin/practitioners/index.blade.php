@@ -91,7 +91,7 @@
                                         </tr>
                                         </tfoot>
                                         <tbody>
-                                        @foreach($practitioners as $practitioner)
+                                        @foreach($practitioners->where('approval_status',1)->sortBy('first_name') as $practitioner)
                                             <tr>
                                                 <td>{{$practitioner->title->name}}</td>
                                                 <td>{{$practitioner->first_name.' '.$practitioner->last_name}}</td>
@@ -181,74 +181,74 @@
                                         </tr>
                                         </tfoot>
                                         <tbody>
-                                        @foreach($pendings as $pending)
+                                        @foreach($practitioners->where('approval_status',0)->sortBy('first_name') as $practitioner)
                                             <tr>
-                                                <td>{{$pending->title->name}}</td>
-                                                <td>{{$pending->first_name.' '.$pending->last_name}}</td>
+                                                <td>{{$practitioner->title->name}}</td>
+                                                <td>{{$practitioner->first_name.' '.$practitioner->last_name}}</td>
                                                 <td>
-                                                    @if($pending->registration_number == null)
-                                                        {{$pending->prefix.' (No Registration Number)'}}
+                                                    @if($practitioner->registration_number == null)
+                                                        {{$practitioner->prefix.' (No Registration Number)'}}
                                                     @else
-                                                        {{$pending->prefix.str_pad($pending->registration_number, 4, '0', STR_PAD_LEFT)}}
+                                                        {{$practitioner->prefix.str_pad($practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}
                                                     @endif
                                                 </td>
-                                                <td>{{$pending->profession->name}}</td>
-                                                <td>@if($pending->professional_qualification_id !=null){{$pending->professionalQualification->name}}@endif</td>
-                                                <td>@if($pending->qualification_category_id !=null){{$pending->qualificationCategory->name}}@endif</td>
+                                                <td>{{$practitioner->profession->name}}</td>
+                                                <td>@if($practitioner->professional_qualification_id !=null){{$practitioner->professionalQualification->name}}@endif</td>
+                                                <td>@if($practitioner->qualification_category_id !=null){{$practitioner->qualificationCategory->name}}@endif</td>
                                                 <td>
-                                                    @if($pending->qualification_category_id !=null)
-                                                        @if($pending->qualification_category_id == 1)
-                                                            {{$pending->accreditedInstitution->name}}
+                                                    @if($practitioner->qualification_category_id !=null)
+                                                        @if($practitioner->qualification_category_id == 1)
+                                                            {{$practitioner->accreditedInstitution->name}}
                                                         @else
-                                                            {{$pending->institution}}
+                                                            {{$practitioner->institution}}
                                                         @endif
                                                     @endif
                                                 </td>
                                                 <td>
                                                     @if(
-                                                    $pending->registration_officer == 0
+                                                    $practitioner->registration_officer == 0
 
                                                     )
                                                         {{'Pending Registration Officer Approval'}}
 
                                                     @elseif(
-                                                    $pending->registration_officer == 1
-                                                    && $pending->accountant == 0
+                                                    $practitioner->registration_officer == 1
+                                                    && $practitioner->accountant == 0
 
                                                     )
                                                         {{'Pending Accountant Approval'}}
 
                                                     @elseif(
-                                                    $pending->registration_officer == 1
-                                                    && $pending->accountant == 1
-                                                    && $pending->member == 0
+                                                    $practitioner->registration_officer == 1
+                                                    && $practitioner->accountant == 1
+                                                    && $practitioner->member == 0
 
                                                     )
                                                         {{'Pending Member Approval'}}
 
                                                     @elseif(
-                                                    $pending->registration_officer == 1
-                                                    && $pending->accountant == 1
-                                                    && $pending->member == 1
+                                                    $practitioner->registration_officer == 1
+                                                    && $practitioner->accountant == 1
+                                                    && $practitioner->member == 1
                                                     )
                                                         {{'Pending Registration Officer Approval'}}
 
                                                     @elseif(
-                                                    $pending->registration_officer == 2
-                                                    && $pending->accountant == 1
-                                                    && $pending->member == 1
-                                                    && $pending->registrar == 0
+                                                    $practitioner->registration_officer == 2
+                                                    && $practitioner->accountant == 1
+                                                    && $practitioner->member == 1
+                                                    && $practitioner->registrar == 0
 
                                                     )
                                                         {{'Pending Registrar Approval'}}
 
                                                     @elseif(
 
-                                                    $pending->registration_officer == 1
-                                                    && $pending->accountant == 1
-                                                    && $pending->member == 1
-                                                    && $pending->registrar == 1
-                                                    && $pending->approval_status == 1
+                                                    $practitioner->registration_officer == 1
+                                                    && $practitioner->accountant == 1
+                                                    && $practitioner->member == 1
+                                                    && $practitioner->registrar == 1
+                                                    && $practitioner->approval_status == 1
                                                     )
                                                         {{'Application Approved '}}
                                                     @else
@@ -256,9 +256,9 @@
                                                     @endif
                                                 </td>
 
-                                                <td><a href="/admin/practitioners/{{$pending->id}}"> View</a></td>
+                                                <td><a href="/admin/practitioners/{{$practitioner->id}}"> View</a></td>
                                                 @can('updatePractitioner')
-                                                    <td><a href="/admin/practitioners/{{$pending->id}}/delete">
+                                                    <td><a href="/admin/practitioners/{{$practitioner->id}}/delete">
                                                             Delete</a></td>
                                                 @endcan
                                             </tr>
