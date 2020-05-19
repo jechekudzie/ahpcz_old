@@ -15,6 +15,7 @@ class Practitioner extends Model
         return $this->hasOne(Renewal::class)->where('renewal_period_id',$year);
     }
 
+
     public function title()
     {
         return $this->belongsTo(Title::class);

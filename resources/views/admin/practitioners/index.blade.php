@@ -104,9 +104,9 @@
                                                 </td>
                                                 <td>{{$practitioner->profession->name}}</td>
                                                 <td> @if($practitioner->professional_qualification_id !=null){{$practitioner->professionalQualification->name}}@endif</td>
-{{--
-                                                <td>@if($practitioner->qualification_category_id!=null){{$practitioner->qualificationCategory->name}}@endif</td>
---}}
+                                                {{--
+                                                                                                <td>@if($practitioner->qualification_category_id!=null){{$practitioner->qualificationCategory->name}}@endif</td>
+                                                --}}
                                                 <td>
                                                     @if($practitioner->qualification_category_id!=null)
                                                         @if($practitioner->qualification_category_id == 1)
@@ -268,14 +268,13 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @stop
-
+</div>
 @section('plugins-js')
     <script src="{{asset('assets/node_modules/datatables/jquery.dataTables.min.js')}}"></script>
     <!-- start - This is for export functionality only -->

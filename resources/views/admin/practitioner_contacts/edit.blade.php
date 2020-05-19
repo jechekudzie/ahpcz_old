@@ -1,8 +1,9 @@
 @extends('layouts.admin')
 @section('title','AHPCZ - Create Institution')
 @section('plugins-css')
-    <link href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
-          rel="stylesheet">
+    <link
+        href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
+        rel="stylesheet">
     <link href="{{asset('../assets/node_modules/wizard/steps.css')}}" rel="stylesheet">
 @endsection
 
@@ -45,10 +46,10 @@
                                 @endif
                                 @if (session('message'))
                                     <div class="alert alert-success alert-rounded col-md-6"><i
-                                                class="fa fa-check-circle"></i> {{ session('message') }}
+                                            class="fa fa-check-circle"></i> {{ session('message') }}
                                         <button type="button" class="close" data-dismiss="alert"
                                                 aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
+                                                aria-hidden="true">&times;</span></button>
                                     </div>
                                 @endif
                             </div>
@@ -60,7 +61,8 @@
                                 <div class="card wizard-content">
                                     <div class="card-body">
                                         <h4 class="card-title">Update Practitioner Contacts</h4>
-                                        <form action="/admin/practitioners/contacts/{{$practitioner->contact->id}}/update" method="post">
+                                        <form action="/admin/practitioners/contacts/{{$practitioner->contact->id}}/update"
+                                            method="post">
                                             {{method_field('PATCH')}}
                                             {{csrf_field()}}
                                             <div class="row">
@@ -68,16 +70,8 @@
                                                     <div class="form-group">
                                                         <h5>Physical Address <span class="text-danger">*</span></h5>
                                                         <div class="controls">
-                                                    <textarea name="physical_address" class="form-control" required
-                                                              data-validation-required-message="This field is required">{{$practitioner->contact->physical_address}}</textarea>
+                                                            <textarea name="physical_address" class="form-control">{{$practitioner->contact->physical_address}}</textarea>
                                                         </div>
-
-                                                        @error('physical_address')
-                                                        <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                        @enderror
-
                                                     </div>
                                                 </div>
 
@@ -86,17 +80,13 @@
                                                     <div class="form-group">
                                                         <h5>Email Address <span class="text-danger">*</span></h5>
                                                         <div class="controls">
-                                                            <input type="email" name="email" value="{{$practitioner->contact->email}}"
-                                                                   class="form-control"
-                                                                   required
-                                                                   data-validation-required-message="This field is required">
+                                                            <input type="email" name="email"
+                                                                   value="{{$practitioner->contact->email}}"
+                                                                   class="form-control">
                                                         </div>
 
-                                                        @error('email')
-                                                        <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
+
                                                 </span>
-                                                        @enderror
 
                                                     </div>
                                                 </div>
@@ -105,20 +95,16 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="wlocation2"> Province : <span
-                                                                    class="danger">*</span>
+                                                                class="danger">*</span>
                                                         </label>
-                                                        <select class="custom-select form-control" required
+                                                        <select class="custom-select form-control"
                                                                 id="provinces" name="province_id">
-                                                            <option value="all">Select province</option>
+                                                            <option value="">Select province</option>
                                                             @foreach($provinces as $province)
-                                                                <option value="{{$province->id}}" @if($province->id == $practitioner->contact->province_id){{'selected'}}@endif>{{$province->name}}</option>
+                                                                <option
+                                                                    value="{{$province->id}}" @if($province->id == $practitioner->contact->province_id){{'selected'}}@endif>{{$province->name}}</option>
                                                             @endforeach
                                                         </select>
-                                                        <div class="form-control-feedback">
-                                                            <small><code>Pick a province in which you reside in here
-                                                                    in zimbabwe.</code>
-                                                            </small>
-                                                        </div>
                                                     </div>
 
 
@@ -131,54 +117,39 @@
                                                         <div class="controls">
                                                             <input type="tel" name="primary_phone"
                                                                    value="{{$practitioner->contact->primary_phone}}"
-                                                                   class="form-control"
-                                                                   required
-                                                                   data-validation-required-message="This field is required">
+                                                                   class="form-control">
                                                         </div>
-                                                        @error('primary_phone')
-                                                        <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
                                                 </span>
-                                                        @enderror
                                                     </div>
                                                 </div>
-
 
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="wlocation2"> City/Location : <span
-                                                                    class="danger">*</span>
+                                                                class="danger">*</span>
                                                         </label>
                                                         <select class="custom-select form-control"
                                                                 id="districts" name='city_id'>
                                                             <option value='0'>Select city/location</option>
 
                                                         </select>
-                                                        <div class="form-control-feedback">
-                                                            <small><code>Pick a city in which you reside in here in
-                                                                    zimbabwe.</code>
-                                                            </small>
-                                                        </div>
                                                     </div>
                                                 </div>
-                                                <input type="hidden" name="my_id" id="my_id" value="{{$practitioner->contact->city_id}}">
+                                                <input type="hidden" name="my_id" id="my_id"
+                                                       value="{{$practitioner->contact->city_id}}">
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <h5>Secondary Phone Number <span class="text-danger">*</span></h5>
+                                                        <h5>Secondary Phone Number <span class="text-danger">*</span>
+                                                        </h5>
                                                         <div class="controls">
                                                             <input type="tel" name="secondary_phone"
                                                                    value="{{$practitioner->contact->secondary_phone}}"
-                                                                   class="form-control"
-                                                                   required
-                                                                   data-validation-required-message="This field is required">
+                                                                   class="form-control">
                                                         </div>
-                                                        @error('secondary_phone')
-                                                        <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                        @enderror
+
+
                                                     </div>
                                                 </div>
 

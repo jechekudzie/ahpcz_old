@@ -66,15 +66,8 @@
                                                    <div class="form-group">
                                                        <h5>Physical Address <span class="text-danger">*</span></h5>
                                                        <div class="controls">
-                                                    <textarea name="physical_address" class="form-control" required
-                                                              data-validation-required-message="This field is required">{{old('physical_address')}}</textarea>
+                                                    <textarea name="physical_address" class="form-control"
                                                        </div>
-
-                                                       @error('physical_address')
-                                                       <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                       @enderror
 
                                                    </div>
                                                </div>
@@ -85,16 +78,8 @@
                                                        <h5>Email Address <span class="text-danger">*</span></h5>
                                                        <div class="controls">
                                                            <input type="email" name="email" value="{{old('email')}}"
-                                                                  class="form-control"
-                                                                  required
-                                                                  data-validation-required-message="This field is required">
+                                                                  class="form-control"/>
                                                        </div>
-
-                                                       @error('email')
-                                                       <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                       @enderror
 
                                                    </div>
                                                </div>
@@ -107,16 +92,11 @@
                                                        </label>
                                                        <select class="custom-select form-control" required
                                                                id="provinces" name="province_id">
-                                                           <option value="all">Select province</option>
+                                                           <option value="0">Select province</option>
                                                            @foreach($provinces as $province)
                                                                <option value="{{$province->id}}" @if($province->id ==old('province_id')){{'selected'}}@endif>{{$province->name}}</option>
                                                            @endforeach
                                                        </select>
-                                                       <div class="form-control-feedback">
-                                                           <small><code>Pick a province in which you reside in here
-                                                                   in zimbabwe.</code>
-                                                           </small>
-                                                       </div>
                                                    </div>
                                                </div>
 
@@ -127,15 +107,8 @@
                                                        <div class="controls">
                                                            <input type="tel" name="primary_phone"
                                                                   value="{{old('primary_phone')}}"
-                                                                  class="form-control"
-                                                                  required
-                                                                  data-validation-required-message="This field is required">
+                                                                  class="form-control">
                                                        </div>
-                                                       @error('primary_phone')
-                                                       <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                       @enderror
                                                    </div>
                                                </div>
 
@@ -149,13 +122,7 @@
                                                        <select class="custom-select form-control"
                                                                id="districts" name='city_id'>
                                                            <option value='0'>Select city/location</option>
-
                                                        </select>
-                                                       <div class="form-control-feedback">
-                                                           <small><code>Pick a city in which you reside in here in
-                                                                   zimbabwe.</code>
-                                                           </small>
-                                                       </div>
                                                    </div>
                                                </div>
 
@@ -165,15 +132,8 @@
                                                        <div class="controls">
                                                            <input type="tel" name="secondary_phone"
                                                                   value="{{old('secondary_phone')}}"
-                                                                  class="form-control"
-                                                                  required
-                                                                  data-validation-required-message="This field is required">
+                                                                  class="form-control">
                                                        </div>
-                                                       @error('secondary_phone')
-                                                       <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                       @enderror
                                                    </div>
                                                </div>
 

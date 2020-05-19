@@ -37,6 +37,7 @@ class RenewalController extends Controller
     }
 
 
+    //payments requirements (Changed)
     public function paymentsRequirementUpdate(Practitioner $practitioner)
     {
         $practitioner->update(request()->validate([
@@ -49,28 +50,21 @@ class RenewalController extends Controller
          * anything in renewals, if yes redirect to renewal checkStatus, if not go to registration route
          */
 
-        return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/checkPaymentStatusRenewal');
+        return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/create');
 
 
     }
 
+    //chekc if alll requirement are there (changed)
     public function checkPaymentStatus(Practitioner $practitioner)
     {
         if ($practitioner->payment_method_id == null && $practitioner->renewal_category_id == null) {
             return redirect('/admin/practitioners/payment_requirement/' . $practitioner->id . '/update');
         }
 
-        if (count($practitioner->payments)) {
-            $chikwereti = $practitioner->payments->sum('balance');
-            if ($chikwereti > 0) {
-                return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/invoiceBalances');
-            } else {
-                return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/invoiceRenewal');
-            }
-        } else {
-            return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/invoiceRenewal');
+        return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/create');
 
-        }
+
 
 
     }
@@ -91,7 +85,8 @@ class RenewalController extends Controller
 
     }
 
-    //Store initial payment and create yearly subscription
+
+    //Store initial payment and create yearly subscription (changed)
     public function store(Practitioner $practitioner)
     {
         $payment = request()->validate([
@@ -130,6 +125,10 @@ class RenewalController extends Controller
 
         $renewals['payment_type_id'] = 1;
 
+        //temporarily pdate the placement, cpd points
+        $renewals['cdpoints'] = 1;
+        $renewals['placement'] = 1;
+
         $submitted_receipt_number = request('receipt_number');
 
         //check for receipt_number in payment before proceeding
@@ -158,7 +157,6 @@ class RenewalController extends Controller
             $payment['payment_item_id'] = 33;
             $new_renewal_payment = $renewal->addPayments($payment);
 
-
             if ($renewal_balance > 0) {
                 if (count($practitioner->payments)) {
                     foreach ($practitioner->payments as $existing_payment) {
@@ -184,7 +182,7 @@ class RenewalController extends Controller
             }
 
             //update approval statuses
-            if (
+            if(
                 $practitioner->approval_status == 0 && $practitioner->registration_officer == 0
                 && $practitioner->accountant == 0 && $practitioner->member == 0
                 && $practitioner->registrar == 0
@@ -210,51 +208,15 @@ class RenewalController extends Controller
 
             }
 
-            //end of payment update
-            $cdpoints = $practitioner->profession->cdpoint;
-            $points = $cdpoints->points;
-            if ($points > 0) {
-                $check_cd_points = PractitionerCpdpoint::wherePractitioner_idAndRenewal_period_id($practitioner->id, $renewal_period_id)->first();
-                if ($check_cd_points) {
-                    $renewal->update(['cdpoints' => 1]);
-                }
-            } else {
-                $renewal->update(['cdpoints' => 1]);
-            }
-
-            //now check if placement is required and or if has already been updated
-            if (($practitioner->renewal_category_id == 2 || $practitioner->renewal_category_id == 3) &&   $cdpoints->placement == 1) {
-                $check_placement = PractitionerPlacement::wherePractitioner_idAndRenewal_period_id($practitioner->id, $renewal_period_id)->first();
-                if ($check_placement) {
-                    $renewal->update(['placement' => 1]);
-                    return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Payment completed successfully.');
-                } else {
-                    return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Payment completed successfully.');
-                }
-            } else {
-                $renewal->update(['placement' => 1]);
-                return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Payment completed successfully.');
-            }
-
-
-            //update the practitioner requirements
-            $practitioner_requirements = $practitioner->practitionerRequirements;
-            foreach ($practitioner_requirements as $practitioner_requirement){
-
-                $practitioner_requirement->update([
-                    'status'=>1,
-                    'member_status'=>1
-                ]);
-
-            }
-
+            return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Payment completed successfully.');
 
         } else {
             return back()->with('message', 'A renewal subscription for the selected period is already active, not that if this a regular payment click the payment link to proceed');
         }
     }
 
-    //Create renewal payments
+
+    //Create renewal payments (fetch form)
     public function createPayment(Renewal $renewal)
     {
         $payment_items = PaymentItem::all()->sortBy('name');
@@ -267,7 +229,8 @@ class RenewalController extends Controller
 
     }
 
-    //make and store renewals payments
+
+    //make and store renewals payments (store data)
     public function makePayment(Renewal $renewal)
     {
 
@@ -329,6 +292,7 @@ class RenewalController extends Controller
         return redirect('/admin/practitioners/renewals/' . $renewal->id . '/payments_list')->with('message', 'Payment was successful.');
     }
 
+
     public function practitionerBalances(Practitioner $practitioner)
     {
         $balances = Payment::wherePractitioner_id($practitioner->id)
@@ -337,6 +301,12 @@ class RenewalController extends Controller
         return view('admin.practitioner_payments.balances', compact('balances', 'practitioner'));
     }
 
+
+
+
+
+
+
     //check cd points
     public function cdpoints(Practitioner $practitioner)
     {
@@ -344,7 +314,7 @@ class RenewalController extends Controller
         return view('admin.practitioner_payments.cdpoints', compact('practitioner', 'cdpoints'));
     }
 
-    //check cd points
+    //check placement
     public function createPlacement(Practitioner $practitioner)
     {
         $cdpoints = $practitioner->profession->cdpoint;

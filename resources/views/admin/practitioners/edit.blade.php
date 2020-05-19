@@ -91,7 +91,7 @@
                                                             <label for="wlocation2"> Gender : <span
                                                                         class="danger">*</span>
                                                             </label>
-                                                            <select class="custom-select form-control" required
+                                                            <select class="custom-select form-control"
                                                                     id="wlocation2" name="gender_id">
                                                                 <option value="">Select Gender</option>
                                                                 @foreach($genders as $gender)
@@ -172,7 +172,7 @@
                                                             <label for="wlocation2"> Nationality : <span
                                                                         class="danger">*</span>
                                                             </label>
-                                                            <select class="custom-select form-control " required
+                                                            <select class="custom-select form-control "
                                                                     id="wlocation2" name="nationality_id">
                                                                 <option value="">Select nationality</option>
                                                                 @foreach($nationalities as $nationaly)
@@ -192,7 +192,7 @@
                                                             <label for="wlocation2"> Province : <span
                                                                         class="danger">*</span>
                                                             </label>
-                                                            <select class="custom-select form-control" required
+                                                            <select class="custom-select form-control"
                                                                     id="provinces" name="province_id">
                                                                 <option value="">Select province</option>
                                                                 @foreach($provinces as $province)
@@ -238,7 +238,7 @@
                                                             <label for="wlocation2"> Profession : <span
                                                                         class="danger">*</span>
                                                             </label>
-                                                            <select class="custom-select form-control " required
+                                                            <select class="custom-select form-control "
                                                                     id="professions" name="profession_id">
                                                                 <option value="">Select profession</option>
                                                                 @foreach($professions as $profession)
@@ -275,7 +275,7 @@
                                                                 <span
                                                                         class="danger">*</span>
                                                             </label>
-                                                            <select class="custom-select form-control" required
+                                                            <select class="custom-select form-control"
                                                                     onchange="myFunction()"
                                                                     id="qualification_category"
                                                                     name="qualification_category_id">
@@ -366,7 +366,7 @@
                                                             <label for="wlocation2"> Register  : <span
                                                                         class="danger">*</span>
                                                             </label>
-                                                            <select class="custom-select form-control " required
+                                                            <select class="custom-select form-control "
                                                                     id="wlocation2" name="register_category_id">
                                                                 <option value="">Select Register</option>
                                                                 @foreach($register_categories as $register_category)
@@ -385,7 +385,7 @@
                                                             <label for="wlocation2"> Renewal Category : <span
                                                                         class="danger">*</span>
                                                             </label>
-                                                            <select class="custom-select form-control " required
+                                                            <select class="custom-select form-control "
                                                                     id="wlocation2" name="renewal_category_id">
                                                                 <option value="">Select Renewal Category</option>
                                                                 @foreach($renewal_categories as $renewal_category)

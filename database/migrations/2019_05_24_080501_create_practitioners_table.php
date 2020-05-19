@@ -23,7 +23,7 @@ class CreatePractitionersTable extends Migration
             $table->timestamp('dob')->nullable();
             $table->string('id_number');
             $table->string('prefix')->nullable();
-            $table->unsignedInteger('registration_number')->nullable();
+            $table->string('registration_number')->nullable();
             $table->integer('registration_certificate')->default(0);
             $table->unsignedInteger('register_category_id')->nullable();
             $table->unsignedBigInteger('profession_id');
@@ -54,6 +54,7 @@ class CreatePractitionersTable extends Migration
             $table->unsignedInteger('registrar')->default(0);
             $table->timestamps();
         });
+
         DB::statement('ALTER TABLE practitioners CHANGE registration_number registration_number INT(4) UNSIGNED ZEROFILL');
 
     }

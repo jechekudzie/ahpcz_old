@@ -29,6 +29,9 @@ class GenerateRegistrationNumber extends Controller
         $prefix = Prefix::whereProfession_id($profession_id)->first();
         $registration_number = $prefix->last_reg + 1;
 
+        $registration_number = sprintf("%04d", $registration_number);
+
+
         $practitioner->update([
             'registration_number'=>$registration_number,
         ]);

@@ -49,8 +49,20 @@ class PractitionersController extends Controller
     public function index(Request $request)
     {
         $practitioners = Practitioner::all();
+        $users = User::all();
 
-        return view('admin.practitioners.index', compact('practitioners'));
+        if( $request->is('api/admin/practitioners'))
+        {
+            return response()->json([
+                'practitioners' => $practitioners->toArray(),
+                'users' => $users->toArray()
+            ]);
+
+        }else{
+
+            return view('admin.practitioners.index', compact('practitioners'));
+
+        }
 
 
     }
@@ -74,7 +86,6 @@ class PractitionersController extends Controller
             ));
 
     }
-
     /**
      * Store a newly created resource in storage.
      **/
@@ -83,7 +94,7 @@ class PractitionersController extends Controller
         $check_id_number = request('id_number');
         $check_profession_id = request('profession_id');
 
-        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number, $check_profession_id)->first();
+        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number,$check_profession_id)->first();
         if ($check_existensce != null) {
 
             return back()->with('message', 'Practitioner already exists.');
@@ -171,6 +182,7 @@ class PractitionersController extends Controller
     }
 
 
+
     //For renewal
     public function createForRenew()
     {
@@ -193,7 +205,7 @@ class PractitionersController extends Controller
         $check_id_number = request('id_number');
         $check_profession_id = request('profession_id');
 
-        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number, $check_profession_id)->first();
+        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number,$check_profession_id)->first();
         if ($check_existensce != null) {
 
             return back()->with('message', 'Practitioner already exists.');
