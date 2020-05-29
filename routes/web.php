@@ -11,6 +11,15 @@
 |
 */
 
+use App\Renewal;
+
+Route::get('testc','TestC@index');
+Route::post('/excel','TestC@store');
+
+
+Route::get('/extract', 'TestC@create');
+
+
 Route::get('/', function () {
 
     return view('auth.login');
@@ -276,17 +285,26 @@ Route::get('/test', 'HomeController@index')->name('home');
 //APIS
 //1. get all practitioners API
 Route::get('/json/practitioners', 'APIController@index');
+
+
 //get one practitioner by practitioner->id and renewal status
 Route::get('/json/practitioners/{practitioner}', 'APIController@show');
+
+//get practitioner by registration_number string only
+Route::get('/json/practitioner_reg_number/{registration_number}', 'APIController@byRegString');
+
 //get practitioner by registration_number and Id_number
 Route::get('/json/practitioners/{registration_number}/{id_number}', 'APIController@byRegID');
 
-//get practitioner by registration_number string and Id_number
+//get practitioner ffby registration_number string and Id_number
 Route::get('/json/practitioner_string/{registration_number}/{id_number}', 'APIController@byRegIdString');
 
-Route::get('/json/testing/{registration_number}/{id_number}', 'APIController@test');
 
-Route::get('/json/test', 'APIController@test');
+//test single reg
+Route::get('/json/testing', 'APIController@testSingle');
+
+//test both reg and id
+Route::get('/json/test', 'APIController@testBoth');
 
 
 //System Reports

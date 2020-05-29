@@ -128,7 +128,10 @@
                                                     @endif
                                                 </td>
 
-                                                <td><a href="/admin/practitioners/{{$practitioner->id}}"> View</a></td>
+                                                <td>
+                                                    <a href="/admin/practitioners/{{$practitioner->id}}">View</a> |
+                                                    <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal"> Renew</a>
+                                                </td>
                                                 @can('updatePractitioner')
                                                     <td><a href="/admin/practitioners/{{$practitioner->id}}/delete">
                                                             Delete</a></td>
@@ -256,7 +259,10 @@
                                                     @endif
                                                 </td>
 
-                                                <td><a href="/admin/practitioners/{{$practitioner->id}}"> View</a></td>
+                                                <td><a href="/admin/practitioners/{{$practitioner->id}}"> View</a> |
+                                                    <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal"> Renew</a>
+
+                                                </td>
                                                 @can('updatePractitioner')
                                                     <td><a href="/admin/practitioners/{{$practitioner->id}}/delete">
                                                             Delete</a></td>

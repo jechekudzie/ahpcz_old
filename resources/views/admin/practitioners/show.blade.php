@@ -750,7 +750,8 @@
                                    class="btn btn-success">REGISTER</a>
 
                                 <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal"
-                                   class="btn btn-success"> RENEW </a>
+                                   class="btn btn-success"> RENEW
+                                </a>
                             @endcan
                             <div class="row">
                                 <div class="col-12">
@@ -942,7 +943,7 @@
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ]
         });
-        
+
         $('#placements').DataTable({
             order: [],
             dom: 'Bfrtip',

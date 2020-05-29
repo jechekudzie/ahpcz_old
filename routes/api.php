@@ -23,6 +23,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/json/practitioners', 'APIController@index');
 //get one practitioner by practitioner->id and renewal status
 Route::get('/json/practitioners/{practitioner}', 'APIController@show');
+
+//get practitioner by registration_number string only
+Route::get('/json/practitioner_reg_number/{registration_number}', 'APIController@byRegString');
+
 //get practitioner by registration_number and Id_number
 Route::get('/json/practitioners/{registration_number}/{id_number}', 'APIController@byRegID');
 
