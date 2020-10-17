@@ -51,7 +51,7 @@ class PractitionersController extends Controller
         $practitioners = Practitioner::all();
 
         return view('admin.practitioners.index', compact('practitioners'));
-
+            
 
     }
 
@@ -74,7 +74,6 @@ class PractitionersController extends Controller
             ));
 
     }
-
     /**
      * Store a newly created resource in storage.
      **/
@@ -83,7 +82,7 @@ class PractitionersController extends Controller
         $check_id_number = request('id_number');
         $check_profession_id = request('profession_id');
 
-        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number, $check_profession_id)->first();
+        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number,$check_profession_id)->first();
         if ($check_existensce != null) {
 
             return back()->with('message', 'Practitioner already exists.');
@@ -103,6 +102,7 @@ class PractitionersController extends Controller
                 'commencement_date' => ['required'],
                 'completion_date' => ['required'],
                 'registration_number' => 'nullable|numeric',
+                'registration_date' => 'nullable',
 
             ],
                 [
@@ -193,7 +193,7 @@ class PractitionersController extends Controller
         $check_id_number = request('id_number');
         $check_profession_id = request('profession_id');
 
-        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number, $check_profession_id)->first();
+        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number,$check_profession_id)->first();
         if ($check_existensce != null) {
 
             return back()->with('message', 'Practitioner already exists.');
@@ -208,6 +208,7 @@ class PractitionersController extends Controller
                 'id_number' => ['alpha_num', 'regex:/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/'],
                 'profession_id' => ['required'],
                 'registration_number' => 'nullable|numeric',
+                'registration_date' => 'nullable',
             ],
                 [
                     'id_number.regex' => 'ID number should contain at least one character and one number',
@@ -377,6 +378,7 @@ class PractitionersController extends Controller
             'renewal_category_id' => ['nullable'],
             'payment_method_id' => ['nullable'],
             'registration_number' => ['nullable'],
+            'registration_date' => 'nullable',
 
             'commencement_date' => ['nullable'],
             'completion_date' => ['nullable'],

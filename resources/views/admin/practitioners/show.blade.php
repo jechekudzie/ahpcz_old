@@ -142,7 +142,7 @@
                                             </tr>--}}
                                             <tr>
                                                 <td>Member Since</td>
-                                                <td>{{$practitioner->created_at->format('d F Y')}}</td>
+                                                <td>{{date('d F Y',strtotime($practitioner->registration_date))}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -295,17 +295,17 @@
                         <div class="tab-pane p-20" id="qualifications" role="tabpanel">
                             @can('updatePractitioner')
                                 <a href="/admin/practitioners/qualifications/{{$practitioner->id}}/create"
-                                   class="btn btn-success btn-sm">Additional Qualification</a>
-                                <br/>
-                                <br/>
+                                   class="btn btn-success btn-sm" style="margin-bottom: 10px;">Additional Qualification</a>
                             @endcan
+
                             <div class="row small-spacing">
                                 <div class="col-md-12 col-xs-12">
                                     <div class="row">
                                         <div class="col-md-6 col-xs-12">
                                             <div class="box-content card">
                                                 <h4 class="box-title"><i class="fa fa-graduation-cap"></i> Professional
-                                                    Qualifications</h4>
+                                                    Qualifications
+                                                </h4>
 
                                                 <div class="card-content">
 
@@ -315,24 +315,29 @@
                                                             @if($practitioner->qualification_category_id != null)
                                                                 @if($practitioner->qualification_category_id == 1)
                                                                     <span
-                                                                        class="date">{{$practitioner->accreditedInstitution->name}}</span>
-                                                                    <i style="color: black;font-weight: bolder;padding-right: 5px">Commencement
-                                                                        date </i>
+                                                                        class="date">{{$practitioner->accreditedInstitution->name}}
+                                                                    </span>
+                                                                    <i style="color: black;font-weight: bolder;padding-right: 5px;">Commencement
+                                                                        date
+                                                                    </i>
                                                                     <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
                                                                     <br/>
-                                                                    <i style="color: black;font-weight: bolder;padding-right: 45px">Completion
-                                                                        date </i>
+                                                                    <i style="color: black;font-weight: bolder;padding-right: 45px;">Completion
+                                                                        date
+                                                                    </i>
                                                                     <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
 
                                                                 @else
                                                                     <span
                                                                         class="date">{{ucwords($practitioner->institution)}}</span>
-                                                                    <i style="color: black;font-weight: bolder;padding-right: 5px">Commencement
-                                                                        date </i>
+                                                                    <i style="color: black;font-weight: bolder;padding-right: 5px;">Commencement
+                                                                        date
+                                                                    </i>
                                                                     <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
                                                                     <br/>
-                                                                    <i style="color: black;font-weight: bolder;padding-right: 45px">Completion
-                                                                        date </i>
+                                                                    <i style="color: black;font-weight: bolder;padding-right: 45px;">Completion
+                                                                        date
+                                                                    </i>
                                                                     <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
                                                                 @endif
                                                             @endif
@@ -619,12 +624,14 @@
                                     <h4 class="box-title"><i class="fa fa-history"></i> Practitioner Experience</h4>
                                     <div class="card-content">
                                         <ul class="dot-list">
-                                            @foreach($practitioner->practitionerExperience as $experience)
-                                                <li>
-                                                    <a href="/admin/practitioners/experience/{{$experience->id}}/show">{{$experience->name}}</a>
-                                                    <span class="date">{{$experience->job_title}}</span>
-                                                </li>
-                                            @endforeach
+                                            @if($practitioner->practitionerExperiences)
+                                                @foreach($practitioner->practitionerExperiences as $experience)
+                                                    <li>
+                                                        <a href="/admin/practitioners/experience/{{$experience->id}}/show">{{$experience->name}}</a>
+                                                        <span class="date">{{$experience->job_title}}</span>
+                                                    </li>
+                                                @endforeach
+                                            @endif
                                         </ul>
                                     </div>
                                 </div>
@@ -714,7 +721,7 @@
                                     </tr>
                                     </tfoot>
                                     <tbody>
-                                        @if($practitioner->otherApplications)
+                                    @if($practitioner->otherApplications)
                                         @foreach($practitioner->otherApplications as $others_apps)
                                             <tr>
                                                 <td>{{$others_apps->paymentItem->name}}</td>
@@ -916,9 +923,8 @@
                 </div>
             </div>
         </div>
+@stop
     </div>
-
-@endsection
 
 
 @section('plugins-js')

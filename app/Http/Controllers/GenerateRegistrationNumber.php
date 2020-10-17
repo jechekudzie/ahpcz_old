@@ -30,8 +30,7 @@ class GenerateRegistrationNumber extends Controller
         $registration_number = $prefix->last_reg + 1;
 
         $registration_number = sprintf("%04d", $registration_number);
-
-
+        
         $practitioner->update([
             'registration_number'=>$registration_number,
         ]);

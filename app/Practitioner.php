@@ -12,13 +12,8 @@ class Practitioner extends Model
     public function currentRenewal()
     {
         $year = date('Y');
-        return $this->hasOne(Renewal::class)
-            ->where('renewal_period_id','=',$year,
-                'AND','renewal_status_id','=',1,
-                'AND','cd_points','=',1,
-                'AND','placement','=',1);
+        return $this->hasOne(Renewal::class)->where('renewal_period_id',$year);
     }
-
 
     public function title()
     {
@@ -83,6 +78,7 @@ class Practitioner extends Model
 
     public function contact()
     {
+
         return $this->hasOne(PractitionerContact::class);
     }
 

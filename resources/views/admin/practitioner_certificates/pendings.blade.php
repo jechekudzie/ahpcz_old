@@ -86,7 +86,7 @@
                                             <td>
                                                 {{$pending_renewal->practitioner->prefix.''.$pending_renewal->practitioner->registration_number}}
                                             </td>
-
+                                            
                                             <td>{{$pending_renewal->renewal_period_id}}</td>
                                             <td>
                                                 {{$pending_renewal->renewalStatus->name}}

@@ -11,7 +11,6 @@
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
-                            <a href="{{url('/admin/practitioners')}}">Proceed to Dashboard</a>
                         </div>
                     @endif
 

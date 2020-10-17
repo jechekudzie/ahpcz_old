@@ -170,6 +170,14 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="wphoneNumber2"> Registration Date:</label>
+                                                            <input type="text" id="registration_date" class="form-control"
+                                                                   name="registration_date">
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </section>
 
@@ -337,6 +345,12 @@
         });
 
         $('#completion_date').bootstrapMaterialDatePicker({
+            weekStart: 0,
+            time: false,
+            format: 'YYYY-MM-DD'
+        });
+
+        $('#registration_date').bootstrapMaterialDatePicker({
             weekStart: 0,
             time: false,
             format: 'YYYY-MM-DD'

@@ -128,12 +128,6 @@ function countPendingItems(){
 
 <body class="horizontal-nav skin-megna fixed-layout">
 
-{{--<div class="preloader">
-    <div class="loader">
-        <div class="loader__figure"></div>
-        <p class="loader__label">AHPCZ</p>
-    </div>
-</div>--}}
 
 <div id="main-wrapper">
 
@@ -292,14 +286,14 @@ function countPendingItems(){
                                 class="hide-menu">Students </span></a>
                     </li>
 
-                    <li><a class=" waves-effect waves-dark" href="#" aria-expanded="false"><i
+                    <li><a class=" waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
                                 class="fa fa-pie-chart"></i><span class="hide-menu">Reports</span></a>
-                        {{--<ul aria-expanded="false" class="collapse">
+                        <ul aria-expanded="false" class="collapse">
                             <li><a href="#">Practitioner</a></li>
                             <li><a href="#">Students</a></li>
                             <li><a href="#">Users</a></li>
 
-                        </ul>--}}
+                        </ul>
                     </li>
 
                     <li><a class="waves-effect waves-dark" href="/admin/practitioner_applications"

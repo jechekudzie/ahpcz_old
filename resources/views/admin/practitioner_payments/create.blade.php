@@ -196,11 +196,11 @@
         //generate full year
         //var min = new Date().getFullYear(),
 
-        var min = 2008;
-        var max = new Date().getFullYear() + 5,
+            var min =  2008;
+            var max = new Date().getFullYear() + 5,
             select = document.getElementById('renewal_period');
 
-        for (var i = max; i >= min; --i) {
+        for (var i = min; i<=max; i++){
             var opt = document.createElement('option');
             opt.value = i;
             opt.innerHTML = i;
@@ -211,5 +211,5 @@
 
 
 
-@stop
+@endsection
 

@@ -8,6 +8,7 @@ class PractitionerExperience extends Model
 {
     //
     protected $guarded = [];
+    public $table = "practitioner_experiences";
 
     public function practitioner(){
 

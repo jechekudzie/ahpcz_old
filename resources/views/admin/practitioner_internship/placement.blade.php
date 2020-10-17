@@ -39,6 +39,19 @@
                         <div class="row">
                             <div class="col-2">
                             </div>
+                            <div class="col-8">
+                                @if($errors->any())
+                                    @include('errors')
+                                @endif
+                                @if (session('message'))
+                                    <div class="alert alert-success alert-rounded col-md-12"><i
+                                                class="fa fa-check-circle"></i> {{ session('message') }}
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                    </div>
+                                @endif
+                            </div>
 
                         </div>
 
@@ -111,7 +124,69 @@
                                                             </div>
                                                         </form>
                                                     </div>
+                                                    <div class="card-body">
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="table-responsive m-t-40">
+                                                                    <h4 class="card-title">Internship Placement</h4>
+                                                                    <table id="renewals"
+                                                                           class="display nowrap table table-hover table-striped table-bordered"
+                                                                           cellspacing="0" width="100%">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th>Period</th>
+                                                                            <th>Current Balance</th>
+                                                                            <th>Status</th>
+                                                                            <th>CPD Points</th>
+                                                                            <th>Renewal Date</th>
+                                                                            <th>view</th>
 
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tfoot>
+                                                                        <tr>
+                                                                            <th>Period</th>
+                                                                            <th>Current Balance</th>
+                                                                            <th>Status</th>
+                                                                            <th>CPD Points</th>
+                                                                            <th>Renewal Date</th>
+                                                                            <th>view</th>
+
+                                                                        </tr>
+                                                                        </tfoot>
+                                                                        <tbody>
+                                                                        @if(count($practitioner->renewals))
+                                                                            @foreach($practitioner->renewals as $renewal)
+                                                                                <tr>
+                                                                                    <td>{{$renewal->renewal_period_id}}</td>
+                                                                                    <td>{{number_format($renewal->payments->sum('balance'),2)}}</td>
+                                                                                    <td>
+
+                                                                                        {{$renewal->renewalStatus->name}}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        @if($renewal->cdpoints == null)
+                                                                                            {{'Pending Cd Points'}}
+                                                                                        @else
+                                                                                            {{'Up to date'}}
+                                                                                        @endif
+                                                                                    </td>
+                                                                                    <td>{{$renewal->created_at->format('d F Y')}}</td>
+                                                                                    <td>
+                                                                                        <a href="/admin/practitioners/renewals/{{$renewal->id}}/payments_list">Payments </a>
+
+                                                                                    </td>
+
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        @endif
+
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
                                             </div>

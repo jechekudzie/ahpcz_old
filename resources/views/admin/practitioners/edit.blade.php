@@ -161,6 +161,14 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Registration Date</label>
+                                                            <input type="text" name="registration_date" value="{{$practitioner->registration_date}}"
+                                                                   class="form-control" id="registration_date">
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </section>
                                             <!-- Step 2 -->
@@ -496,6 +504,12 @@
         });
 
         $('#completion_date').bootstrapMaterialDatePicker({
+            weekStart: 0,
+            time: false,
+            format: 'YYYY-MM-DD'
+        });
+
+        $('#registration_date').bootstrapMaterialDatePicker({
             weekStart: 0,
             time: false,
             format: 'YYYY-MM-DD'

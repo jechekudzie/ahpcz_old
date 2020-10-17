@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Accreditation extends Model
 {
     //
+
     protected $guarded = [];
 
     public function professionalQualification(){

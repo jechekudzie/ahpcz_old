@@ -51,7 +51,7 @@ class PractitionerContactsController extends Controller
                 'physical_address' => ['required'],
                 'email' => ['required'],
                 'primary_phone' => ['required'],
-                'secondary_phone' => 'nullable',
+                'secondary_phone' => ['nullable'],
                 'province_id' => ['required'],
                 'city_id' => ['required']
             ])
@@ -95,12 +95,12 @@ class PractitionerContactsController extends Controller
     public function update(PractitionerContact $practitionerContact)
     {
         $practitionerContact->update(request()->validate([
-            'physical_address' => 'nullable',
-            'email' => 'nullable',
-            'primary_phone' => 'nullable',
-            'secondary_phone' => 'nullable',
-            'province_id' => 'nullable',
-            'city_id' => 'nullable'
+            'physical_address' => ['nullable'],
+            'email' => ['nullable'],
+            'primary_phone' => ['nullable'],
+            'secondary_phone' => ['nullable'],
+            'province_id' => ['nullable'],
+            'city_id' => ['nullable']
         ]));
 
 

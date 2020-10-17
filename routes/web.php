@@ -11,14 +11,6 @@
 |
 */
 
-use App\Renewal;
-
-Route::get('testc','TestC@index');
-Route::post('/excel','TestC@store');
-
-
-Route::get('/extract', 'TestC@create');
-
 
 Route::get('/', function () {
 
@@ -200,8 +192,7 @@ Route::get('/admin/practitioners/{practitioner}/cdpoints', 'RenewalController@cd
 Route::post('/admin/practitioners/{practitioner}/storeCdpoints', 'RenewalController@storeCdpoints');
 Route::get('/admin/practitioners/{practitioner}/createPlacement', 'RenewalController@createPlacement');
 Route::post('/admin/practitioners/{practitioner}/storePlacement', 'RenewalController@storePlacement');
-Route::post('/admin/practitioners/{id}/viewPlacement', 'RenewalController@viewPlacement');
-//added view placement route here as of 19 April 16:42
+
 
 //practitioner registration
 Route::get('/admin/practitioners/registration/{practitioner}/registration', 'RegistrationController@create');
@@ -272,86 +263,37 @@ Route::patch('/admin/practitioners/certificate/signoff/{renewal}', 'Practitioner
 Route::patch('/admin/practitioners/certificate/collect/{renewal}', 'PractitionerCertificateController@collect');
 
 
+Auth::routes(['verify' => true]);
+
+Route::get('/home', 'HomeController@index')->name('home');
+
 //System Users
 Route::resource('/admin/users', 'SystemUsersController');
 
-//Home controller
-Route::get('/home', 'HomeController@index')->name('home');
+
+/*
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');*/
 
 
-Route::get('/test', 'HomeController@index')->name('home');
+Route::get('/admin/other/{practitioner}', 'PractitionersController@other');
+
 
 
 //APIS
 //1. get all practitioners API
 Route::get('/json/practitioners', 'APIController@index');
-
-
 //get one practitioner by practitioner->id and renewal status
 Route::get('/json/practitioners/{practitioner}', 'APIController@show');
-
-//get practitioner by registration_number string only
-Route::get('/json/practitioner_reg_number/{registration_number}', 'APIController@byRegString');
-
 //get practitioner by registration_number and Id_number
 Route::get('/json/practitioners/{registration_number}/{id_number}', 'APIController@byRegID');
 
-//get practitioner ffby registration_number string and Id_number
+//get practitioner by registration_number string and Id_number
 Route::get('/json/practitioner_string/{registration_number}/{id_number}', 'APIController@byRegIdString');
 
+Route::get('/json/testing/{registration_number}/{id_number}', 'APIController@test');
 
-//test single reg
-Route::get('/json/testing', 'APIController@testSingle');
-
-//test both reg and id
-Route::get('/json/test', 'APIController@testBoth');
-
-
-//System Reports
-
-/* Renewal reports
- * Renewal Period (year)
- * Professions
- * Professional Qualification (bse, masters etc)
- * Qualification category (foreign, local)
- * Payment status - >renewed , none compliant
- * Renewal category (active, maintenance etc)
- * Register category (main, student, intern etc)
-
- * Note that the above can be used generate a details renewal report
- * create an algorithm to compute that, n2p9*/
-
-
-/*Payment channel reports
-1. Profession
-2. Professional qualification
-3. Qualification category
-4. Renewal category
-5. Register category
-6. Payment channel (ecocash, cbz, stanchart, cash) -> for accounts
-* generate a report that is based on Payment channel using the above parameters to */
-
-/*Payment method
-1. Profession
-2. Professional qualification
-3. Qualification category
-4. Renewal category
-5. Register category
-6. Payment method (ssb, individual, organization) -> for accounts
-* generate a report that is based on Payment methods using the above parameters to */
-
-/*
- * Location reports (both physical address and employment location)
- * Profession
- * Professional qualification
- * Country
- * Province
- * City
- * */
-
-Auth::routes(['verify' => true]);
-
-
-
+Route::get('/json/test', 'APIController@test');
 
 

@@ -37,7 +37,7 @@ class RenewalController extends Controller
     }
 
 
-    //payments requirements (Changed)
+    //payments requirements
     public function paymentsRequirementUpdate(Practitioner $practitioner)
     {
         $practitioner->update(request()->validate([
@@ -55,7 +55,6 @@ class RenewalController extends Controller
 
     }
 
-    //chekc if alll requirement are there (changed)
     public function checkPaymentStatus(Practitioner $practitioner)
     {
         if ($practitioner->payment_method_id == null && $practitioner->renewal_category_id == null) {
@@ -85,8 +84,7 @@ class RenewalController extends Controller
 
     }
 
-
-    //Store initial payment and create yearly subscription (changed)
+    //Store initial payment and create yearly subscription
     public function store(Practitioner $practitioner)
     {
         $payment = request()->validate([
@@ -215,7 +213,7 @@ class RenewalController extends Controller
         }
     }
 
-
+    
     //Create renewal payments (fetch form)
     public function createPayment(Renewal $renewal)
     {
@@ -301,12 +299,12 @@ class RenewalController extends Controller
         return view('admin.practitioner_payments.balances', compact('balances', 'practitioner'));
     }
 
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     //check cd points
     public function cdpoints(Practitioner $practitioner)
     {

@@ -31,6 +31,9 @@ class Profession extends Model
         return $this->hasMany(Practitioner::class);
     }
 
+    public function professionalQualifications(){
+        return $this->hasMany(ProfessionalQualification::class);
+    }
 
     public function practitionerQualification(){
         return $this->hasMany(PractitionerQualification::class);
