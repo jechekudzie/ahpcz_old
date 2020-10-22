@@ -51,7 +51,7 @@ class PractitionersController extends Controller
         $practitioners = Practitioner::all();
 
         return view('admin.practitioners.index', compact('practitioners'));
-            
+
 
     }
 
@@ -283,6 +283,7 @@ class PractitionersController extends Controller
 
     public function show(Practitioner $practitioner)
     {
+
         $registration_fee = 0;
 
         //$qualification_category_id = $practitioner->qualificationCategory->id;
@@ -327,7 +328,7 @@ class PractitionersController extends Controller
 
         $titles = Title::all()->sortBy('name');
         $genders = Gender::all()->sortBy('name');
-        $marital_statuses = MaritalStatus::all()->sortBy('name');
+       /*   = MaritalStatus::all()->sortBy('name');*/
         $provinces = Province::all()->sortBy('name');
         $nationalities = Nationality::all()->sortBy('name');
         $cities = City::all()->sortBy('name');
@@ -338,7 +339,7 @@ class PractitionersController extends Controller
         $register_categories = RegisterCategory::all()->sortBy('name');
 
         return view('admin.practitioners.edit',
-            compact('practitioner', 'titles', 'genders', 'marital_statuses',
+            compact('practitioner', 'titles', 'genders',
                 'provinces', 'cities', 'nationalities', 'professions',
                 'qualification_categories', 'renewal_categories', 'payment_methods',
                 'register_categories'

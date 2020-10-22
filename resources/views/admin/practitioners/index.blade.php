@@ -108,13 +108,14 @@
                                                                                                 <td>@if($practitioner->qualification_category_id!=null){{$practitioner->qualificationCategory->name}}@endif</td>
                                                 --}}
                                                 <td>
-                                                    @if($practitioner->qualification_category_id!=null)
                                                         @if($practitioner->qualification_category_id == 1)
-                                                            {{$practitioner->accreditedInstitution->name}}
+                                                            @if($practitioner->accreditedInstitution)
+                                                                {{$practitioner->accreditedInstitution->name}}
+                                                            @endif
+                                                            {{-- {{$practitioner->accreditedInstitution->name}}--}}
                                                         @else
                                                             {{$practitioner->institution}}
                                                         @endif
-                                                    @endif
                                                 </td>
                                                 <td>
                                                     @if($practitioner->currentRenewal)
@@ -130,7 +131,8 @@
 
                                                 <td>
                                                     <a href="/admin/practitioners/{{$practitioner->id}}">View</a> |
-                                                    <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal"> Renew</a>
+                                                    <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal">
+                                                        Renew</a>
                                                 </td>
                                                 @can('updatePractitioner')
                                                     <td><a href="/admin/practitioners/{{$practitioner->id}}/delete">
@@ -199,13 +201,16 @@
                                                 <td>@if($practitioner->professional_qualification_id !=null){{$practitioner->professionalQualification->name}}@endif</td>
                                                 <td>@if($practitioner->qualification_category_id !=null){{$practitioner->qualificationCategory->name}}@endif</td>
                                                 <td>
-                                                    @if($practitioner->qualification_category_id !=null)
+
                                                         @if($practitioner->qualification_category_id == 1)
-                                                            {{$practitioner->accreditedInstitution->name}}
+                                                            @if($practitioner->accreditedInstitution)
+                                                                {{$practitioner->accreditedInstitution->name}}
+                                                            @endif
+                                                            {{-- {{$practitioner->accreditedInstitution->name}}--}}
                                                         @else
                                                             {{$practitioner->institution}}
                                                         @endif
-                                                    @endif
+
                                                 </td>
                                                 <td>
                                                     @if(
@@ -260,7 +265,8 @@
                                                 </td>
 
                                                 <td><a href="/admin/practitioners/{{$practitioner->id}}"> View</a> |
-                                                    <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal"> Renew</a>
+                                                    <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal">
+                                                        Renew</a>
 
                                                 </td>
                                                 @can('updatePractitioner')
@@ -279,8 +285,8 @@
             </div>
         </div>
     </div>
-@stop
-</div>
+    @stop
+    </div>
 @section('plugins-js')
     <script src="{{asset('assets/node_modules/datatables/jquery.dataTables.min.js')}}"></script>
     <!-- start - This is for export functionality only -->

@@ -199,13 +199,15 @@
                                         <div class="col-md-4 col-xs-6 b-r"><strong>Accredited Institution</strong>
                                             <br>
                                             <p class="text-muted">
-                                                @if($practitioner->qualification_category_id == null)
+
                                                     @if($practitioner->qualification_category_id==1)
-                                                        {{$practitioner->accreditedInstitution->name}}
+                                                        @if($practitioner->accreditedInstitution)
+                                                            {{$practitioner->accreditedInstitution->name}}
+                                                        @endif
                                                     @else
                                                         {{ucwords($practitioner->institution)}}
                                                     @endif
-                                                @endif
+
                                             </p>
                                         </div>
                                         <div class="col-md-4 col-xs-6 b-r"><strong>Qualification Category</strong>
@@ -295,7 +297,8 @@
                         <div class="tab-pane p-20" id="qualifications" role="tabpanel">
                             @can('updatePractitioner')
                                 <a href="/admin/practitioners/qualifications/{{$practitioner->id}}/create"
-                                   class="btn btn-success btn-sm" style="margin-bottom: 10px;">Additional Qualification</a>
+                                   class="btn btn-success btn-sm" style="margin-bottom: 10px;">Additional
+                                    Qualification</a>
                             @endcan
 
                             <div class="row small-spacing">
@@ -311,11 +314,14 @@
 
                                                     <ul class="dot-list">
                                                         <li>
-                                                            <a href="/admin/practitioners/qualifications/{{$practitioner->id}}/showprimary">@if($practitioner->qualification_category_id !=null){{$practitioner->professionalQualification->name}}@endif</a>
-                                                            @if($practitioner->qualification_category_id != null)
+                                                            <a href="/admin/practitioners/qualifications/{{$practitioner->id}}/showprimary">
+                                                                @if($practitioner->qualification_category_id !=null)
+                                                                    @if($practitioner->professionalQualification){{$practitioner->professionalQualification->name}}@endif
+                                                                @endif</a>
+
                                                                 @if($practitioner->qualification_category_id == 1)
                                                                     <span
-                                                                        class="date">{{$practitioner->accreditedInstitution->name}}
+                                                                        class="date">@if($practitioner->accreditedInstitution){{$practitioner->accreditedInstitution->name}}@endif
                                                                     </span>
                                                                     <i style="color: black;font-weight: bolder;padding-right: 5px;">Commencement
                                                                         date
@@ -340,7 +346,7 @@
                                                                     </i>
                                                                     <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
                                                                 @endif
-                                                            @endif
+
 
                                                         </li>
                                                     </ul>
@@ -624,8 +630,8 @@
                                     <h4 class="box-title"><i class="fa fa-history"></i> Practitioner Experience</h4>
                                     <div class="card-content">
                                         <ul class="dot-list">
-                                            @if($practitioner->practitionerExperiences)
-                                                @foreach($practitioner->practitionerExperiences as $experience)
+                                            @if($practitioner->practitionerExperience)
+                                                @foreach($practitioner->practitionerExperience as $experience)
                                                     <li>
                                                         <a href="/admin/practitioners/experience/{{$experience->id}}/show">{{$experience->name}}</a>
                                                         <span class="date">{{$experience->job_title}}</span>
@@ -923,7 +929,7 @@
                 </div>
             </div>
         </div>
-@stop
+        @stop
     </div>
 
 

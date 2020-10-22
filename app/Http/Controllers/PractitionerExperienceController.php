@@ -50,7 +50,7 @@ class PractitionerExperienceController extends Controller
     {
         //
 
-        $practitioner->addExperience(
+        $test = $practitioner->addExperience(
 
             request()->validate([
                 'name' => ['required'],
@@ -65,6 +65,8 @@ class PractitionerExperienceController extends Controller
                 'resignation_date' => ['required']
             ])
         );
+
+        dd($test);
 
         return back()->with('message','Practitioner Experience added successfully');
     }
