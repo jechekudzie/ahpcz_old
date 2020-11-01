@@ -1,698 +1,359 @@
-@extends('layouts.admin')
-@section('title','Allied Health Practitioners Council')
-@section('morris-chart-css')
-    <!-- chartist CSS -->
-    <link href="{{asset('assets/node_modules/morrisjs/morris.css')}}" rel="stylesheet">
-    <!--Toaster Popup message CSS -->
-    <link href="{{asset('assets/node_modules/toast-master/css/jquery.toast.css')}}" rel="stylesheet">
-@endsection
+<?php
+use App\Practitioner;
+use App\Renewal;
+use Carbon\CarbonInterval;
 
-@section('content')
-    <div class="container-fluid">
-        <!-- ============================================================== -->
-        <!-- Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <div class="row page-titles">
-            <div class="col-md-5 align-self-center">
-                <h4 class="text-themecolor">Dashboard 1</h4>
-            </div>
-            <div class="col-md-7 align-self-center text-right">
-                <div class="d-flex justify-content-end align-items-center">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard 1</li>
-                    </ol>
-                    <button type="button" class="btn btn-info d-none d-lg-block m-l-15"><i class="fa fa-plus-circle"></i> Create New</button>
-                </div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Bread crumb and right sidebar toggle -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Info box -->
-        <!-- ============================================================== -->
-        <div class="card-group">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="d-flex no-block align-items-center">
-                                <div>
-                                    <h3><i class="icon-screen-desktop"></i></h3>
-                                    <p class="text-muted">MYNEW CLIENTS</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <h2 class="counter text-primary">23</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="progress">
-                                <div class="progress-bar bg-primary" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Column -->
-            <!-- Column -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="d-flex no-block align-items-center">
-                                <div>
-                                    <h3><i class="icon-note"></i></h3>
-                                    <p class="text-muted">NEW PROJECTS</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <h2 class="counter text-cyan">169</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="progress">
-                                <div class="progress-bar bg-cyan" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Column -->
-            <!-- Column -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="d-flex no-block align-items-center">
-                                <div>
-                                    <h3><i class="icon-doc"></i></h3>
-                                    <p class="text-muted">NEW INVOICES</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <h2 class="counter text-purple">157</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="progress">
-                                <div class="progress-bar bg-purple" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Column -->
-            <!-- Column -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="d-flex no-block align-items-center">
-                                <div>
-                                    <h3><i class="icon-bag"></i></h3>
-                                    <p class="text-muted">All PROJECTS</p>
-                                </div>
-                                <div class="ml-auto">
-                                    <h2 class="counter text-success">431</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 85%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Info box -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Over Visitor, Our income , slaes different and  sales prediction -->
-        <!-- ============================================================== -->
-        <div class="row">
-            <!-- Column -->
-            <div class="col-lg-8 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex m-b-40 align-items-center no-block">
-                            <h5 class="card-title ">YEARLY SALES</h5>
-                            <div class="ml-auto">
-                                <ul class="list-inline font-12">
-                                    <li><i class="fa fa-circle text-cyan"></i> Iphone</li>
-                                    <li><i class="fa fa-circle text-primary"></i> Ipad</li>
-                                    <li><i class="fa fa-circle text-purple"></i> Ipod</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div id="morris-area-chart" style="height: 340px;"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- Column -->
-            <div class="col-lg-4 col-md-12">
-                <div class="row">
-                    <!-- Column -->
-                    <div class="col-md-12">
-                        <div class="card bg-cyan text-white">
-                            <div class="card-body ">
-                                <div class="row weather">
-                                    <div class="col-6 m-t-40">
-                                        <h3>&nbsp;</h3>
-                                        <div class="display-4">73<sup>°F</sup></div>
-                                        <p class="text-white">AHMEDABAD, INDIA</p>
-                                    </div>
-                                    <div class="col-6 text-right">
-                                        <h1 class="m-b-"><i class="wi wi-day-cloudy-high"></i></h1>
-                                        <b class="text-white">SUNNEY DAY</b>
-                                        <p class="op-5">April 14</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <div class="col-md-12">
-                        <div class="card bg-primary text-white">
-                            <div class="card-body">
-                                <div id="myCarouse2" class="carousel slide" data-ride="carousel">
-                                    <!-- Carousel items -->
-                                    <div class="carousel-inner">
-                                        <div class="carousel-item active">
-                                            <h4 class="cmin-height">My Acting blown <span class="font-medium">Your Mind</span> and you also <br/>laugh at the moment</h4>
-                                            <div class="d-flex no-block">
-                                                <span><img src="../assets/images/users/1.jpg" alt="user" width="50" class="img-circle"></span>
-                                                <span class="m-l-10">
-                                                    <h4 class="text-white m-b-0">Govinda</h4>
-                                                    <p class="text-white">Actor</p>
-                                                    </span>
-                                            </div>
-                                        </div>
-                                        <div class="carousel-item">
-                                            <h4 class="cmin-height">My Acting blown <span class="font-medium">Your Mind</span> and you also <br/>laugh at the moment</h4>
-                                            <div class="d-flex no-block">
-                                                <span><img src="../assets/images/users/2.jpg" alt="user" width="50" class="img-circle"></span>
-                                                <span class="m-l-10">
-                                                    <h4 class="text-white m-b-0">Govinda</h4>
-                                                    <p class="text-white">Actor</p>
-                                                    </span>
-                                            </div>
-                                        </div>
-                                        <div class="carousel-item">
-                                            <h4 class="cmin-height">My Acting blown <span class="font-medium">Your Mind</span> and you also <br/>laugh at the moment</h4>
-                                            <div class="d-flex no-block">
-                                                <span><img src="../assets/images/users/3.jpg" alt="user" width="50" class="img-circle"></span>
-                                                <span class="m-l-10">
-                                                    <h4 class="text-white m-b-0">Govinda</h4>
-                                                    <p class="text-white">Actor</p>
-                                                    </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                </div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- Comment - table -->
-        <!-- ============================================================== -->
-        <div class="row">
+function getDifference($created_at, $now)
+{
+    $days = $created_at->diffInDays($now);
+    $hours = $created_at->diffInHours($now->subDays($days));
+    $minutes = $created_at->diffInMinutes($now->subHours($hours));
+    $seconds = $created_at->diffInSeconds($now->subMinutes($minutes));
+
+    return CarbonInterval::days($days)->hours($hours)->minutes($minutes)->seconds($seconds)->forHumans();
+}
+
+function countTasks()
+{
+    $user_role = auth()->user()->role_id;
+    $count = 0;
+    if ($user_role == 4) {
+        $count = Practitioner::whereRegistration_officerOrRegistration_officerAndAccountantAndMember(0, 1, 1, 1)->count();
+    }
+
+    if ($user_role == 5) {
+        $count = Practitioner::whereRegistration_officerAndAccountant(1, 0)->count();
+
+    }
+
+    if ($user_role == 6) {
+        $count = Practitioner::whereRegistration_officerAndAccountantAndMember(1, 1, 0)->count();
+
+    }
+
+    if ($user_role == 7) {
+        $count = Practitioner::whereRegistration_officerAndAccountantAndMemberAndRegistrar(2, 1, 1, 0)->count();
+
+    }
+
+    if ($user_role == 3) {
+
+        $count = 0;
+    }
+    if ($user_role == 2) {
+
+        $count = 0;
+    }
+    if ($user_role == 1) {
+
+        $count = 0;
+    }
+
+    echo $count;
+}
+
+function countCertificates()
+{
+
+    $current_year = date('Y');
+    $no_shortfalls = [];
+    $percentage = 0;
+    $count_certificates = 0;
+    $complete_renewals = Renewal::where('renewal_period_id', '>=', $current_year)->get();
+    foreach ($complete_renewals as $complete_renewal) {
+
+        $total = count($complete_renewal->practitioner->practitionerRequirements);
+        $checked = count($complete_renewal->practitioner->practitionerRequirements->where('status', '1'));
+        $percentage = ($checked / $total) * 100;
+
+        if ($percentage == 100 && ($complete_renewal->renewal_status_id == 1) && ($complete_renewal->cdpoints == 1) && ($complete_renewal->placement == 1)) {
+            $no_shortfalls[] = array('shortfall' => $percentage, 'renewal_id' => $complete_renewal->id);
+        }
+
+    }
+
+    $count_certificates = count($no_shortfalls);
+
+    echo $count_certificates;
+}
+
+
+function countPendingItems()
+{
+    $year = date('Y');
+    $shortfalls = [];
+    $percentage = 0;
+    $count_pending = 0;
+    $renewals = Renewal::where('renewal_period_id', '>=', $year)->get();
+    foreach ($renewals as $renewal) {
+
+        $total = count($renewal->practitioner->practitionerRequirements);
+        $checked = count($renewal->practitioner->practitionerRequirements->where('status', '1'));
+        $percentage = ($checked / $total) * 100;
+
+        if ($percentage < 100 || ($renewal->renewal_status_id != 1) || ($renewal->cdpoints == 0) || ($renewal->placement == 0)) {
+            $shortfalls[] = array('shortfall' => $percentage, 'renewal_id' => $renewal->id);
+        }
+
+    }
+    $count_pending = count($shortfalls);
+
+    echo $count_pending;
+}
+
+?>
+    <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Allied Health Practitioners Council</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/css/bootstrap.min.css">
+
+    <link href="{{asset('dist/css/style.min.css')}}" rel="stylesheet">
+    <!-- Dashboard 1 Page CSS -->
+    <link href="{{asset('dist/css/pages/dashboard1.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{asset('css/style-horizontal.min.css')}}">
+
+   @livewireStyles
+
+
+</head>
+
+<body class="horizontal-nav skin-megna fixed-layout">
+
+
+<div id="main-wrapper">
+
+    <header class="topbar">
+        <nav class="navbar top-navbar navbar-expand-md navbar-dark">
             <!-- ============================================================== -->
-            <!-- Comment widgets -->
+            <!-- Logo -->
             <!-- ============================================================== -->
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Recent Comments</h5>
-                    </div>
-                    <!-- ============================================================== -->
-                    <!-- Comment widgets -->
-                    <!-- ============================================================== -->
-                    <div class="comment-widgets">
-                        <!-- Comment Row -->
-                        <div class="d-flex no-block comment-row">
-                            <div class="p-2"><span class="round"><img src="../assets/images/users/1.jpg" alt="user" width="50"></span></div>
-                            <div class="comment-text w-100">
-                                <h5 class="font-medium">James Anderson</h5>
-                                <p class="m-b-10 text-muted">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has beenorem Ipsum is simply dummy text of the printing and type setting industry.</p>
-                                <div class="comment-footer">
-                                    <span class="text-muted pull-right">April 14, 2016</span> <span class="badge badge-pill badge-info">Pending</span> <span class="action-icons">
-                                                    <a href="javascript:void(0)"><i class="ti-pencil-alt"></i></a>
-                                                    <a href="javascript:void(0)"><i class="ti-check"></i></a>
-                                                    <a href="javascript:void(0)"><i class="ti-heart"></i></a>
-                                                </span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Comment Row -->
-                        <div class="d-flex no-block comment-row border-top">
-                            <div class="p-2"><span class="round"><img src="../assets/images/users/2.jpg" alt="user" width="50"></span></div>
-                            <div class="comment-text active w-100">
-                                <h5 class="font-medium">Michael Jorden</h5>
-                                <p class="m-b-10 text-muted">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has beenorem Ipsum is simply dummy text of the printing and type setting industry..</p>
-                                <div class="comment-footer">
-                                    <span class="text-muted pull-right">April 14, 2016</span>
-                                    <span class="badge badge-pill badge-success">Approved</span>
-                                    <span class="action-icons active">
-                                                    <a href="javascript:void(0)"><i class="ti-pencil-alt"></i></a>
-                                                    <a href="javascript:void(0)"><i class="icon-close"></i></a>
-                                                    <a href="javascript:void(0)"><i class="ti-heart text-danger"></i></a>
-                                                </span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Comment Row -->
-                        <div class="d-flex no-block comment-row border-top">
-                            <div class="p-2"><span class="round"><img src="../assets/images/users/3.jpg" alt="user" width="50"></span></div>
-                            <div class="comment-text w-100">
-                                <h5 class="font-medium">Johnathan Doeting</h5>
-                                <p class="m-b-10 text-muted">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has beenorem Ipsum is simply dummy text of the printing and type setting industry.</p>
-                                <div class="comment-footer">
-                                    <span class="text-muted pull-right">April 14, 2016</span>
-                                    <span class="badge badge-pill badge-danger">Rejected</span>
-                                    <span class="action-icons">
-                                                    <a href="javascript:void(0)"><i class="ti-pencil-alt"></i></a>
-                                                    <a href="javascript:void(0)"><i class="ti-check"></i></a>
-                                                    <a href="javascript:void(0)"><i class="ti-heart"></i></a>
-                                                </span>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Comment Row -->
-                        <div class="d-flex no-block comment-row border-top">
-                            <div class="p-2"><span class="round"><img src="../assets/images/users/4.jpg" alt="user" width="50"></span></div>
-                            <div class="comment-text active w-100">
-                                <h5 class="font-medium">Genelia doe</h5>
-                                <p class="m-b-10 text-muted">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has beenorem Ipsum is simply dummy text of the printing and type setting industry..</p>
-                                <div class="comment-footer">
-                                    <span class="text-muted pull-right">April 14, 2016</span>
-                                    <span class="badge badge-pill badge-success">Approved</span>
-                                    <span class="action-icons active">
-                                                    <a href="javascript:void(0)"><i class="ti-pencil-alt"></i></a>
-                                                    <a href="javascript:void(0)"><i class="icon-close"></i></a>
-                                                    <a href="javascript:void(0)"><i class="ti-heart text-danger"></i></a>
-                                                </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">
+                    <!--End Logo icon -->
+                    <!-- Logo text -->
+                    <span class="hidden-sm-down">
+                         <!-- dark Logo text -->
+
+                         {{--<img src="{{asset('profiles/ahpcz.png')}}" alt="homepage" class="dark-logo"/>--}}
+                         <img style="background-color: white;" src="{{asset('profiles/ahpcz.png')}}" alt="homepage"
+                              class="light-logo"/>
+
+
+                    </span>
+                </a>
             </div>
             <!-- ============================================================== -->
-            <!-- Table -->
+            <!-- End Logo -->
             <!-- ============================================================== -->
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex">
-                            <div>
-                                <h5 class="card-title">Sales Overview</h5>
-                                <h6 class="card-subtitle">Check the monthly sales </h6>
-                            </div>
-                            <div class="ml-auto">
-                                <select class="custom-select b-0">
-                                    <option>January</option>
-                                    <option value="1">February</option>
-                                    <option value="2" selected="">March</option>
-                                    <option value="3">April</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body bg-light">
-                        <div class="row">
-                            <div class="col-6">
-                                <h3>March 2017</h3>
-                                <h5 class="font-light m-t-0">Report for this month</h5></div>
-                            <div class="col-6 align-self-center display-6 text-right">
-                                <h2 class="text-success">$3,690</h2></div>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="text-center">#</th>
-                                <th>NAME</th>
-                                <th>STATUS</th>
-                                <th>DATE</th>
-                                <th>PRICE</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="text-center">1</td>
-                                <td class="txt-oflo">Elite admin</td>
-                                <td><span class="badge badge-success badge-pill">sale</span> </td>
-                                <td class="txt-oflo">April 18, 2017</td>
-                                <td><span class="text-success">$24</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">2</td>
-                                <td class="txt-oflo">Real Homes WP Theme</td>
-                                <td><span class="badge badge-info badge-pill">extended</span></td>
-                                <td class="txt-oflo">April 19, 2017</td>
-                                <td><span class="text-info">$1250</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">3</td>
-                                <td class="txt-oflo">Ample Admin</td>
-                                <td><span class="badge badge-info badge-pill">extended</span></td>
-                                <td class="txt-oflo">April 19, 2017</td>
-                                <td><span class="text-info">$1250</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">4</td>
-                                <td class="txt-oflo">Medical Pro WP Theme</td>
-                                <td><span class="badge badge-danger badge-pill">tax</span></td>
-                                <td class="txt-oflo">April 20, 2017</td>
-                                <td><span class="text-danger">-$24</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">5</td>
-                                <td class="txt-oflo">Hosting press html</td>
-                                <td><span class="badge badge-success badge-pill">sale</span></td>
-                                <td class="txt-oflo">April 21, 2017</td>
-                                <td><span class="text-success">$24</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">6</td>
-                                <td class="txt-oflo">Digital Agency PSD</td>
-                                <td><span class="badge badge-success badge-pill">sale</span> </td>
-                                <td class="txt-oflo">April 23, 2017</td>
-                                <td><span class="text-danger">-$14</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">7</td>
-                                <td class="txt-oflo">Helping Hands WP Theme</td>
-                                <td><span class="badge badge-warning badge-pill">member</span></td>
-                                <td class="txt-oflo">April 22, 2017</td>
-                                <td><span class="text-success">$64</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-center">8</td>
-                                <td class="txt-oflo">Ample Admin</td>
-                                <td><span class="badge badge-info badge-pill">extended</span></td>
-                                <td class="txt-oflo">April 19, 2017</td>
-                                <td><span class="text-info">$1250</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Comment - chats -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Over Visitor, Our income , slaes different and  sales prediction -->
-        <!-- ============================================================== -->
-        <div class="row">
-            <!-- Column -->
-            <div class="col-lg-8 col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex m-b-40 align-items-center no-block">
-                            <h5 class="card-title ">SALES DIFFERENCE</h5>
-                            <div class="ml-auto">
-                                <ul class="list-inline font-12">
-                                    <li><i class="fa fa-circle text-cyan"></i> SITE A</li>
-                                    <li><i class="fa fa-circle text-primary"></i> SITE B</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div id="morris-area-chart2" style="height: 340px;"></div>
-                    </div>
-                </div>
-            </div>
-            <!-- Column -->
-            <div class="col-lg-4 col-md-12">
-                <div class="row">
-                    <!-- Column -->
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">SALES DIFFERENCE</h5>
-                                <div class="row">
-                                    <div class="col-6  m-t-30">
-                                        <h1 class="text-info">$647</h1>
-                                        <p class="text-muted">APRIL 2017</p>
-                                        <b>(150 Sales)</b> </div>
-                                    <div class="col-6">
-                                        <div id="sparkline2dash" class="text-right"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <div class="col-md-12">
-                        <div class="card bg-purple text-white">
-                            <div class="card-body">
-                                <h5 class="card-title">VISIT STATASTICS</h5>
-                                <div class="row">
-                                    <div class="col-6  m-t-30">
-                                        <h1 class="text-white">$347</h1>
-                                        <p class="light_op_text">APRIL 2017</p>
-                                        <b class="text-white">(150 Sales)</b> </div>
-                                    <div class="col-6">
-                                        <div id="sales1" class="text-right"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                </div>
-            </div>
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Page Content -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Todo, chat, notification -->
-        <!-- ============================================================== -->
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex no-block align-items-center">
-                            <div>
-                                <h5 class="card-title m-b-0">TO DO LIST</h5>
-                            </div>
-                            <div class="ml-auto">
-                                <button class="pull-right btn btn-circle btn-success" data-toggle="modal" data-target="#myModal"><i class="ti-plus"></i></button>
-                            </div>
-                        </div>
-                        <!-- ============================================================== -->
-                        <!-- To do list widgets -->
-                        <!-- ============================================================== -->
-                        <div class="to-do-widget m-t-20">
-                            <!-- .modal for add task -->
-                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Add Task</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form>
-                                                <div class="form-group">
-                                                    <label>Task name</label>
-                                                    <input type="text" class="form-control" placeholder="Enter Task Name"> </div>
-                                                <div class="form-group">
-                                                    <label>Assign to</label>
-                                                    <select class="custom-select form-control pull-right">
-                                                        <option selected="">Sachin</option>
-                                                        <option value="1">Sehwag</option>
-                                                        <option value="2">Pritam</option>
-                                                        <option value="3">Alia</option>
-                                                        <option value="4">Varun</option>
-                                                    </select>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-success" data-dismiss="modal">Submit</button>
-                                        </div>
-                                    </div>
-                                    <!-- /.modal-content -->
-                                </div>
-                                <!-- /.modal-dialog -->
-                            </div>
-                            <!-- /.modal -->
-                            <ul class="list-task todo-list list-group m-b-0" data-role="tasklist">
-                                <li class="list-group-item" data-role="task">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck">
-                                        <label class="custom-control-label" for="customCheck">
-                                            <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been</span> <span class="badge badge-pill badge-danger pull-right">Today</span>
-                                        </label>
-                                    </div>
-                                    <ul class="assignedto">
-                                        <li><img src="../assets/images/users/1.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Steave"></li>
-                                        <li><img src="../assets/images/users/2.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Jessica"></li>
-                                        <li><img src="../assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
-                                        <li><img src="../assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
-                                    </ul>
-                                </li>
-                                <li class="list-group-item" data-role="task">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                        <label class="custom-control-label" for="customCheck1">
-                                            <span>Lorem Ipsum is simply dummy text of the printing</span><span class="badge badge-pill badge-primary pull-right">1 week </span>
-                                        </label>
-                                    </div>
-                                    <div class="item-date"> 26 jun 2017</div>
-                                </li>
-                                <li class="list-group-item" data-role="task">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck2">
-                                        <label class="custom-control-label" for="customCheck2">
-                                            <span>Give Purchase report to</span> <span class="badge badge-pill badge-info pull-right">Yesterday</span>
-                                        </label>
-                                    </div>
-                                    <ul class="assignedto">
-                                        <li><img src="../assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
-                                        <li><img src="../assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
-                                    </ul>
-                                </li>
-                                <li class="list-group-item" data-role="task">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck3">
-                                        <label class="custom-control-label" for="customCheck3">
-                                            <span>Lorem Ipsum is simply dummy text of the printing </span> <span class="badge badge-pill badge-warning pull-right">2 weeks</span>
-                                        </label>
-                                    </div>
-                                    <div class="item-date"> 26 jun 2017</div>
-                                </li>
-                                <li class="list-group-item" data-role="task">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck4">
-                                        <label class="custom-control-label" for="customCheck4">
-                                            <span>Give Purchase report to</span> <span class="badge badge-pill badge-info pull-right">Yesterday</span>
-                                        </label>
-                                    </div>
-                                    <ul class="assignedto">
-                                        <li><img src="../assets/images/users/3.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Priyanka"></li>
-                                        <li><img src="../assets/images/users/4.jpg" alt="user" data-toggle="tooltip" data-placement="top" title="" data-original-title="Selina"></li>
-                                    </ul>
-                                </li>
+            <div style="color:white;padding-left: 9%"><h1 style="text-align: center">Allied Health Practitioners Council</h1></div>
+
+            <div class="navbar-collapse">
+                <!-- ============================================================== -->
+                <!-- toggle and nav items -->
+                <!-- ============================================================== -->
+                <ul class="navbar-nav mr-auto">
+                    <!-- This is  -->
+                    <li class="nav-item"><a class="nav-link nav-toggler d-block d-sm-none waves-effect waves-dark"
+                                            href="javascript:void(0)"><i class="ti-menu"></i></a></li>
+                    <li class="nav-item"><a class="nav-link sidebartoggler d-none waves-effect waves-dark"
+                                            href="javascript:void(0)"><i class="icon-menu"></i></a></li>
+
+                </ul>
+                <!-- ============================================================== -->
+                <!-- User profile and search -->
+                <!-- ============================================================== -->
+
+                <ul class="navbar-nav my-lg-0">
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
+                           aria-haspopup="true"
+                           aria-expanded="false">{{--@if(auth()->user()->unreadNotifications){{count(auth()->user()->unreadNotifications)}}@endif--}}
+                            <i class="ti-email"></i>
+                            <div class="notify"><span class="heartbit"></span> <span class="point"></span></div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
+                            <ul>
+                                {{-- <li>
+                                     <a href="/admin/notification/inbox">
+                                         <div class="drop-title">Notifications
+                                             @if(auth()->user()->unreadNotifications->count() > 0 ){{count(auth()->user()->unreadNotifications)}}@endif
+                                         </div>
+                                     </a>
+                                 </li>--}}
+                                {{-- <li>
+                                     <div class="message-center">
+                                         <!-- Message -->
+                                         @if(auth()->user()->unreadNotifications->count() > 0)
+                                             @foreach (auth()->user()->unreadNotifications as $notification)
+                                                 <a href="/admin/{{$notification->id}}/read">
+                                                     <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i>
+                                                     </div>
+                                                     <div class="mail-contnet">
+                                                         <h5>{{$notification->data['sender']['name']}}</h5> <span
+                                                             class="mail-desc">
+                                                         @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
+                                                     </span>
+
+                                                         <span class="time">{{getDifference($notification->created_at,now())}} ago</span>
+
+                                                     </div>
+
+                                                 </a>
+                                             @endforeach
+                                         @endif
+
+                                     </div>
+                                 </li>
+                                 <li>
+                                     <a class="nav-link text-center link" href="{{url('/admin/notification/inbox')}}">
+                                         <strong>View all
+                                             notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                 </li>--}}
                             </ul>
                         </div>
-                    </div>
-                </div>
+                    </li>
+                    <li class="nav-item dropdown u-pro">
+                        <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href=""
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                             <span
+                                 class="hidden-md-down">@if(auth()->user()){{auth()->user()->name}}@endif &nbsp;<i
+                                     class="fa fa-angle-down"></i></span> </a>
+                        <div class="dropdown-menu dropdown-menu-right animated flipInY">
+                            <!-- text-->
+                            <a href="javascript:void(0)" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
+                            <!-- text-->
+                            {{--<a href="javascript:void(0)" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
+                            <!-- text-->
+                            <a href="javascript:void(0)" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
+                            <!-- text-->--}}
+                            <div class="dropdown-divider"></div>
+                            <!-- text-->
+                            <a href="/password/reset" class="dropdown-item"><i class="ti-settings"></i> Password
+                                Setting</a>
+                            <!-- text-->
+                            <div class="dropdown-divider"></div>
+                            <!-- text-->
+                            <a href="{{ route('logout') }}"
+                               onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+                               class="dropdown-item"><i class="fa fa-power-off"></i> Logout
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                  style="display: none;">
+                                @csrf
+                            </form>
+                            <!-- text-->
+                        </div>
+                    </li>
+
+                </ul>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">YOU HAVE 5 NEW MESSAGES</h5>
-                        <div class="message-box">
-                            <div class="message-widget message-scroll">
-                                <!-- Message -->
-                                <a href="javascript:void(0)">
-                                    <div class="user-img"> <img src="../assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online pull-right"></span> </div>
-                                    <div class="mail-contnet">
-                                        <h5>Pavan kumar</h5> <span class="mail-desc">Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been.</span> <span class="time">9:30 AM</span> </div>
+        </nav>
+    </header>
+
+    <aside class="left-sidebar">
+        <!-- Sidebar scroll-->
+        <div class="scroll-sidebar">
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav">
+                <ul id="sidebarnav">
+
+                    <li><a class="waves-effect waves-dark" href="/" aria-expanded="false"><i
+                                class="fa fa-bank"></i><span class="hide-menu">Home</span> </a>
+
+                    </li>
+
+
+                    <li><a class=" waves-effect waves-dark" href="/admin/practitioners" aria-expanded="false">
+                            <i class="fa fa-user-md"></i><span class="hide-menu">Practitioners
+
+                            </span></a>
+                        {{--<ul aria-expanded="false" class="collapse">
+                            <li><a href="/admin/practitioner_applications"> <i class="fa fa-file"> </i> Practitioner
+                                    Applications
                                 </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">CHAT</h5>
-                        <div class="chat-box">
-                            <!--chat Row -->
-                            <ul class="chat-list">
-                                <!--chat Row -->
-                                <li>
-                                    <div class="chat-img"><img src="../assets/images/users/1.jpg" alt="user"></div>
-                                    <div class="chat-content">
-                                        <h5>James Anderson</h5>
-                                        <div class="box bg-light-info">Lorem Ipsum is simply dummy text of the printing &amp; type setting industry.</div>
-                                    </div>
-                                    <div class="chat-time">10:56 am</div>
-                                </li>
-                                <!--chat Row -->
-                                <li>
-                                    <div class="chat-img"><img src="../assets/images/users/2.jpg" alt="user"></div>
-                                    <div class="chat-content">
-                                        <h5>Bianca Doe</h5>
-                                        <div class="box bg-light-info">It’s Great opportunity to work.</div>
-                                    </div>
-                                    <div class="chat-time">10:57 am</div>
-                                </li>
-                                <!--chat Row -->
-                                <li class="odd">
-                                    <div class="chat-content">
-                                        <div class="box bg-light-inverse">I would love to join the team.</div>
-                                        <br>
-                                    </div>
-                                    <div class="chat-time">10:58 am</div>
-                                </li>
-                                <!--chat Row -->
-                                <li class="odd">
-                                    <div class="chat-content">
-                                        <div class="box bg-light-inverse">Whats budget of the new project.</div>
-                                        <br>
-                                    </div>
-                                    <div class="chat-time">10:59 am</div>
-                                </li>
-                                <!--chat Row -->
-                                <li>
-                                    <div class="chat-img"><img src="../assets/images/users/3.jpg" alt="user"></div>
-                                    <div class="chat-content">
-                                        <h5>Angelina Rhodes</h5>
-                                        <div class="box bg-light-info">Well we have good budget for the project</div>
-                                    </div>
-                                    <div class="chat-time">11:00 am</div>
-                                </li>
-                                <!--chat Row -->
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card-body border-top">
-                        <div class="row">
-                            <div class="col-8">
-                                <textarea placeholder="Type your message here" class="form-control border-0"></textarea>
-                            </div>
-                            <div class="col-4 text-right">
-                                <button type="button" class="btn btn-info btn-circle btn-lg"><i class="fa fa-paper-plane-o"></i> </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            </li>
+                        </ul>--}}
+                    </li>
+
+                    <li><a class=" waves-effect waves-dark two-column" href="javascript:void(0)"
+                           aria-expanded="false"><i class="fa fa-graduation-cap"></i><span
+                                class="hide-menu">Students </span></a>
+                    </li>
+
+                    <li>
+                        <a class=" waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
+                                class="fa fa-pie-chart"></i><span class="hide-menu">Reports</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="#">Practitioner</a></li>
+                            <li><a href="#">Students</a></li>
+                            <li><a href="#">Users</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li><a class="waves-effect waves-dark" href="/admin/practitioner_applications"
+                           aria-expanded="false"><i
+                                class="fa fa-tasks"></i><span
+                                class="hide-menu">My Tasks {{--({{countTasks()}})--}}</span></a>
+                    </li>
+
+                    <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/index"
+                           aria-expanded="false"><i
+                                class="fa fa-certificate"></i><span class="hide-menu">Certificate Collection {{--({{countCertificates()}})--}}</span></a>
+                    </li>
+
+                    <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/pending"
+                           aria-expanded="false"><i class="fa fa-certificate"></i><span class="hide-menu"> Out-standings {{--({{countPendingItems()}})--}}</span></a>
+                    </li>
+                    @can('admin')
+                        <li><a class="waves-effect waves-dark" href="/admin/" aria-expanded="false"><i
+                                    class="ti-settings"></i><span class="hide-menu">Administration</span></a>
+                        </li>
+
+
+                    @endcan
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
         </div>
-        <!-- ============================================================== -->
-        <!-- End Page Content -->
-        <!-- ============================================================== -->
+        <!-- End Sidebar scroll-->
+    </aside>
+    <br/>
+    <br/>
+
+    <div class="page-wrapper">
+
+        @livewire('index')
+
 
     </div>
-@endsection
 
-@section('plugins-js')
-    <!--morris JavaScript -->
-    <script src="{{asset('assets/node_modules/raphael/raphael-min.js')}}"></script>
-    <script src="{{asset('assets/node_modules/morrisjs/morris.min.js')}}"></script>
-    <script src="{{asset('assets/node_modules/jquery-sparkline/jquery.sparkline.min.js')}}"></script>
+    <footer class="footer">
+        ©{{date('Y')}} Allied Health Practitioners Council
+    </footer>
+
+    <script src="{{asset('assets/node_modules/jquery/jquery-3.2.1.min.js')}}"></script>
+    <script src="{{asset('dist/js/dashboard1.js')}}"></script>
+
+    <script src="{{asset('assets/node_modules/bootstrap/dist/js/bootstrap.min.js')}}"></script>
+
+    <!--Menu sidebar -->
+    <script src="{{asset('dist/js/sidebarmenu.js')}}"></script>
 
 
-    <!-- jQuery peity -->
-    <script src="{{asset('assets/node_modules/peity/jquery.peity.min.js')}}"></script>
-    <script src="{{asset('assets/node_modules/peity/jquery.peity.init.js')}}"></script>
-@endsection
+
+</div>
+@livewireScripts
+</body>
+
+</html>

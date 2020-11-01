@@ -53,7 +53,8 @@ function countTasks()
     echo $count;
 }
 
-function countCertificates(){
+function countCertificates()
+{
 
     $current_year = date('Y');
     $no_shortfalls = [];
@@ -78,7 +79,8 @@ function countCertificates(){
 }
 
 
-function countPendingItems(){
+function countPendingItems()
+{
     $year = date('Y');
     $shortfalls = [];
     $percentage = 0;
@@ -101,7 +103,6 @@ function countPendingItems(){
 }
 
 ?>
-
     <!DOCTYPE html>
 <html lang="en">
 
@@ -119,10 +120,11 @@ function countPendingItems(){
     <link href="{{asset('dist/css/pages/dashboard1.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/style-horizontal.min.css')}}">
 
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    {{--<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-
+--}}
     @yield('plugins-css')
+
 
 </head>
 
@@ -154,7 +156,8 @@ function countPendingItems(){
             <!-- ============================================================== -->
             <!-- End Logo -->
             <!-- ============================================================== -->
-            <div style="color:white;padding-left: 9%"><h1>Allied Health Practitioners Council</h1></div>
+            <div style="color:white;padding-left: 9%"><h1 style="text-align: center">Allied Health Practitioners
+                    Council</h1></div>
 
             <div class="navbar-collapse">
                 <!-- ============================================================== -->
@@ -176,45 +179,58 @@ function countPendingItems(){
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">({{count(auth()->user()->unreadNotifications)}})
+                           aria-haspopup="true"
+                           aria-expanded="false">
+                            @if(auth()->check())
+                                @if(auth()->user()->unreadNotifications)
+                                    ({{auth()->user()->unreadNotifications()->count()}})
+                                @endif
+                            @endif
                             <i class="ti-email"></i>
                             <div class="notify"><span class="heartbit"></span> <span class="point"></span></div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right mailbox animated bounceInDown">
                             <ul>
                                 <li>
-                                    <a href="/admin/notification/inbox">
+                                    <a href="{{url('/admin/notification/inbox')}}">
                                         <div class="drop-title">Notifications
-                                            ({{count(auth()->user()->unreadNotifications)}})
+                                            @if(auth()->check() )
+                                                @if(auth()->user()->unreadNotifications)
+                                                    ({{auth()->user()->unreadNotifications()->count()}})
+                                                @endif
+                                            @endif
                                         </div>
                                     </a>
                                 </li>
                                 <li>
-                                    <div class="message-center">
-                                        <!-- Message -->
-                                        @foreach (auth()->user()->unreadNotifications as $notification)
-                                            <a href="/admin/{{$notification->id}}/read">
-                                                <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
-                                                <div class="mail-contnet">
-                                                    <h5>{{$notification->data['sender']['name']}}</h5> <span
-                                                        class="mail-desc">
-                                                        @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
-                                                    </span>
+                                     <div class="message-center">
+                                         <!-- Message -->
+                                         @if(auth()->user()->unreadNotifications)
+                                             @foreach (auth()->user()->unreadNotifications as $notification)
+                                                 <a href="/admin/{{$notification->id}}/read">
+                                                     <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i>
+                                                     </div>
+                                                     <div class="mail-contnet">
+                                                         <h5>{{$notification->data['sender']['name']}}</h5> <span
+                                                             class="mail-desc">
+                                                         @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
+                                                     </span>
 
-                                                    <span class="time">{{getDifference($notification->created_at,now())}} ago</span>
+                                                         <span class="time">{{getDifference($notification->created_at,now())}} ago</span>
 
-                                                </div>
+                                                     </div>
 
-                                            </a>
-                                        @endforeach
+                                                 </a>
+                                             @endforeach
+                                         @endif
 
-                                    </div>
-                                </li>
-                                <li>
-                                    <a class="nav-link text-center link" href="{{url('/admin/notification/inbox')}}">
-                                        <strong>View all
-                                            notifications</strong> <i class="fa fa-angle-right"></i> </a>
-                                </li>
+                                     </div>
+                                 </li>
+                                 <li>
+                                     <a class="nav-link text-center link" href="{{url('/admin/notification/inbox')}}">
+                                         <strong>View all
+                                             notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                 </li>
                             </ul>
                         </div>
                     </li>
@@ -222,16 +238,12 @@ function countPendingItems(){
                         <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href=""
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                              <span
-                                 class="hidden-md-down">{{auth()->user()->name}} &nbsp;<i
+                                 class="hidden-md-down">@if(auth()->check()){{auth()->user()->name}}@endif &nbsp;<i
                                      class="fa fa-angle-down"></i></span> </a>
                         <div class="dropdown-menu dropdown-menu-right animated flipInY">
                             <!-- text-->
                             <a href="javascript:void(0)" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
-                            <!-- text-->
-                            {{--<a href="javascript:void(0)" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
-                            <!-- text-->
-                            <a href="javascript:void(0)" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
-                            <!-- text-->--}}
+
                             <div class="dropdown-divider"></div>
                             <!-- text-->
                             <a href="/password/reset" class="dropdown-item"><i class="ti-settings"></i> Password
@@ -269,16 +281,18 @@ function countPendingItems(){
                     </li>
 
 
-                    <li><a class=" waves-effect waves-dark" href="/admin/practitioners" aria-expanded="false">
+                    <li><a class=" waves-effect waves-dark" href="#" aria-expanded="false">
                             <i class="fa fa-user-md"></i><span class="hide-menu">Practitioners
-
                             </span></a>
-                        {{--<ul aria-expanded="false" class="collapse">
-                            <li><a href="/admin/practitioner_applications"> <i class="fa fa-file"> </i> Practitioner
-                                    Applications
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a href="{{url('/admin/practitioners')}}"> Practitioners
                                 </a>
                             </li>
-                        </ul>--}}
+                            <li><a href="{{url('/admin/pending_approval')}}">Practitioners
+                                    Pending Approval
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
                     <li><a class=" waves-effect waves-dark two-column" href="javascript:void(0)"
@@ -286,7 +300,8 @@ function countPendingItems(){
                                 class="hide-menu">Students </span></a>
                     </li>
 
-                    <li><a class=" waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
+                    <li>
+                        <a class=" waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
                                 class="fa fa-pie-chart"></i><span class="hide-menu">Reports</span></a>
                         <ul aria-expanded="false" class="collapse">
                             <li><a href="#">Practitioner</a></li>
@@ -299,15 +314,18 @@ function countPendingItems(){
                     <li><a class="waves-effect waves-dark" href="/admin/practitioner_applications"
                            aria-expanded="false"><i
                                 class="fa fa-tasks"></i><span
-                                class="hide-menu">My Tasks ({{countTasks()}})</span></a>
+                                class="hide-menu">My Tasks {{--({{countTasks()}})--}}</span></a>
                     </li>
 
                     <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/index"
                            aria-expanded="false"><i
-                                class="fa fa-certificate"></i><span class="hide-menu">Certificate Collection ({{countCertificates()}})</span></a></li>
+                                class="fa fa-certificate"></i><span
+                                class="hide-menu">Certificate Collection {{--({{countCertificates()}})--}}</span></a>
+                    </li>
 
                     <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/pending"
-                           aria-expanded="false"><i class="fa fa-certificate"></i><span class="hide-menu"> Out-standings ({{countPendingItems()}})</span></a>
+                           aria-expanded="false"><i class="fa fa-certificate"></i><span
+                                class="hide-menu"> Out-standings {{--({{countPendingItems()}})--}}</span></a>
                     </li>
                     @can('admin')
                         <li><a class="waves-effect waves-dark" href="/admin/" aria-expanded="false"><i
@@ -336,22 +354,19 @@ function countPendingItems(){
         ©{{date('Y')}} Allied Health Practitioners Council
     </footer>
 
-<script src="{{asset('assets/node_modules/jquery/jquery-3.2.1.min.js')}}"></script>
-<script src="{{asset('dist/js/dashboard1.js')}}"></script>
+    <script src="{{asset('assets/node_modules/jquery/jquery-3.2.1.min.js')}}"></script>
+    <script src="{{asset('dist/js/dashboard1.js')}}"></script>
 
-<script src="{{asset('assets/node_modules/popper/popper.min.js')}}"></script>
-<script src="{{asset('assets/node_modules/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-<!-- slimscrollbar scrollbar JavaScript -->
-<script src="{{asset('dist/js/perfect-scrollbar.jquery.min.js')}}"></script>
-<!--Wave Effects -->
-<script src="{{asset('dist/js/waves.js')}}"></script>
-<!--Menu sidebar -->
-<script src="{{asset('dist/js/sidebarmenu.js')}}"></script>
-<!--Custom JavaScript -->
-<script src="{{asset('dist/js/custom.min.js')}}"></script>
+    <script src="{{asset('assets/node_modules/bootstrap/dist/js/bootstrap.min.js')}}"></script>
 
-@yield('plugins-js')
+    <!--Menu sidebar -->
+    <script src="{{asset('dist/js/sidebarmenu.js')}}"></script>
+
+    @yield('plugins-js')
+
 </div>
+
 </body>
 
 </html>
+

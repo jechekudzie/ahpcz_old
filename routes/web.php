@@ -108,6 +108,7 @@ Route::get('/admin/practitioner_applications/{practitioner}/{application}', 'Pra
 /*---------------------*/
 /*Start Of Practitioner Registration*/
 Route::resource('/admin/practitioners', 'PractitionersController');
+Route::get('/admin/pending_approval', 'PractitionersController@pendingApproval');
 Route::get('/admin/practitioners/renewal/create', 'PractitionersController@createForRenew');
 Route::post('/admin/practitioners/renewal/store', 'PractitionersController@practitionerRenewStore');
 Route::get('/admin/practitioners/{practitioner}/delete', 'PractitionersController@delete');
@@ -276,10 +277,13 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');*/
 
+//Tables routes
+Route::get('/fetchingAllUnit', 'PractitionersController@fetchingAllUnit');
+Route::get('/search_unit', 'PractitionersController@search_unit_by_key');
+
+
 
 Route::get('/admin/other/{practitioner}', 'PractitionersController@other');
-
-
 
 //APIS
 //1. get all practitioners API

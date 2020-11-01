@@ -40,21 +40,23 @@ class PractitionersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /*public function __construct()
+    public function __construct()
     {
         $this->middleware('auth');
 
-    }*/
+    }
 
     public function index(Request $request)
     {
-        $practitioners = Practitioner::all();
-
-        return view('admin.practitioners.index', compact('practitioners'));
-
+        return view('admin.practitioners.index');
 
     }
 
+    public function pendingApproval(Request $request)
+    {
+        return view('admin.practitioners.pendings');
+
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -74,6 +76,7 @@ class PractitionersController extends Controller
             ));
 
     }
+
     /**
      * Store a newly created resource in storage.
      **/
@@ -82,7 +85,7 @@ class PractitionersController extends Controller
         $check_id_number = request('id_number');
         $check_profession_id = request('profession_id');
 
-        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number,$check_profession_id)->first();
+        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number, $check_profession_id)->first();
         if ($check_existensce != null) {
 
             return back()->with('message', 'Practitioner already exists.');
@@ -193,7 +196,7 @@ class PractitionersController extends Controller
         $check_id_number = request('id_number');
         $check_profession_id = request('profession_id');
 
-        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number,$check_profession_id)->first();
+        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number, $check_profession_id)->first();
         if ($check_existensce != null) {
 
             return back()->with('message', 'Practitioner already exists.');
@@ -328,7 +331,7 @@ class PractitionersController extends Controller
 
         $titles = Title::all()->sortBy('name');
         $genders = Gender::all()->sortBy('name');
-       /*   = MaritalStatus::all()->sortBy('name');*/
+        /*   = MaritalStatus::all()->sortBy('name');*/
         $provinces = Province::all()->sortBy('name');
         $nationalities = Nationality::all()->sortBy('name');
         $cities = City::all()->sortBy('name');
