@@ -57,6 +57,11 @@
             <th class="px-4 py-2">Profession</th>
             <th class="px-4 py-2">Professional Qualification</th>
             <th class="px-4 py-2">Renewal Status</th>
+            <th class="px-4 py-2">Actions</th>
+            @can('updatePractitioner')
+                <th class="px-4 py-2">Delete</th>
+            @endcan
+
         </tr>
         </thead>
         <tbody>
@@ -90,9 +95,16 @@
                         {{'Not Compliant'}}
                     @endif
                 </td>
-
-
-
+                <td class="border px-4 py-2">
+                    <a href="/admin/practitioners/{{$practitioner->id}}">View</a> |
+                    <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal">
+                        Renew</a>
+                </td>
+                @can('updatePractitioner')
+                    <td class="border px-4 py-2"><a href="/admin/practitioners/{{$practitioner->id}}/delete">
+                            Delete</a>
+                    </td>
+                @endcan
             </tr>
         @endforeach
         </tbody>
@@ -100,7 +112,8 @@
     {!! $practitioners->links() !!}
 
     <div>
-        Showing {!! $practitioners->firstItem() !!} of {!! $practitioners->lastItem() !!} out of {!! $practitioners->total() !!}
+        Showing {!! $practitioners->firstItem() !!} of {!! $practitioners->lastItem() !!} out
+        of {!! $practitioners->total() !!}
 
     </div>
 </div>

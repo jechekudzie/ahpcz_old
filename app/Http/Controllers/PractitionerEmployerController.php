@@ -52,8 +52,8 @@ class PractitionerEmployerController extends Controller
 
         $practitioner_details = request()->validate([
             'name' => ['required'],
-            'email' => ['required', 'email'],
-            'phone' => ['required'],
+            'email' => ['nullable'],
+            'phone' => ['nullable'],
             'business_address' => ['required'],
             'province_id' => ['required'],
             'city_id' => ['required'],
@@ -106,8 +106,8 @@ class PractitionerEmployerController extends Controller
 
             request()->validate([
                 'name' => ['required'],
-                'email' => ['required', 'email'],
-                'phone' => ['required'],
+                'email' => ['nullable'],
+                'phone' => ['nullable'],
                 'business_address' => ['required'],
                 'province_id' => ['required'],
                 'city_id' => ['required'],
