@@ -1,4 +1,15 @@
 @extends('layouts.admin')
+<!-- Styles -->
+<!-- TailwindCSS -->
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Nunito';
+    }
+</style>
 @livewireStyles
 @section('content')
     <div class="container-fluid">
@@ -18,7 +29,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="/admin">Dashboard</a></li>
 
-                        <li class="breadcrumb-item active">Practitioners</li>
+                        <li class="breadcrumb-item active">Practitioners Pending Approval</li>
                     </ol>
 
                 </div>
@@ -40,22 +51,22 @@
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#approved"
                                                 role="tab"><span
                                     class="hidden-sm-up"><i class="ti-home"></i></span> <span
-                                    class="hidden-xs-down"> Practitioners</span></a></li>
+                                    class="hidden-xs-down"> Practitioners Pending Approval </span></a></li>
 
-                        {{-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pending" role="tab"><span
-                                     class="hidden-sm-up"><i class="ti-user"></i></span> <span
-                                     class="hidden-xs-down">Applications Pending Approval ({{$pending_apps = \App\Practitioner::where("approval_status","=",0)->count()}})</span></a>
-                         </li>
- --}}
                     </ul>
+                    <br/>
+                    <br/>
 
-                    @livewire('pendings')
+                    <div class="col-md-12">
+                        @livewire('pending')
+                    </div>
 
                 </div>
             </div>
         </div>
     </div>
 @stop
-
 @livewireScripts
+<!-- Scripts -->
+
 

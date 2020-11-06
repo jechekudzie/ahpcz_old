@@ -9,10 +9,42 @@ class Practitioner extends Model
     //
     protected $guarded = [];
 
+
+    public function professional_qualification()
+    {
+        return $this->belongsTo(ProfessionalQualification::class);
+    }
+
+    //livewire
+   /* public static function search($search)
+    {
+        return empty($search) ? static::query()
+            :static::query()
+                ->where('id', 'like', '%'.$search.'%')
+                ->orWhere('first_name', 'like', '%'.$search.'%')
+                ->orWhere('last_name', 'like', '%'.$search.'%')
+                ->orWhere('registration_number', 'like', '%'.$search.'%')
+                ->whereHas('profession', function ($query) use ($search) {
+                    $query->where('name', 'like', '%'.$search.'%');
+                })
+                ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", "%{$search}%");
+    }*/
+    public static function search($search)
+    {
+        return empty($search) ? static::query()
+            :static::query()
+                ->where('id', 'like', '%'.$search.'%')
+                ->orWhereHas('profession', function ($query) use ($search) {
+                    $query->where('name', 'like', '%'.$search.'%');
+                })
+                ->orWhereRaw("CONCAT(prefix, ' ', registration_number) LIKE ?", ["%{$search}%"])
+                ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", "%{$search}%");
+    }
+
     public function currentRenewal()
     {
         $year = date('Y');
-        return $this->hasOne(Renewal::class)->where('renewal_period_id',$year);
+        return $this->hasOne(Renewal::class)->where('renewal_period_id', $year);
     }
 
     public function title()
@@ -53,8 +85,10 @@ class Practitioner extends Model
 
     public function professionalQualification()
     {
+
         return $this->belongsTo(ProfessionalQualification::class);
     }
+
 
     public function accreditedInstitution()
     {
@@ -93,7 +127,7 @@ class Practitioner extends Model
     public function documents()
     {
 
-        return $this->hasMany(Document::class,'document_owner');
+        return $this->hasMany(Document::class, 'document_owner');
     }
 
     public function employer()
@@ -126,7 +160,8 @@ class Practitioner extends Model
         return $this->hasMany(PractitionerCpdpoint::class);
     }
 
-    public function placement(){
+    public function placement()
+    {
         return $this->hasMany(PractitionerPlacement::class);
     }
 
@@ -151,7 +186,8 @@ class Practitioner extends Model
     }
 
     //practitioner other applications
-    public function otherApplications(){
+    public function otherApplications()
+    {
 
         return $this->hasMany(OtherApplication::class);
 
@@ -163,6 +199,7 @@ class Practitioner extends Model
     {
         $this->contact()->create($contact);
     }
+
     //add cpd points
     public function addCdPoints($cdpoints)
     {

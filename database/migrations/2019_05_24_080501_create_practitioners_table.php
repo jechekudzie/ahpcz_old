@@ -20,7 +20,7 @@ class CreatePractitionersTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('previous_name')->nullable();
-            $table->timestamp('dob')->nullable();
+            $table->string('dob')->nullable();
             $table->string('id_number');
             $table->string('prefix')->nullable();
             $table->unsignedInteger('registration_number')->nullable();

@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.1",
         "laravel-vue-datatable": "^0.5.14",
         "laravel-vue-pagination": "^2.3.1",
         "vue-resource": "^1.5.1",

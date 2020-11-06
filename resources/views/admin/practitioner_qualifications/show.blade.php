@@ -19,7 +19,7 @@
                     <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                 @endcan
                 <a href="/admin/practitioners/{{$practitionerQualification->practitioner->id}}"
-                   class="btn btn-success"></i> Dash Board</a>
+                   class="btn btn-success"> Dash Board</a>
             </div>
 
             <div class="col-md-7 align-self-center text-right">

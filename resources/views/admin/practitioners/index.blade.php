@@ -1,4 +1,15 @@
 @extends('layouts.admin')
+<!-- Styles -->
+<!-- TailwindCSS -->
+<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Nunito';
+    }
+</style>
 @livewireStyles
 @section('content')
     <div class="container-fluid">
@@ -40,22 +51,22 @@
                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#approved"
                                                 role="tab"><span
                                     class="hidden-sm-up"><i class="ti-home"></i></span> <span
-                                    class="hidden-xs-down"> Practitioners</span></a></li>
+                                    class="hidden-xs-down"> Practitioners Approved</span></a></li>
 
-                       {{-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#pending" role="tab"><span
-                                    class="hidden-sm-up"><i class="ti-user"></i></span> <span
-                                    class="hidden-xs-down">Applications Pending Approval ({{$pending_apps = \App\Practitioner::where("approval_status","=",0)->count()}})</span></a>
-                        </li>
---}}
                     </ul>
+                    <br/>
+                    <br/>
 
-                    @livewire('index')
+                    <div class="col-md-12">
+                        @livewire('index')
+                    </div>
 
                 </div>
             </div>
         </div>
     </div>
 @stop
-
 @livewireScripts
+<!-- Scripts -->
+
 

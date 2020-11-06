@@ -50,6 +50,7 @@ class PractitionersController extends Controller
     {
         return view('admin.practitioners.index');
 
+
     }
 
     public function pendingApproval(Request $request)

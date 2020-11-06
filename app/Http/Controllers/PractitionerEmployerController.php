@@ -38,37 +38,32 @@ class PractitionerEmployerController extends Controller
         //
         $provinces = Province::all()->sortBy('name');
 
-        return view('admin.practitioner_employers.create',compact('practitioner','provinces'));
+        return view('admin.practitioner_employers.create', compact('practitioner', 'provinces'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Practitioner $practitioner)
     {
-        try {
-            $practitioner->addEmployer(
 
-                request()->validate([
-                    'name' => ['required'],
-                    'email' => ['required','email'],
-                    'phone' => ['required'],
-                    'business_address' => ['required'],
-                    'province_id' => ['required'],
-                    'city_id' => ['required'],
-                    'contact_person' => ['nullable'],
-                    'job_title' => ['required'],
-                    'commencement_date' => ['required']
-                ])
-            );
-            return redirect('/admin/practitioners/'.$practitioner->id)->with('message','Employer added successfully');
-        }catch (Exception $exception){
+        $practitioner_details = request()->validate([
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'phone' => ['required'],
+            'business_address' => ['required'],
+            'province_id' => ['required'],
+            'city_id' => ['required'],
+            'contact_person' => ['nullable'],
+            'job_title' => ['required'],
+            'commencement_date' => ['required']
+        ]);
+        $practitioner->addEmployer($practitioner_details);
 
-            return redirect('/admin/practitioners/'.$practitioner->id)->with('message','Practitioner already have an employer assigned');
-        }
+        return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Employer added successfully');
 
 
     }
@@ -76,7 +71,7 @@ class PractitionerEmployerController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -87,47 +82,47 @@ class PractitionerEmployerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(PractitionerEmployer $practitionerEmployer)
     {
         $provinces = Province::all()->sortBy('name');
 
-        return view('admin.practitioner_employers.edit',compact('practitionerEmployer','provinces'));
+        return view('admin.practitioner_employers.edit', compact('practitionerEmployer', 'provinces'));
 
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(PractitionerEmployer $practitionerEmployer)
     {
         $practitionerEmployer->update(
 
-                request()->validate([
-                    'name' => ['required'],
-                    'email' => ['required','email'],
-                    'phone' => ['required'],
-                    'business_address' => ['required'],
-                    'province_id' => ['required'],
-                    'city_id' => ['required'],
-                    'contact_person' => ['nullable'],
-                    'job_title' => ['required'],
-                    'commencement_date' => ['required']
-                ])
-            );
-            return redirect('/admin/practitioners/'.$practitionerEmployer->practitioner->id)->with('message','Employer updated successfully');
+            request()->validate([
+                'name' => ['required'],
+                'email' => ['required', 'email'],
+                'phone' => ['required'],
+                'business_address' => ['required'],
+                'province_id' => ['required'],
+                'city_id' => ['required'],
+                'contact_person' => ['nullable'],
+                'job_title' => ['required'],
+                'commencement_date' => ['required']
+            ])
+        );
+        return redirect('/admin/practitioners/' . $practitionerEmployer->practitioner->id)->with('message', 'Employer updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

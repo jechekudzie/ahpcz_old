@@ -362,17 +362,17 @@
                                                                         <span
                                                                             class="date">{{$practitioner_qualification->accreditedInstitution->name}}</span>
                                                                         <span
-                                                                            class="date">Commencement date: {{date("d F Y",strtotime($practitioner->commencement_date))}}</span>
+                                                                            class="date">Commencement date: {{date("d F Y",strtotime($practitioner_qualification->commencement_date))}}</span>
                                                                         <span
-                                                                            class="date">Completion date  : {{date("d F Y",strtotime($practitioner->completion_date))}}</span>
+                                                                            class="date">Completion date  : {{date("d F Y",strtotime($practitioner_qualification->completion_date))}}</span>
 
                                                                     @else
                                                                         <span
                                                                             class="date">{{ucwords($practitioner->institution)}}</span>
                                                                         <span
-                                                                            class="date">Commencement date: {{date("d F Y",strtotime($practitioner->commencement_date))}}</span>
+                                                                            class="date">Commencement date: {{date("d F Y",strtotime($practitioner_qualification->commencement_date))}}</span>
                                                                         <span
-                                                                            class="date">Completion date  : {{date("d F Y",strtotime($practitioner->completion_date))}}</span>
+                                                                            class="date">Completion date  : {{date("d F Y",strtotime($practitioner_qualification->completion_date))}}</span>
 
                                                                     @endif
 

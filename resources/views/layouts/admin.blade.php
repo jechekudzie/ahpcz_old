@@ -120,12 +120,7 @@ function countPendingItems()
     <link href="{{asset('dist/css/pages/dashboard1.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/style-horizontal.min.css')}}">
 
-    {{--<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
---}}
     @yield('plugins-css')
-
-
 </head>
 
 <body class="horizontal-nav skin-megna fixed-layout">
@@ -203,34 +198,34 @@ function countPendingItems()
                                     </a>
                                 </li>
                                 <li>
-                                     <div class="message-center">
-                                         <!-- Message -->
-                                         @if(auth()->user()->unreadNotifications)
-                                             @foreach (auth()->user()->unreadNotifications as $notification)
-                                                 <a href="/admin/{{$notification->id}}/read">
-                                                     <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i>
-                                                     </div>
-                                                     <div class="mail-contnet">
-                                                         <h5>{{$notification->data['sender']['name']}}</h5> <span
-                                                             class="mail-desc">
+                                    <div class="message-center">
+                                        <!-- Message -->
+                                        @if(auth()->user()->unreadNotifications)
+                                            @foreach (auth()->user()->unreadNotifications as $notification)
+                                                <a href="/admin/{{$notification->id}}/read">
+                                                    <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i>
+                                                    </div>
+                                                    <div class="mail-contnet">
+                                                        <h5>{{$notification->data['sender']['name']}}</h5> <span
+                                                            class="mail-desc">
                                                          @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
                                                      </span>
 
-                                                         <span class="time">{{getDifference($notification->created_at,now())}} ago</span>
+                                                        <span class="time">{{getDifference($notification->created_at,now())}} ago</span>
 
-                                                     </div>
+                                                    </div>
 
-                                                 </a>
-                                             @endforeach
-                                         @endif
+                                                </a>
+                                            @endforeach
+                                        @endif
 
-                                     </div>
-                                 </li>
-                                 <li>
-                                     <a class="nav-link text-center link" href="{{url('/admin/notification/inbox')}}">
-                                         <strong>View all
-                                             notifications</strong> <i class="fa fa-angle-right"></i> </a>
-                                 </li>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a class="nav-link text-center link" href="{{url('/admin/notification/inbox')}}">
+                                        <strong>View all
+                                            notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -285,7 +280,7 @@ function countPendingItems()
                             <i class="fa fa-user-md"></i><span class="hide-menu">Practitioners
                             </span></a>
                         <ul aria-expanded="false" class="collapse">
-                            <li><a href="{{url('/admin/practitioners')}}"> Practitioners
+                            <li><a href="{{url('/admin/practitioners')}}"> Practitioners Approved
                                 </a>
                             </li>
                             <li><a href="{{url('/admin/pending_approval')}}">Practitioners
