@@ -17,14 +17,26 @@ class Index extends Component
     public $search = '';
     public $orderBy = 'id';
     public $orderAsc = true;
+    public $compliance = 0;
 
+
+    /*    public function render()
+        {
+            return view('livewire.index', [
+                'practitioners' => Practitioner::search($this->search)
+                    ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+                    ->where('approval_status',1)
+                    ->paginate($this->perPage),
+            ]);
+        }*/
     public function render()
     {
         return view('livewire.index', [
             'practitioners' => Practitioner::search($this->search)
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
+                ->CheckCompliance($this->compliance)
                 ->where('approval_status',1)
-                ->paginate($this->perPage),
+                ->paginate($this->perPage)
         ]);
     }
 }

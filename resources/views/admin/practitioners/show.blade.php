@@ -200,13 +200,13 @@
                                             <br>
                                             <p class="text-muted">
 
-                                                    @if($practitioner->qualification_category_id==1)
-                                                        @if($practitioner->accreditedInstitution)
-                                                            {{$practitioner->accreditedInstitution->name}}
-                                                        @endif
-                                                    @else
-                                                        {{ucwords($practitioner->institution)}}
+                                                @if($practitioner->qualification_category_id==1)
+                                                    @if($practitioner->accreditedInstitution)
+                                                        {{$practitioner->accreditedInstitution->name}}
                                                     @endif
+                                                @else
+                                                    {{ucwords($practitioner->institution)}}
+                                                @endif
 
                                             </p>
                                         </div>
@@ -319,33 +319,33 @@
                                                                     @if($practitioner->professionalQualification){{$practitioner->professionalQualification->name}}@endif
                                                                 @endif</a>
 
-                                                                @if($practitioner->qualification_category_id == 1)
-                                                                    <span
-                                                                        class="date">@if($practitioner->accreditedInstitution){{$practitioner->accreditedInstitution->name}}@endif
+                                                            @if($practitioner->qualification_category_id == 1)
+                                                                <span
+                                                                    class="date">@if($practitioner->accreditedInstitution){{$practitioner->accreditedInstitution->name}}@endif
                                                                     </span>
-                                                                    <i style="color: black;font-weight: bolder;padding-right: 5px;">Commencement
-                                                                        date
-                                                                    </i>
-                                                                    <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
-                                                                    <br/>
-                                                                    <i style="color: black;font-weight: bolder;padding-right: 45px;">Completion
-                                                                        date
-                                                                    </i>
-                                                                    <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
+                                                                <i style="color: black;font-weight: bolder;padding-right: 5px;">Commencement
+                                                                    date
+                                                                </i>
+                                                                <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
+                                                                <br/>
+                                                                <i style="color: black;font-weight: bolder;padding-right: 45px;">Completion
+                                                                    date
+                                                                </i>
+                                                                <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
 
-                                                                @else
-                                                                    <span
-                                                                        class="date">{{ucwords($practitioner->institution)}}</span>
-                                                                    <i style="color: black;font-weight: bolder;padding-right: 5px;">Commencement
-                                                                        date
-                                                                    </i>
-                                                                    <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
-                                                                    <br/>
-                                                                    <i style="color: black;font-weight: bolder;padding-right: 45px;">Completion
-                                                                        date
-                                                                    </i>
-                                                                    <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
-                                                                @endif
+                                                            @else
+                                                                <span
+                                                                    class="date">{{ucwords($practitioner->institution)}}</span>
+                                                                <i style="color: black;font-weight: bolder;padding-right: 5px;">Commencement
+                                                                    date
+                                                                </i>
+                                                                <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
+                                                                <br/>
+                                                                <i style="color: black;font-weight: bolder;padding-right: 45px;">Completion
+                                                                    date
+                                                                </i>
+                                                                <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
+                                                            @endif
 
 
                                                         </li>
@@ -605,11 +605,22 @@
 
                                                 <div class="col-md-3 col-xs-6 b-r"><strong>Province</strong>
                                                     <br>
-                                                    <p class="text-muted">@if($practitioner->employer){{$practitioner->employer->province->name}}@endif</p>
+                                                    <p class="text-muted">
+                                                        @if($practitioner->employer)
+                                                            @if($practitioner->employer->province)
+                                                                {{$practitioner->employer->province->name}}
+                                                            @endif
+                                                        @endif
+                                                    </p>
                                                 </div>
                                                 <div class="col-md-3 col-xs-6"><strong>City/Location</strong>
                                                     <br>
-                                                    <p class="text-muted">@if($practitioner->employer){{$practitioner->employer->city->name}}@endif</p>
+                                                    <p class="text-muted">
+                                                        @if($practitioner->employer)
+                                                            @if($practitioner->employer->city)
+                                                                {{$practitioner->employer->city->name}}
+                                                            @endif
+                                                        @endif</p>
                                                 </div>
 
                                             </div>

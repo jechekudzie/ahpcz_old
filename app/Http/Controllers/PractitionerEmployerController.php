@@ -54,12 +54,12 @@ class PractitionerEmployerController extends Controller
             'name' => ['required'],
             'email' => ['nullable'],
             'phone' => ['nullable'],
-            'business_address' => ['required'],
-            'province_id' => ['required'],
-            'city_id' => ['required'],
+            'business_address' => ['nullable'],
+            'province_id' => ['nullable'],
+            'city_id' => ['nullable'],
             'contact_person' => ['nullable'],
-            'job_title' => ['required'],
-            'commencement_date' => ['required']
+            'job_title' => ['nullable'],
+            'commencement_date' => ['nullable']
         ]);
         $practitioner->addEmployer($practitioner_details);
 
@@ -108,12 +108,12 @@ class PractitionerEmployerController extends Controller
                 'name' => ['required'],
                 'email' => ['nullable'],
                 'phone' => ['nullable'],
-                'business_address' => ['required'],
-                'province_id' => ['required'],
-                'city_id' => ['required'],
+                'business_address' => ['nullable'],
+                'province_id' => ['nullable'],
+                'city_id' => ['nullable'],
                 'contact_person' => ['nullable'],
-                'job_title' => ['required'],
-                'commencement_date' => ['required']
+                'job_title' => ['nullable'],
+                'commencement_date' => ['nullable']
             ])
         );
         return redirect('/admin/practitioners/' . $practitionerEmployer->practitioner->id)->with('message', 'Employer updated successfully');
