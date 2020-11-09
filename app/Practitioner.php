@@ -27,7 +27,8 @@ class Practitioner extends Model
                 ->whereHas('profession', function ($query) use ($search) {
                     $query->where('name', 'like', '%' . $search . '%');
                 })
-                ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", "%{$search}%");
+                ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", "%{$search}%")
+                ->orWhereRaw("CONCAT(prefix, '', registration_number) LIKE ?", "%{$search}%");
     }
 
 
