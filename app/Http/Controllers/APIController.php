@@ -71,7 +71,6 @@ class APIController extends Controller
 
     }
 
-
     //registration number string
     public function byRegString(Request $request, $registration_number)
     {
@@ -105,7 +104,6 @@ class APIController extends Controller
 
     }
 
-
     public function byRegIdString(Request $request, $registration_number, $id_number)
     {
         $registration = str_replace('*', '/', $registration_number);
@@ -137,14 +135,8 @@ class APIController extends Controller
 
     }
 
-
-
-
-
-
     public function testBoth()
     {
-
         $reg_number = "A/PSY0412";
         $id_number  = "63915996H26";
 

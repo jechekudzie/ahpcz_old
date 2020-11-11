@@ -360,7 +360,11 @@
                                                                     <a href="/admin/practitioners/qualifications/{{$practitioner_qualification->id}}/show">{{$practitioner_qualification->professionalQualification->name}}</a>
                                                                     @if($practitioner_qualification->qualification_category_id == 1)
                                                                         <span
-                                                                            class="date">{{$practitioner_qualification->accreditedInstitution->name}}</span>
+                                                                            class="date">
+                                                                            @if($practitioner_qualification->accreditedInstitution)
+                                                                                {{$practitioner_qualification->accreditedInstitution->name}}
+                                                                            @endif
+                                                                        </span>
                                                                         <span
                                                                             class="date">Commencement date: {{date("d F Y",strtotime($practitioner_qualification->commencement_date))}}</span>
                                                                         <span

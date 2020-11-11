@@ -126,9 +126,9 @@
                                                         <label for="wlocation2"> Province : <span
                                                                     class="danger">*</span>
                                                         </label>
-                                                        <select class="custom-select form-control" required
+                                                        <select class="custom-select form-control"
                                                                 id="provinces" name="province_id">
-                                                            <option value="all">Select province</option>
+                                                            <option value="">Select province</option>
                                                             @foreach($provinces as $province)
                                                                 <option value="{{$province->id}}" @if($province->id ==$practitionerEmployer->province_id){{'selected'}}@endif>{{$province->name}}</option>
                                                             @endforeach

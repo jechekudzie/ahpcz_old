@@ -27,6 +27,7 @@ use App\Requirement;
 use App\Shortfall;
 use App\Title;
 use App\User;
+use GuzzleHttp\Client;
 use http\Env\Response;
 use Illuminate\Contracts\Auth\Access\Gate;
 use Illuminate\Http\Request;
@@ -40,9 +41,30 @@ class PractitionersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function __construct()
+   /* public function __construct()
     {
         $this->middleware('auth');
+
+    }*/
+
+
+
+    public function testme(){
+        $client = new Client();
+        $url = "http://localhost:8000/api/pay";
+        $headers = [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ];
+        $response = $client->request('POST', $url,
+            [
+                'headers' => $headers,
+                'json' => ['amount' => 90]
+            ]
+        );
+        $data =  $response->getBody();
+        $make_payment_link = $response->redirectUrl();
+
 
     }
 

@@ -35,7 +35,6 @@ class Index extends Component
             'practitioners' => Practitioner::search($this->search)
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->CheckCompliance($this->compliance)
-                ->where('approval_status',1)
                 ->paginate($this->perPage)
         ]);
     }

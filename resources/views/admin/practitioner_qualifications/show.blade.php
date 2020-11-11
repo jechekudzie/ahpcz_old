@@ -1,8 +1,9 @@
 @extends('layouts.admin')
 @section('title','AHPCZ - Create Institution')
 @section('plugins-css')
-    <link href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
-          rel="stylesheet">
+    <link
+        href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
+        rel="stylesheet">
     <link href="{{asset('../assets/node_modules/wizard/steps.css')}}" rel="stylesheet">
 @endsection
 
@@ -47,10 +48,10 @@
                                 @endif
                                 @if (session('message'))
                                     <div class="alert alert-success alert-rounded col-md-6"><i
-                                                class="fa fa-check-circle"></i> {{ session('message') }}
+                                            class="fa fa-check-circle"></i> {{ session('message') }}
                                         <button type="button" class="close" data-dismiss="alert"
                                                 aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
+                                                aria-hidden="true">&times;</span></button>
                                     </div>
                                 @endif
                             </div>
@@ -91,7 +92,11 @@
                                                                 </strong>
                                                                 <br>
                                                                 @if($practitionerQualification->qualification_category_id == 1)
-                                                                    <p class="text-muted">{{ucwords($practitionerQualification->accreditedInstitution->name)}}</p>
+                                                                    <p class="text-muted">
+                                                                        @if($practitionerQualification->accreditedInstitution)
+                                                                            {{ucwords($practitionerQualification->accreditedInstitution->name)}}
+                                                                        @endif
+                                                                    </p>
                                                                 @else
                                                                     <p class="text-muted">{{ucwords($practitionerQualification->institution)}}</p>
 
@@ -103,7 +108,11 @@
                                                                     Category
                                                                 </strong>
                                                                 <br>
-                                                                <p class="text-muted">{{ucwords($practitionerQualification->qualificationCategory->name)}}</p>
+                                                                <p class="text-muted">
+                                                                    @if($practitionerQualification->qualificationCategory)
+                                                                        {{ucwords($practitionerQualification->qualificationCategory->name)}}
+                                                                    @endif
+                                                                </p>
                                                             </div>
                                                             <div class="col-md-3 col-xs-6 b-r">
                                                                 <strong>Commencement date</strong>
@@ -152,7 +161,8 @@
     <script type="text/javascript" src="{{asset('js/functions.js')}}"></script>
 
     <script src="{{asset('../assets/node_modules/moment/moment.js')}}"></script>
-    <script src="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>
+    <script
+        src="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>
     <script>
         // MAterial Date picker
         $('#resignation_date').bootstrapMaterialDatePicker({

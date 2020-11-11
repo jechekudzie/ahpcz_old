@@ -224,7 +224,8 @@ function countPendingItems()
                                 <li>
                                     <a class="nav-link text-center link" href="{{url('/admin/notification/inbox')}}">
                                         <strong>View all
-                                            notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                            notifications</strong> <i class="fa fa-angle-right"></i>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -276,10 +277,10 @@ function countPendingItems()
                     </li>
 
 
-                    <li><a class=" waves-effect waves-dark" href="#" aria-expanded="false">
+                    <li><a class=" waves-effect waves-dark" href="{{url('/admin/practitioners')}}" aria-expanded="false">
                             <i class="fa fa-user-md"></i><span class="hide-menu">Practitioners
                             </span></a>
-                        <ul aria-expanded="false" class="collapse">
+                       {{-- <ul aria-expanded="false" class="collapse">
                             <li><a href="{{url('/admin/practitioners')}}"> Practitioners Approved
                                 </a>
                             </li>
@@ -287,7 +288,7 @@ function countPendingItems()
                                     Pending Approval
                                 </a>
                             </li>
-                        </ul>
+                        </ul>--}}
                     </li>
 
                     <li><a class=" waves-effect waves-dark two-column" href="javascript:void(0)"
