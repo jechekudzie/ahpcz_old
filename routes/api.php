@@ -32,3 +32,6 @@ Route::get('/json/practitioner_string/{registration_number}/{id_number}', 'APICo
 Route::get('/json/testing/{registration_number}/{id_number}', 'APIController@test');
 
 Route::get('/json/test', 'APIController@test');
+
+
+Route::get('/practitioner/{reg_number}', 'PortalRegistrationController@test');

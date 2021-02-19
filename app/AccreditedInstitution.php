@@ -19,8 +19,7 @@ class AccreditedInstitution extends Model
         return $this->hasMany(Practitioner::class);
     }
 
-    public function practitionerQualification(){
-
+    public function practitionerQualifications(){
         return $this->hasMany(PractitionerQualification::class);
     }
 

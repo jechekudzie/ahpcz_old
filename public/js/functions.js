@@ -86,17 +86,30 @@ $(document).ready(function () {
 
 
 function myFunction() {
-    var x = document.getElementById("qualification_category").value;
+
+   var  x = document.getElementById("qualification_category").value;
     if (x == 1) {
+        document.getElementById("pq_div").style.display = 'block';
         document.getElementById("accredited_institution_div").style.display = 'block';
+
+        document.getElementById("pq_name_div").style.display = 'none';
         document.getElementById("institution_div").style.display = 'none';
-    } else
+
+    }
+    else
 
     if (x == 2) {
+        document.getElementById("pq_name_div").style.display = 'block';
         document.getElementById("institution_div").style.display = 'block';
+
+        document.getElementById("pq_div").style.display = 'none';
         document.getElementById("accredited_institution_div").style.display = 'none';
+
     }  else {
-        document.getElementById("institution_div").style.display = 'none';
+        document.getElementById("pq_div").style.display = 'none';
+        document.getElementById("pq_name_div").style.display = 'none';
         document.getElementById("accredited_institution_div").style.display = 'none';
+        document.getElementById("institution_div").style.display = 'none';
+
     }
 }

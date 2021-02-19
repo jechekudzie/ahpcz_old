@@ -10,7 +10,7 @@
                 {{-- @can('admin')
                      <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                  @endcan--}}
-                <a href="/admin/practitioners" class="btn btn-success"></i> All Practitioners</a>
+                <a href="/admin/practitioners" class="btn btn-success"> All Practitioners</a>
             </div>
 
             <div class="col-md-7 align-self-center text-right">
@@ -38,10 +38,10 @@
                         <h4 class="card-title">{{$practitioner->title->name.' '.ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}}</h4>
                         <h4>Registration Number :
                             @if($practitioner->registration_number == null)
-                                {{$practitioner->prefix.' (No Registration Number)'}} <a
+                                {{$practitioner->profession->prefix->name.' (No Registration Number)'}} <a
                                     href="/admin/practitioners/generate_reg/{{$practitioner->profession_id}}/{{$practitioner->id}}">Generate</a>
                             @else
-                                {{$practitioner->prefix.str_pad($practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}
+                                {{$practitioner->profession->prefix->name.str_pad($practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}
                             @endif
                         </h4>
                         <h6 style="font-size: 20px;" class="card-subtitle">Current Status:
@@ -106,6 +106,7 @@
                     </ul>
                     <!-- Tab panes -->
                     <div class="tab-content">
+                        <!-- Start Of Personal details tab -->
                         <div class="tab-pane active" id="personal" role="tabpanel">
 
                             <div class="row small-spacing">
@@ -113,8 +114,9 @@
                                     <div class="box-content bordered primary margin-bottom-20">
                                         <div class="profile-avatar">
                                             <img src="{{asset('profiles/user.png')}}" alt="">
-                                            <a href="#" class="btn btn-block btn-success"><i
-                                                    class="fa fa-envelope"></i> Send Message</a>
+                                            {{--
+                                                                                        <a href="#" class="btn btn-block btn-success"><i class="fa fa-envelope"></i> Send Message</a>
+                                            --}}
                                             <h4 style="text-align: center;">
                                                 <strong>{{ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}}</strong>
                                             </h4>
@@ -132,14 +134,6 @@
                                                         @endif
                                                     </span></td>
                                             </tr>
-                                            {{--<tr>
-                                                <td>User Renewal Status</td>
-                                                <td><i class="fa fa-star text-warning"></i> <i
-                                                            class="fa fa-star text-warning"></i> <i
-                                                            class="fa fa-star text-warning"></i> <i
-                                                            class="fa fa-star text-warning"></i> <i
-                                                            class="fa fa-star text-warning"></i></td>
-                                            </tr>--}}
                                             <tr>
                                                 <td>Member Since</td>
                                                 <td>{{date('d F Y',strtotime($practitioner->registration_date))}}</td>
@@ -185,6 +179,20 @@
                                     </div>
 
                                     <hr/>
+                                    <div class="row">
+                                        <div class="col-md-4 col-xs-6 b-r"><strong>Nationality</strong>
+                                            <br>
+                                            <p class="text-muted">@if($practitioner->nationality){{$practitioner->nationality->name}}@endif</p>
+                                        </div>
+
+
+                                        <div class="col-md-4 col-xs-6 b-r"><strong>Registration Date</strong>
+                                            <br>
+                                            <p class="text-muted">@if($practitioner->registration_date){{date('d F Y',strtotime($practitioner->registration_date))}}@endif</p>
+                                        </div>
+                                    </div>
+
+                                    <hr/>
 
                                     <div class="row">
 
@@ -192,37 +200,7 @@
                                             <br>
                                             <p class="text-muted">@if($practitioner->profession){{$practitioner->profession->name}}@endif</p>
                                         </div>
-                                        <div class="col-md-4 col-xs-6 b-r"><strong>Professional Qualification</strong>
-                                            <br>
-                                            <p class="text-muted">@if($practitioner->professionalQualification){{$practitioner->professionalQualification->name}}@endif</p>
-                                        </div>
-                                        <div class="col-md-4 col-xs-6 b-r"><strong>Accredited Institution</strong>
-                                            <br>
-                                            <p class="text-muted">
 
-                                                @if($practitioner->qualification_category_id==1)
-                                                    @if($practitioner->accreditedInstitution)
-                                                        {{$practitioner->accreditedInstitution->name}}
-                                                    @endif
-                                                @else
-                                                    {{ucwords($practitioner->institution)}}
-                                                @endif
-
-                                            </p>
-                                        </div>
-                                        <div class="col-md-4 col-xs-6 b-r"><strong>Qualification Category</strong>
-                                            <br>
-                                            <p class="text-muted">@if($practitioner->qualificationCategory){{$practitioner->qualificationCategory->name}}@endif</p>
-                                        </div>
-                                        <div class="col-md-4 col-xs-6 b-r"><strong>Renewal Category</strong>
-                                            <br>
-                                            <p class="text-muted">@if($practitioner->renewalCategory){{$practitioner->renewalCategory->name}}@endif</p>
-                                        </div>
-
-                                        <div class="col-md-4 col-xs-6 b-r"><strong>Register Category</strong>
-                                            <br>
-                                            <p class="text-muted">@if($practitioner->registerCategory){{$practitioner->registerCategory->name}}@endif</p>
-                                        </div>
                                         <div class="col-md-4 col-xs-6 b-r"><strong>Registration Number</strong>
                                             <br>
                                             <p class="text-muted">
@@ -235,6 +213,14 @@
                                             </p>
                                         </div>
 
+
+                                        <div class="col-md-4 col-xs-6 b-r"><strong>Register Category</strong>
+                                            @if($practitioner->practitioner_payment_information)
+                                                <br>
+                                                <p class="text-muted">@if($practitioner->practitioner_payment_information->register_category){{$practitioner->practitioner_payment_information->register_category->name}}@endif</p>
+                                            @endif
+                                        </div>
+
                                     </div>
                                     @can('updatePractitioner')
                                         <a href="/admin/practitioners/{{$practitioner->id}}/edit"
@@ -245,6 +231,7 @@
                             </div>
 
                         </div>
+                        <!-- Start Of Contact tab -->
                         <div class="tab-pane p-20" id="contacts" role="tabpanel">
                             <div class="card-body col-md-10">
                                 <div class="row">
@@ -271,14 +258,17 @@
                                         <br>
                                         <p class="text-muted">@if($practitioner->nationality_id){{$practitioner->nationality->name}}@endif</p>
                                     </div>
-                                    <div class="col-md-3 col-xs-6 b-r"><strong>Province</strong>
-                                        <br>
-                                        <p class="text-muted">@if($practitioner->contact->province_id){{$practitioner->contact->province->name}}@endif</p>
-                                    </div>
-                                    <div class="col-md-3 col-xs-6 b-r"><strong>City/Location</strong>
-                                        <br>
-                                        <p class="text-muted">@if($practitioner->contact->city_id){{$practitioner->contact->city->name}}@endif</p>
-                                    </div>
+                                    @if($practitioner->contact)
+                                        <div class="col-md-3 col-xs-6 b-r"><strong>Province</strong>
+                                            <br>
+                                            <p class="text-muted">@if($practitioner->contact->province){{$practitioner->contact->province->name}}@endif</p>
+                                        </div>
+                                        <div class="col-md-3 col-xs-6 b-r"><strong>City/Location</strong>
+                                            <br>
+                                            <p class="text-muted">@if($practitioner->contact->city){{$practitioner->contact->city->name}}@endif</p>
+                                        </div>
+                                    @endif
+
                                 </div>
                                 <hr>
                                 @can('updatePractitioner')
@@ -294,6 +284,7 @@
                                 @endcan
                             </div>
                         </div>
+                        <!-- Start Of Practitioner Qualifications tab -->
                         <div class="tab-pane p-20" id="qualifications" role="tabpanel">
                             @can('updatePractitioner')
                                 <a href="/admin/practitioners/qualifications/{{$practitioner->id}}/create"
@@ -302,100 +293,78 @@
                             @endcan
 
                             <div class="row small-spacing">
-                                <div class="col-md-12 col-xs-12">
-                                    <div class="row">
-                                        <div class="col-md-6 col-xs-12">
-                                            <div class="box-content card">
-                                                <h4 class="box-title"><i class="fa fa-graduation-cap"></i> Professional
-                                                    Qualifications
-                                                </h4>
 
-                                                <div class="card-content">
-
-                                                    <ul class="dot-list">
-                                                        <li>
-                                                            <a href="/admin/practitioners/qualifications/{{$practitioner->id}}/showprimary">
-                                                                @if($practitioner->qualification_category_id !=null)
-                                                                    @if($practitioner->professionalQualification){{$practitioner->professionalQualification->name}}@endif
-                                                                @endif</a>
-
-                                                            @if($practitioner->qualification_category_id == 1)
-                                                                <span
-                                                                    class="date">@if($practitioner->accreditedInstitution){{$practitioner->accreditedInstitution->name}}@endif
-                                                                    </span>
-                                                                <i style="color: black;font-weight: bolder;padding-right: 5px;">Commencement
-                                                                    date
-                                                                </i>
-                                                                <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
-                                                                <br/>
-                                                                <i style="color: black;font-weight: bolder;padding-right: 45px;">Completion
-                                                                    date
-                                                                </i>
-                                                                <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
-
-                                                            @else
-                                                                <span
-                                                                    class="date">{{ucwords($practitioner->institution)}}</span>
-                                                                <i style="color: black;font-weight: bolder;padding-right: 5px;">Commencement
-                                                                    date
-                                                                </i>
-                                                                <span>: {{ date("d F Y",strtotime($practitioner->commencement_date))}}</span>
-                                                                <br/>
-                                                                <i style="color: black;font-weight: bolder;padding-right: 45px;">Completion
-                                                                    date
-                                                                </i>
-                                                                <span>: {{ date("d F Y",strtotime($practitioner->completion_date))}}</span>
-                                                            @endif
-
-
-                                                        </li>
-                                                    </ul>
+                                <div class="col-md-8 col-xs-12">
+                                    @if($practitioner->practitionerQualifications->count())
+                                        @foreach($practitioner->practitionerQualifications as $practitioner_qualification)
+                                            <div class="row">
+                                                <div class="col-md-3 col-xs-4 b-r"><strong>Profession</strong>
+                                                    <br>
+                                                    <p class="text-muted">@if($practitioner_qualification->profession){{$practitioner_qualification->profession->name}}@endif</p>
                                                 </div>
 
-                                                <div class="card-content">
-                                                    @if($practitioner->practitionerQualification)
-                                                        <ul class="dot-list">
-                                                            @foreach($practitioner->practitionerQualification as $practitioner_qualification)
-                                                                <li>
-                                                                    <a href="/admin/practitioners/qualifications/{{$practitioner_qualification->id}}/show">{{$practitioner_qualification->professionalQualification->name}}</a>
-                                                                    @if($practitioner_qualification->qualification_category_id == 1)
-                                                                        <span
-                                                                            class="date">
-                                                                            @if($practitioner_qualification->accreditedInstitution)
-                                                                                {{$practitioner_qualification->accreditedInstitution->name}}
-                                                                            @endif
-                                                                        </span>
-                                                                        <span
-                                                                            class="date">Commencement date: {{date("d F Y",strtotime($practitioner_qualification->commencement_date))}}</span>
-                                                                        <span
-                                                                            class="date">Completion date  : {{date("d F Y",strtotime($practitioner_qualification->completion_date))}}</span>
 
-                                                                    @else
-                                                                        <span
-                                                                            class="date">{{ucwords($practitioner->institution)}}</span>
-                                                                        <span
-                                                                            class="date">Commencement date: {{date("d F Y",strtotime($practitioner_qualification->commencement_date))}}</span>
-                                                                        <span
-                                                                            class="date">Completion date  : {{date("d F Y",strtotime($practitioner_qualification->completion_date))}}</span>
+                                                <div class="col-md-3 col-xs-4 b-r"><strong>Professional
+                                                        Qualification</strong>
+                                                    <br>
+                                                    @if($practitioner_qualification->qualification_category_id == 1)
+                                                        <p class="text-muted">@if($practitioner_qualification->professionalQualification){{$practitioner_qualification->professionalQualification->name}}@endif</p>
+                                                    @else
+                                                        <p class="text-muted">@if($practitioner_qualification->professional_qualification_name !=null){{$practitioner_qualification->professional_qualification_name}}@endif</p>
 
-                                                                    @endif
-
-                                                                </li>
-                                                            @endforeach
-                                                        </ul>
                                                     @endif
                                                 </div>
-                                                <!-- /.card-content -->
+
+
+                                                <div class="col-md-3 col-xs-4 b-r"><strong>Accredited
+                                                        Institution</strong>
+                                                    <br>
+                                                    <p class="text-muted">
+
+                                                        @if($practitioner_qualification->qualification_category_id==1)
+                                                            @if($practitioner_qualification->accreditedInstitution)
+                                                                {{$practitioner_qualification->accreditedInstitution->name}}
+                                                            @endif
+                                                        @else
+                                                            {{ucwords($practitioner_qualification->institution)}}
+                                                        @endif
+
+                                                    </p>
+                                                </div>
+                                                <div class="col-md-3 col-xs-4 b-r"><strong>Qualification
+                                                        Category</strong>
+                                                    <br>
+                                                    <p class="text-muted">@if($practitioner_qualification->qualificationCategory){{$practitioner_qualification->qualificationCategory->name}}@endif</p>
+                                                </div>
+
+                                                <div class="col-md-3 col-xs-4 b-r"><strong>Commencement Date
+                                                        </strong>
+                                                    <br>
+                                                    <p class="text-muted">@if($practitioner_qualification->commencement_date){{date('d F Y',strtotime($practitioner_qualification->commencement_date))}}@endif</p>
+                                                </div>
+
+                                                <div class="col-md-3 col-xs-4 b-r"><strong>Completion Date
+                                                    </strong>
+                                                    <br>
+                                                    <p class="text-muted">@if($practitioner_qualification->completion_date){{date('d F Y',strtotime($practitioner_qualification->completion_date))}}@endif</p>
+                                                </div>
+
+
                                             </div>
-                                            <!-- /.box-content card -->
-                                        </div>
-                                        <!-- /.col-md-6 -->
-                                    </div>
-                                    <!-- /.row -->
+                                            <div class="col-md-12 col-xs-12">
+                                                <a href="{{url('/admin/practitioners/qualifications/'.$practitioner_qualification->id.'/edit')}}">
+                                                    Edit Professional Qualification
+                                                </a>
+                                            </div>
+                                            <br/>
+                                            <br/>
+                                        @endforeach
+                                    @endif
                                 </div>
                                 <!-- /.col-md-9 col-xs-12 -->
                             </div>
                         </div>
+                        <!-- Start Of documents  tab -->
                         <div class="tab-pane p-20" id="documents" role="tabpanel">
                             @can('updatePractitioner')
                                 <a href="/admin/practitioners/documents/{{$practitioner->id}}/create"
@@ -420,11 +389,11 @@
                                                                 <span
                                                                     class="date">{{$identification->documentCategory->group}}</span>
                                                                 <span class="">
-                        <a href="/admin/practitioners/documents/{{$identification->id}}/edit">
-                            <i class="fa fa-pencil"></i> Edit
-                        </a>
+<a href="/admin/practitioners/documents/{{$identification->id}}/edit">
+<i class="fa fa-pencil"></i> Edit
+</a>
 
-                    </span>
+</span>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -469,7 +438,7 @@
                                                                 <span class=""><a
                                                                         href="/admin/practitioners/documents/{{$professional->id}}/edit"><i
                                                                             class="fa fa-pencil"></i> Edit</a>
-                    </span>
+</span>
                                                             </li>
                                                         @endforeach
                                                     </ul>
@@ -480,9 +449,10 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Start Of intern  tab -->
                         <div class="tab-pane p-20" id="intern" role="tabpanel">
                             {{-- <a href="/admin/practitioners/documents/{{$practitioner->id}}/create"
-                                class="btn btn-success btn-sm">Add Internship</a>--}}
+                            class="btn btn-success btn-sm">Add Internship</a>--}}
 
                             <a href="/admin/practitioners/{{$practitioner->id}}/createPlacement"
                                class="btn btn-success btn-sm">Add Placement</a>
@@ -548,6 +518,7 @@
 
 
                         </div>
+                        <!-- Start Of employment  tab -->
                         <div class="tab-pane p-20" id="employment_history" role="tabpanel">
                             @can('updatePractitioner')
                                 @if($practitioner->employer)
@@ -632,32 +603,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-9 col-xs-12">
-                                @can('updatePractitioner')
-                                    <a href="/admin/practitioners/experience/{{$practitioner->id}}/create"
-                                       class="btn btn-success btn-sm">Add Practitioner Experience
-                                    </a>
-                                    <br/>
-                                    <br/>
-                                @endcan
-                                <div class="box-content card">
-
-                                    <h4 class="box-title"><i class="fa fa-history"></i> Practitioner Experience</h4>
-                                    <div class="card-content">
-                                        <ul class="dot-list">
-                                            @if($practitioner->practitionerExperience)
-                                                @foreach($practitioner->practitionerExperience as $experience)
-                                                    <li>
-                                                        <a href="/admin/practitioners/experience/{{$experience->id}}/show">{{$experience->name}}</a>
-                                                        <span class="date">{{$experience->job_title}}</span>
-                                                    </li>
-                                                @endforeach
-                                            @endif
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+                        <!-- Start Of shortfalls  tab -->
                         <div class="tab-pane p-20" id="shortfalls" role="tabpanel">
                             <div class="table-responsive">
 
@@ -712,6 +659,7 @@
                                 </table>
                             </div>
                         </div>
+                        <!-- Start Of applications  tab -->
                         <div class="tab-pane p-20" id="apps" role="tabpanel">
 
                             <a href="/admin/practitioners/apps/{{$practitioner->id}}/create"
@@ -772,6 +720,7 @@
                             </div>
 
                         </div>
+                        <!-- Start Of Renewals  tab -->
                         <div class="tab-pane p-20" id="renewal" role="tabpanel">
                             @can('updatePractitionerPayment')
                                 <a href="/admin/practitioners/registration/{{$practitioner->id}}/registration"
@@ -781,6 +730,21 @@
                                    class="btn btn-success"> RENEW
                                 </a>
                             @endcan
+                            <div class="row small-spacing">
+                                <div class="col-md-4 col-xs-6 b-r"><strong>Renewal Category</strong>
+                                    @if($practitioner->practitioner_payment_information)
+                                        <br>
+                                        <p class="text-muted">@if($practitioner->practitioner_payment_information->renewal_category){{$practitioner->practitioner_payment_information->renewal_category->name}}@endif</p>
+                                    @endif
+                                </div>
+
+                                <div class="col-md-4 col-xs-6 b-r"><strong>Payment Method</strong>
+                                    @if($practitioner->practitioner_payment_information)
+                                        <br>
+                                        <p class="text-muted">@if($practitioner->practitioner_payment_information->payment_method){{$practitioner->practitioner_payment_information->payment_method->name}}@endif</p>
+                                    @endif
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card-group">
@@ -901,6 +865,7 @@
                             </div>
 
                         </div>
+                        <!-- Start Of Approvals  tab -->
                         <div class="tab-pane p-20" id="approval" role="tabpanel">
 
                             <div class="col-md-9 col-xs-12">
@@ -922,18 +887,20 @@
                                     <h4 class="box-title"><i class="fa fa-bookmark-o"></i> Application Comments </h4>
                                     <div class="card-content">
                                         <ul class="dot-list">
-                                            @if(count(auth()->user()->unreadNotifications))
-                                                @foreach (auth()->user()->unreadNotifications as $notification)
-                                                    @if ($practitioner->id == $notification->data['id'])
-                                                        <li>
-                                                            {{--<a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
-                                                                As Read</a>--}}
-                                                            <span
-                                                                class="date">@if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif</span>
-                                                        </li>
-                                                        </li>
-                                                    @endif
-                                                @endforeach
+                                            @if(auth()->check())
+                                                @if(auth()->user()->unreadNotifications->count())
+                                                    @foreach (auth()->user()->unreadNotifications as $notification)
+                                                        @if ($practitioner->id == $notification->data['id'])
+                                                            <li>
+                                                                {{--<a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
+                                                                    As Read</a>--}}
+                                                                <span
+                                                                    class="date">@if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif</span>
+                                                            </li>
+                                                            </li>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
                                             @endif
                                         </ul>
                                     </div>

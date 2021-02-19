@@ -1,8 +1,9 @@
 @extends('layouts.admin')
 @section('title','AHPCZ - Create Institution')
 @section('plugins-css')
-    <link href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
-          rel="stylesheet">
+    <link
+        href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
+        rel="stylesheet">
     <link href="{{asset('../assets/node_modules/wizard/steps.css')}}" rel="stylesheet">
 @endsection
 
@@ -44,10 +45,10 @@
                                 @endif
                                 @if (session('message'))
                                     <div class="alert alert-success alert-rounded col-md-6"><i
-                                                class="fa fa-check-circle"></i> {{ session('message') }}
+                                            class="fa fa-check-circle"></i> {{ session('message') }}
                                         <button type="button" class="close" data-dismiss="alert"
                                                 aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
+                                                aria-hidden="true">&times;</span></button>
                                     </div>
                                 @endif
                             </div>
@@ -67,44 +68,9 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="wlocation2"> Profession : <span
-                                                                    class="danger">*</span>
-                                                        </label>
-                                                        <select class="custom-select form-control " required
-                                                                id="professions" name="profession_id">
-                                                            <option value="">Select Profession</option>
-                                                            @foreach($professions as $profession)
-                                                                <option value="{{$profession->id}}" @if($profession->id==old('profession_id')){{'selected'}}@endif>{{$profession->name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        <div class="form-control-feedback">
-                                                            <small><code>Pick your profession.</code>
-                                                            </small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="wlocation2"> Professional Qualifications : <span
-                                                                    class="danger">*</span>
-                                                        </label>
-                                                        <select class="custom-select form-control"
-                                                                id="professional_qualifications"
-                                                                name='professional_qualification_id'>
-                                                            <option value='0'>Select Professional Qualification</option>
-
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
                                                         <label for="wlocation2"> Qualification Category :
                                                             <span
-                                                                    class="danger">*</span>
+                                                                class="danger">*</span>
                                                         </label>
                                                         <select class="custom-select form-control" required
                                                                 onchange="myFunction()"
@@ -112,7 +78,8 @@
                                                                 name="qualification_category_id">
                                                             <option value="">Select Qualification Category</option>
                                                             @foreach($qualification_categories as $qualification_category)
-                                                                <option value="{{$qualification_category->id}}" @if($qualification_category->id==old('qualification_category_id')){{'selected'}}@endif>{{$qualification_category->name}}</option>
+                                                                <option
+                                                                    value="{{$qualification_category->id}}">{{$qualification_category->name}}</option>
                                                             @endforeach
                                                         </select>
                                                         <div class="form-control-feedback">
@@ -124,12 +91,57 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="wlocation2"> Profession : <span
+                                                                class="danger">*</span>
+                                                        </label>
+                                                        <select class="custom-select form-control " required
+                                                                id="professions" name="profession_id">
+                                                            <option value="">Select Profession</option>
+                                                            @foreach($professions as $profession)
+                                                                <option
+                                                                    value="{{$profession->id}}">{{$profession->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <div class="form-control-feedback">
+                                                            <small><code>Pick your profession.</code>
+                                                            </small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div id="pq_div" style="display: none;" class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="wlocation2"> Professional Qualifications : <span
+                                                                class="danger">*</span>
+                                                        </label>
+                                                        <select class="custom-select form-control"
+                                                                id="professional_qualifications"
+                                                                name='professional_qualification_id'>
+                                                            <option value=''>Select Professional Qualification</option>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div id="pq_name_div" style="display: none;" class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="wphoneNumber2">Professional Qualification name
+                                                            :</label>
+                                                        <input type="text" class="form-control"
+                                                               name="professional_qualification_name">
+                                                    </div>
+                                                </div>
+
 
                                                 <div id="accredited_institution_div" style="display: none;"
                                                      class="col-md-6">
                                                     <div class="form-group">
                                                         <label for="wlocation2"> Accredited Institutions : <span
-                                                                    class="danger">*</span>
+                                                                class="danger">*</span>
                                                         </label>
                                                         <select class="custom-select form-control"
                                                                 id="accredited_institutions"
@@ -155,33 +167,33 @@
                                             </div>
 
                                             <div class="row">
-
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Commencement Date</label>
-                                                        <input type="text" name="commencement_date" class="form-control" id="commencement_date">
+                                                        <input type="text" name="commencement_date"
+                                                               class="form-control" id="commencement_date">
                                                     </div>
                                                 </div>
+
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Completion Date</label>
-                                                        <input type="text" name="completion_date"  class="form-control" id="completion_date">
+                                                        <input type="text" name="completion_date" value=""
+                                                               class="form-control" id="completion_date">
                                                     </div>
                                                 </div>
 
+                                            </div>
 
-
+                                            <div id="result" class="col-md-6">
 
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-6">
-                                                    <input type="submit" name="add" class="btn btn-success btn-block">
+                                                <div class="col-md-8">
+                                                    <input type="submit" class="btn btn-success btn-block" value="Add Professional Qualification"/>
                                                 </div>
-                                            </div>
-
-                                            <div id="result" class="col-md-6">
 
                                             </div>
                                         </form>
@@ -205,7 +217,8 @@
     <script type="text/javascript" src="{{asset('js/functions.js')}}"></script>
 
     <script src="{{asset('../assets/node_modules/moment/moment.js')}}"></script>
-    <script src="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>
+    <script
+        src="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>
     <script>
         // MAterial Date picker
         $('#completion_date').bootstrapMaterialDatePicker({

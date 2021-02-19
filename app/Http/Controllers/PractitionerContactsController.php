@@ -15,10 +15,10 @@ class PractitionerContactsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-   /* public function __construct()
-    {
-        $this->middleware('verified');
-    }*/
+    /* public function __construct()
+     {
+         $this->middleware('verified');
+     }*/
 
     public function index()
     {
@@ -57,7 +57,7 @@ class PractitionerContactsController extends Controller
             ])
         );
 
-        return redirect('/admin/practitioners/'.$practitioner->id)->with('message', 'Contact details added successfully');
+        return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Contact details added successfully');
     }
 
     /**
@@ -118,5 +118,12 @@ class PractitionerContactsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function contacts()
+    {
+        $practitioner_contacts = Practitioner::all();
+        //dd($practitioner_contacts);
+        return view('admin.practitioner_contacts.email', compact('practitioner_contacts'));
     }
 }

@@ -21,6 +21,7 @@ class CreatePractitionerQualificationsTable extends Migration
             $table->unsignedBigInteger('accredited_institution_id')->nullable();
             $table->unsignedBigInteger('qualification_category_id')->nullable();
             $table->string('institution')->nullable();
+            $table->string('professional_qualification_name')->nullable();
             $table->timestamp('commencement_date')->nullable();
             $table->timestamp('completion_date')->nullable();
             $table->string('awarded_by')->nullable();

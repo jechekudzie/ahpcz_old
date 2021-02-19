@@ -200,25 +200,27 @@ function countPendingItems()
                                 <li>
                                     <div class="message-center">
                                         <!-- Message -->
-                                        @if(auth()->user()->unreadNotifications)
-                                            @foreach (auth()->user()->unreadNotifications as $notification)
-                                                <a href="/admin/{{$notification->id}}/read">
-                                                    <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i>
-                                                    </div>
-                                                    <div class="mail-contnet">
-                                                        <h5>{{$notification->data['sender']['name']}}</h5> <span
-                                                            class="mail-desc">
+                                        @if(auth()->check() )
+                                            @if(auth()->user()->unreadNotifications)
+                                                @foreach (auth()->user()->unreadNotifications as $notification)
+                                                    <a href="/admin/{{$notification->id}}/read">
+                                                        <div class="btn btn-danger btn-circle"><i
+                                                                class="fa fa-link"></i>
+                                                        </div>
+                                                        <div class="mail-contnet">
+                                                            <h5>{{$notification->data['sender']['name']}}</h5> <span
+                                                                class="mail-desc">
                                                          @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
                                                      </span>
 
-                                                        <span class="time">{{getDifference($notification->created_at,now())}} ago</span>
+                                                            <span class="time">{{getDifference($notification->created_at,now())}} ago</span>
 
-                                                    </div>
+                                                        </div>
 
-                                                </a>
-                                            @endforeach
+                                                    </a>
+                                                @endforeach
+                                            @endif
                                         @endif
-
                                     </div>
                                 </li>
                                 <li>
@@ -277,18 +279,19 @@ function countPendingItems()
                     </li>
 
 
-                    <li><a class=" waves-effect waves-dark" href="{{url('/admin/practitioners')}}" aria-expanded="false">
+                    <li><a class=" waves-effect waves-dark" href="{{url('/admin/practitioners')}}"
+                           aria-expanded="false">
                             <i class="fa fa-user-md"></i><span class="hide-menu">Practitioners
                             </span></a>
-                       {{-- <ul aria-expanded="false" class="collapse">
-                            <li><a href="{{url('/admin/practitioners')}}"> Practitioners Approved
-                                </a>
-                            </li>
-                            <li><a href="{{url('/admin/pending_approval')}}">Practitioners
-                                    Pending Approval
-                                </a>
-                            </li>
-                        </ul>--}}
+                        {{-- <ul aria-expanded="false" class="collapse">
+                             <li><a href="{{url('/admin/practitioners')}}"> Practitioners Approved
+                                 </a>
+                             </li>
+                             <li><a href="{{url('/admin/pending_approval')}}">Practitioners
+                                     Pending Approval
+                                 </a>
+                             </li>
+                         </ul>--}}
                     </li>
 
                     <li><a class=" waves-effect waves-dark two-column" href="javascript:void(0)"
@@ -322,6 +325,11 @@ function countPendingItems()
                     <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/pending"
                            aria-expanded="false"><i class="fa fa-certificate"></i><span
                                 class="hide-menu"> Out-standings {{--({{countPendingItems()}})--}}</span></a>
+                    </li>
+
+                    <li><a class="waves-effect waves-dark" href="/admin/emails"
+                           aria-expanded="false"><i class="fa fa-id-card"></i><span
+                                class="hide-menu"> Practitioner Contacts </span></a>
                     </li>
                     @can('admin')
                         <li><a class="waves-effect waves-dark" href="/admin/" aria-expanded="false"><i

@@ -87,7 +87,6 @@ class DynamicDataController extends Controller
         foreach ($professional_qualifications as $professional_qualification) {
             if($professional_qualification->id == $pq_id){
 
-
                 $response .= '<option value=' . $professional_qualification->id . ' selected>' . $professional_qualification->name . '</option>';
 
             }else{
@@ -147,9 +146,9 @@ class DynamicDataController extends Controller
         $response .= '<table style="width:100%;border-spacing: 5px;">
                           <tr>
                             <th style="text-align:left">University name</th>
-                            <th style="text-align:left">Status</th> 
+                            <th style="text-align:left">Status</th>
                           </tr>
-                          
+
                     ';
         foreach ($discredited_institutions as $discredited_institution) {
 

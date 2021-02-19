@@ -18,6 +18,9 @@ Route::get('/', function () {
 
 })->middleware('auth')->middleware('guest');
 
+Route::get('/admin/emails','PractitionerContactsController@contacts');
+
+
 Route::get('/admin', 'AdminController@index');
 
 /*Start Of Utilities CRUD*/
@@ -301,5 +304,9 @@ Route::get('/json/testing/{registration_number}/{id_number}', 'APIController@tes
 // this is a test point where data is pre-initialized
 Route::get('/json/test', 'APIController@testBoth');
 Route::get('/testme', 'PractitionersController@testme');
+
+//portal teste
+Route::get('/checkUpdate', 'APIController@updateq');
+Route::get('/updatepaymentinfor', 'APIController@updatepaymentinfor');
 
 

@@ -13,6 +13,10 @@ class Profession extends Model
         return $this->hasOne(Prefix::class);
     }
 
+    public function practitionerQualifications(){
+        return $this->hasMany(PractitionerQualification::class);
+    }
+
     public function cdpoint(){
         return $this->hasOne(CdPoint::class);
     }
@@ -35,8 +39,6 @@ class Profession extends Model
         return $this->hasMany(ProfessionalQualification::class);
     }
 
-    public function practitionerQualification(){
-        return $this->hasMany(PractitionerQualification::class);
-    }
+
 
 }

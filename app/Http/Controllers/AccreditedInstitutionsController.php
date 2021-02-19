@@ -21,6 +21,7 @@ class AccreditedInstitutionsController extends Controller
     {
         $this->middleware('verified');
     }*/
+    
 
     public function index()
     {

@@ -16,7 +16,7 @@
                 @can('admin')
                     <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                 @endcan
-                <a href="/admin/practitioners" class="btn btn-success"></i> Practitioners</a>
+                <a href="/admin/practitioners" class="btn btn-success"> Practitioners</a>
             </div>
 
             <div class="col-md-7 align-self-center text-right">
@@ -66,7 +66,7 @@
                                               class="validation-wizard wizard-circle">
                                         {{csrf_field()}}
                                         <!-- Step 1 -->
-                                            <h3>Step 1</h3>
+                                            <h3>Personal details</h3>
                                             <hr/>
                                             <section>
                                                 <div class="row">
@@ -182,9 +182,31 @@
                                             </section>
 
                                             <!-- Step 2 -->
-                                            <h3>Step 2</h3>
+                                            <h3>Professional details</h3>
                                             <section>
                                                 <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="wlocation2"> Qualification Category :
+                                                                <span
+                                                                    class="danger">*</span>
+                                                            </label>
+                                                            <select class="custom-select form-control" required onchange="myFunction()"
+                                                                    id="qualification_category" name="qualification_category_id">
+                                                                <option value="">Select Qualification Category</option>
+                                                                @foreach($qualification_categories as $qualification_category)
+                                                                    <option value="{{$qualification_category->id}}" >{{$qualification_category->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            <div class="form-control-feedback">
+                                                                <small><code>Choose your qualification type, it can
+                                                                        either be local or foreign depending on where
+                                                                        you obtained it.</code>
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="wlocation2"> Profession : <span
@@ -203,43 +225,29 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="wlocation2"> Professional Qualifications : <span
-                                                                        class="danger">*</span>
-                                                            </label>
-                                                            <select class="custom-select form-control"
-                                                                    id="professional_qualifications" name='professional_qualification_id'>
-                                                                <option value='0'>Select Professional Qualification</option>
-
-                                                            </select>
-                                                        </div>
-                                                    </div>
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div id="pq_div" style="display: none;"  class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="wlocation2"> Qualification Category :
-                                                                <span
-                                                                        class="danger">*</span>
+                                                            <label for="wlocation2"> Professional Qualifications : <span
+                                                                    class="danger">*</span>
                                                             </label>
-                                                            <select class="custom-select form-control" required onchange="myFunction()"
-                                                                    id="qualification_category" name="qualification_category_id">
-                                                                <option value="">Select Qualification Category</option>
-                                                                @foreach($qualification_categories as $qualification_category)
-                                                                    <option value="{{$qualification_category->id}}" >{{$qualification_category->name}}</option>
-                                                                @endforeach
+                                                            <select class="custom-select form-control"
+                                                                    id="professional_qualifications" name='professional_qualification_id'>
+                                                                <option value=''>Select Professional Qualification</option>
+
                                                             </select>
-                                                            <div class="form-control-feedback">
-                                                                <small><code>Choose your qualification type, it can
-                                                                        either be local or foreign depending on where
-                                                                        you obtained it.</code>
-                                                                </small>
-                                                            </div>
                                                         </div>
                                                     </div>
+
+                                                    <div id="pq_name_div" style="display: none;" class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="wphoneNumber2">Professional Qualification name :</label>
+                                                            <input  type="text" class="form-control" name="professional_qualification_name">
+                                                        </div>
+                                                    </div>
+
 
 
                                                     <div id="accredited_institution_div" style="display: none;" class="col-md-6">
@@ -409,19 +417,7 @@
             });
         });
 
-        var x = document.getElementById("checkqualcategory").value;
-        if (x == 1) {
-            document.getElementById("accredited_institution_div").style.display = 'block';
-            document.getElementById("institution_div").style.display = 'none';
-        } else
 
-        if (x == 2) {
-            document.getElementById("institution_div").style.display = 'block';
-            document.getElementById("accredited_institution_div").style.display = 'none';
-        }  else {
-            document.getElementById("institution_div").style.display = 'none';
-            document.getElementById("accredited_institution_div").style.display = 'none';
-        }
 
     </script>
 

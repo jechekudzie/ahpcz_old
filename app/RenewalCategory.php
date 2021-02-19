@@ -17,4 +17,12 @@ class RenewalCategory extends Model
     public function practitioner(){
         return $this->hasMany(Practitioner::class);
     }
+
+
+    public function practitioner_payment_information(){
+
+        return $this->hasMany(PractitionerPaymentInformation::class);
+    }
+
+
 }

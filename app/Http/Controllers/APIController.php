@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Practitioner;
+use App\PractitionerPaymentInformation;
+use App\PractitionerQualification;
 use App\Prefix;
 use App\ProfessionalQualification;
 use App\User;
@@ -12,42 +14,138 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 
 class APIController extends Controller
 {
+
+    public function updateq()
+    {
+
+        $practitioners = Practitioner::all();
+
+        foreach ($practitioners as $practitioner) {
+
+            if ($practitioner->professional_qualification) {
+                ///if relationship exists then nullify all fields in practitioner table
+                $practitioner->update([
+                    'qualification_category_id' => null,
+                    'professional_qualification_id' => null,
+                    'accredited_institution_id' => null,
+                    'institution' => null,
+                    'commencement_date' => null,
+                    'completion_date' => null,
+                ]);
+
+            } else {
+
+                $create = PractitionerQualification::create([
+                    'practitioner_id' => $practitioner->id,
+                    'profession_id' => $practitioner->profession_id,
+                    'qualification_category_id' => $practitioner->qualification_category_id,
+                    'professional_qualification_id' => $practitioner->professional_qualification_id,
+                    'accredited_institution_id' => $practitioner->accredited_institution_id,
+                    'institution' => $practitioner->institution,
+                    'commencement_date' => $practitioner->commencement_date,
+                    'completion_date' => $practitioner->completion_date,
+                ]);
+            }
+        }
+    }
+
+    public function updatepaymentinfor()
+    {
+
+        $practitioners = Practitioner::all();
+
+        foreach ($practitioners as $practitioner) {
+
+            if ($practitioner->practitioner_payment_information) {
+                ///if relationship exists then nullify all fields in practitioner table
+                $practitioner->update([
+                    'renewal_category_id' => null,
+                    'register_category_id' => null,
+                    'payment_method_id' => null,
+                ]);
+
+            } else {
+                $create = PractitionerPaymentInformation::create([
+                    'practitioner_id' => $practitioner->id,
+                    'renewal_category_id' => $practitioner->renewal_category_id,
+                    'register_category_id' => $practitioner->register_category_id,
+                    'payment_method_id' => $practitioner->payment_method_id,
+                ]);
+
+                $practitioner->update([
+                    'renewal_category_id' => null,
+                    'register_category_id' => null,
+                    'payment_method_id' => null,
+                ]);
+
+            }
+        }
+    }
+
+
     public function index(Request $request)
     {
         $practitioners = Practitioner::all();
         $users = User::all();
 
-        if ($request->is('api/json/practitioners')) {
-            return response()->json([
-                'practitioners' => $practitioners->toArray(),
-                'users' => $users->toArray()
-            ]);
+        //if ($request->is('api/json/practitioners')) {
+        return response()->json([
+            'practitioners' => $practitioners->toArray(),
+            'users' => $users->toArray()
+        ]);
 
-        }
+        //}
 
 
     }
 
-    public function show(Request $request, Practitioner $practitioner)
+    public
+    function show(Request $request, Practitioner $practitioner)
     {
-        //get practitioner current renewal infor
-        $practitioner->profession;
-        $practitioner->currentRenewal;
-        $practitioner->professionalQualification;
-
-        if ($request->is('/api/json/practitioners/' . $practitioner->id)) {
-            return response()->json([
-                'practitioners' => $practitioner->toArray(),
-            ]);
-
+        //practitioner contacts
+        if ($practitioner->contact) {
+            $practitioner->contact->city;
+            $practitioner->contact->province;
         }
+
+        //practitioner qualifications
+        if ($practitioner->practitionerQualifications) {
+            foreach ($practitioner->practitionerQualifications as $practitionerQualification) {
+                $practitionerQualification;
+                $practitionerQualification->profession;
+                $practitionerQualification->professionalQualification;
+                $practitionerQualification->accreditedInstitution;
+                $practitionerQualification->qualificationCategory;
+            }
+        }
+
+
+        //practitioner employer
+        if ($practitioner->employer) {
+            $practitioner->employer->city;
+            $practitioner->employer->province;
+        }
+
+
+        //practitioner contacts
+        if ($practitioner->practitioner_payment_information) {
+            $practitioner->practitioner_payment_information->renewal_category;
+            $practitioner->practitioner_payment_information->register_category;
+            $practitioner->practitioner_payment_information->payment_method;
+        }
+
+
+        return response()->json([
+            'practitioner' => $practitioner->toArray(),
+
+        ]);
 
 
     }
 
-
-    ///registration number digit only
-    public function byRegID(Request $request, $registration_number, $id_number)
+    //registration number digit only
+    public
+    function byRegID(Request $request, $registration_number, $id_number)
     {
         $result = Practitioner::whereRegistrationNumberAndIdNumber($registration_number, $id_number)->first();
 
@@ -71,8 +169,9 @@ class APIController extends Controller
 
     }
 
-    //registration number string
-    public function byRegString(Request $request, $registration_number)
+//registration number string
+    public
+    function byRegString(Request $request, $registration_number)
     {
         $registration = str_replace('*', '/', $registration_number);
 
@@ -104,7 +203,8 @@ class APIController extends Controller
 
     }
 
-    public function byRegIdString(Request $request, $registration_number, $id_number)
+    public
+    function byRegIdString(Request $request, $registration_number, $id_number)
     {
         $registration = str_replace('*', '/', $registration_number);
 
@@ -135,10 +235,11 @@ class APIController extends Controller
 
     }
 
-    public function testBoth()
+    public
+    function testBoth()
     {
         $reg_number = "A/PSY0412";
-        $id_number  = "63915996H26";
+        $id_number = "63915996H26";
 
         /*$reg_number = "A/AT0004";
         $id_number  = "43125772P";*/
@@ -148,17 +249,18 @@ class APIController extends Controller
 
         $fa = str_replace("/", "*", $reg_number);
 
-        return redirect('/api/json/practitioner_string/' . $fa.'/'.$id_number);
+        return redirect('/api/json/practitioner_string/' . $fa . '/' . $id_number);
 
     }
 
-    public function testSingle()
+    public
+    function testSingle()
     {
 
         $pqs = Prefix::all();
 
-        foreach ($pqs as $pq){
-            echo '["id"=>"'.$pq->id.'","profession_id"=>"'.$pq->profession_id.'","name"=>"'.$pq->name.'","created_at"=>now(),"updated_at"=>now()],<br/>';
+        foreach ($pqs as $pq) {
+            echo '["id"=>"' . $pq->id . '","profession_id"=>"' . $pq->profession_id . '","name"=>"' . $pq->name . '","created_at"=>now(),"updated_at"=>now()],<br/>';
 
         }
 

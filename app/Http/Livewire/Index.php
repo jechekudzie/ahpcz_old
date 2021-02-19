@@ -12,29 +12,19 @@ class Index extends Component
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap';
-
     public $perPage = 10;
-    public $search = '';
+    public $search;
     public $orderBy = 'id';
     public $orderAsc = true;
-    public $compliance = 0;
+    public $compliance;
 
 
-    /*    public function render()
-        {
-            return view('livewire.index', [
-                'practitioners' => Practitioner::search($this->search)
-                    ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
-                    ->where('approval_status',1)
-                    ->paginate($this->perPage),
-            ]);
-        }*/
     public function render()
     {
         return view('livewire.index', [
             'practitioners' => Practitioner::search($this->search)
-                ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->CheckCompliance($this->compliance)
+                ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->paginate($this->perPage)
         ]);
     }
