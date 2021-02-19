@@ -94,7 +94,7 @@
                 </td>
                 <td class="border px-4 py-2">{{ $practitioner->profession->name }}</td>
                 <td class="border px-4 py-2">
-                    @if($practitioner->professional_qualification_id !=null)
+                    @if($practitioner->professionalQualification)
                         {{$practitioner->professionalQualification->name}}
                     @endif
                 </td>
