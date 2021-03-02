@@ -36,9 +36,14 @@ class PractitionerEmployerController extends Controller
     public function create(Practitioner $practitioner)
     {
         //
-        $provinces = Province::all()->sortBy('name');
+        if($practitioner->employment_status_id == 1){
+            $provinces = Province::all()->sortBy('name');
+            return view('admin.practitioner_employers.create', compact('practitioner', 'provinces'));
+        }else{
+            return redirect('/admin/practitioners/'.$practitioner->id)->with('message','Your employment status states that you are not employed, so no employment details are required');
+        }
 
-        return view('admin.practitioner_employers.create', compact('practitioner', 'provinces'));
+
     }
 
     /**

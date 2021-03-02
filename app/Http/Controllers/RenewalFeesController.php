@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Profession;
+use App\ProfessionTire;
+use App\Rate;
 use App\RenewalCategory;
 use App\RenewalFee;
+use App\Tire;
 use Illuminate\Http\Request;
 
 class RenewalFeesController extends Controller
@@ -19,7 +22,12 @@ class RenewalFeesController extends Controller
         //
 
         $renewal_fees = RenewalFee::all();
-        return view('admin.renewal_fees.index',compact('renewal_fees'));
+        $tires = Tire::all();
+        $rates = Rate::all();
+        $profession_tires = ProfessionTire::all();
+        return view('admin.renewal_fees.index',
+            compact('renewal_fees','profession_tires',
+                'tires','rates'));
     }
 
     /**

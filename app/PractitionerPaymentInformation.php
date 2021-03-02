@@ -31,4 +31,14 @@ class PractitionerPaymentInformation extends Model
 
         return $this->belongsTo(PaymentMethod::class);
     }
+
+    public function employment_status(){
+
+        return $this->belongsTo(EmploymentStatus::class);
+    }
+
+    public function employment_location(){
+
+        return $this->belongsTo(EmploymentLocation::class);
+    }
 }

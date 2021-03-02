@@ -25,6 +25,13 @@ class Profession extends Model
         return $this->hasMany(RenewalFee::class);
     }
 
+    public  function profession_tires(){
+        return $this->hasMany(ProfessionTire::class);
+    }
+
+
+
+
     public function professionApprover(){
 
         return $this->hasOne(ProfessionApprover::class);
@@ -39,6 +46,9 @@ class Profession extends Model
         return $this->hasMany(ProfessionalQualification::class);
     }
 
+    public function cpd_criterias(){
+        return $this->hasMany(CpdCriteria::class);
+    }
 
 
 }

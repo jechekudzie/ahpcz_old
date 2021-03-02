@@ -26,14 +26,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    @if(session('message'))
-                        <div class="alert alert-success alert-rounded col-md-6">
-                            <i class="fa fa-check-circle"></i> {{ session('message') }}
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
                     <div class="card-body p-b-0">
                         <h4 class="card-title">{{$practitioner->title->name.' '.ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}}</h4>
                         <h4>Registration Number :
@@ -58,6 +50,14 @@
                             </code> @can('updatePractitioner')<a
                                 href="/admin/practitioners/{{$practitioner->id}}/cdpoints"
                                 class="btn btn-success btn-xs">Add CPD Points</a>@endcan</h6>
+                        @if(session('message'))
+                            <div class="alert alert-success alert-rounded col-md-12">
+                                <i class="fa fa-check-circle"></i> {{ session('message') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                     </div>
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs customtab" role="tablist">
@@ -219,6 +219,28 @@
                                                 <br>
                                                 <p class="text-muted">@if($practitioner->practitioner_payment_information->register_category){{$practitioner->practitioner_payment_information->register_category->name}}@endif</p>
                                             @endif
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+
+                                        <div class="col-md-4 col-xs-6 b-r"><strong>Employment Status</strong>
+                                            <br>
+                                            <p class="text-muted">
+                                                @if($practitioner->employment_status_id != null)
+                                                    {{$practitioner->employment_status->name}}
+                                                @endif
+                                            </p>
+                                        </div>
+
+                                        <div class="col-md-4 col-xs-6 b-r"><strong>Residence</strong>
+                                            <br>
+                                            <p class="text-muted">
+                                                @if($practitioner->employment_location_id != null)
+                                                    {{$practitioner->employment_location->name}}
+                                                @endif
+                                            </p>
                                         </div>
 
                                     </div>
@@ -494,7 +516,7 @@
                                                                     {{'Up to date'}}
                                                                 @endif
                                                             </td>
-                                                            <td>{{$renewal->created_at->format('d F Y')}}</td>
+                                                            <td>@if($renewal->created_at !=null){{$renewal->created_at->format('d F Y')}}@endif</td>
                                                             <td>
                                                                 @if($practitioner_placement = \App\PractitionerPlacement::where('renewal_period_id',$renewal->renewal_period_id)->first())
                                                                     <a target="_blank"
@@ -726,7 +748,7 @@
                                 <a href="/admin/practitioners/registration/{{$practitioner->id}}/registration"
                                    class="btn btn-success">REGISTER</a>
 
-                                <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal"
+                                <a href="/admin/practitioner_renewals/{{$practitioner->id}}/create"
                                    class="btn btn-success"> RENEW
                                 </a>
                             @endcan
@@ -829,6 +851,7 @@
                                                                 <td>{{number_format($renewal->payments->sum('balance'),2)}}</td>
                                                                 <td>
 
+
                                                                     {{$renewal->renewalStatus->name}}
                                                                 </td>
                                                                 <td>
@@ -845,9 +868,9 @@
                                                                         {{'Up to date'}}
                                                                     @endif
                                                                 </td>
-                                                                <td>{{$renewal->created_at->format('d F Y')}}</td>
+                                                                <td>@if($renewal->created_at !=null){{$renewal->created_at->format('d F Y')}}@endif</td>
                                                                 <td>
-                                                                    <a href="/admin/practitioners/renewals/{{$renewal->id}}/payments_list">Payments </a>
+                                                                    <a href="/admin/practitioner_renewals/{{$renewal->id}}/index">Payments </a>
 
                                                                 </td>
 

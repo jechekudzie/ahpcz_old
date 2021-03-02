@@ -249,7 +249,6 @@
                                                     </div>
 
 
-
                                                     <div id="accredited_institution_div" style="display: none;" class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="wlocation2"> Accredited Institutions : <span
@@ -301,6 +300,44 @@
                                                 </div>
 
                                             </section>
+
+
+                                            <h3>Employment Status & residence</h3>
+                                            <section>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="wlocation2"> Employment Status :
+                                                                <span
+                                                                    class="danger">*</span>
+                                                            </label>
+                                                            <select class="custom-select form-control" required onchange="myFunction()"
+                                                                    id="" name="employment_status_id">
+                                                                <option value="">Employment Status</option>
+                                                                @foreach($employment_statuses as $employment_status)
+                                                                    <option value="{{$employment_status->id}}" >{{$employment_status->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="wlocation2"> Residence : <span
+                                                                    class="danger">*</span>
+                                                            </label>
+                                                            <select class="custom-select form-control " required
+                                                                    id="" name="employment_location_id">
+                                                                <option value="">Choose Residence</option>
+                                                                @foreach($employment_locations as $employment_location)
+                                                                    <option value="{{$employment_location->id}}">{{$employment_location->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </section>
                                         </form>
 
                                     </div>
@@ -330,7 +367,7 @@
             transitionEffect: "slideLeft",
             enableFinishButton: !1,
             onStepChanged: function (event, currentIndex, priorIndex) {
-                if (currentIndex == 1) {
+                if (currentIndex == 2) {
                     var $input = $('<input style="margin-left: 5px" type="submit" class="btn btn-success btn-xs" value="Add Practitioner"/>');
                     $input.appendTo($('ul[aria-label=Pagination]'));
                 } else {

@@ -66,6 +66,21 @@ class Practitioner extends Model
         return $this->hasMany(Document::class, 'document_owner');
     }
 
+
+
+
+    public function employment_status(){
+        return $this->belongsTo(EmploymentStatus::class);
+    }
+
+    public function employment_location(){
+        return $this->belongsTo(EmploymentLocation::class);
+    }
+
+
+
+
+
     public function employer()
     {
         return $this->hasOne(PractitionerEmployer::class);
@@ -163,7 +178,6 @@ class Practitioner extends Model
     //add documents
     public function addEmployer($employer)
     {
-
         $this->employer()->create($employer);
     }
 

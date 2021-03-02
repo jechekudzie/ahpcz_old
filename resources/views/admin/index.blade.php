@@ -84,7 +84,7 @@
                     <div class="col-sm-6 col-md-4">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">RENEWAL CATEGORIES</h5>
+                                <h5 class="card-title">RENEWAL CRITERIA AND CATEGORIES</h5>
                                 <div class="d-flex m-t-30 m-b-20 no-block align-items-center">
                                     <span class="display-5 text-success"><i class="fa fa-users"></i></span>
                                     <a href="/admin/renewal_categories" class="link display-5 ml-auto">{{$renewal_categories}}</a>

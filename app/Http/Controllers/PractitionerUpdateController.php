@@ -30,6 +30,7 @@ class PractitionerUpdateController extends Controller
         $renewal_categories = RenewalCategory::all()->sortBy('name');
         $register_categories = RegisterCategory::all()->sortBy('name');
         return view('admin.practitioner_payments.payment_requirement_fields', compact('payment_methods', 'renewal_categories', 'register_categories', 'practitioner'));
+
     }
 
     public function approve(Practitioner $practitioner)

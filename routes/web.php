@@ -39,6 +39,11 @@ Route::resource('/admin/renewal_categories', 'RenewalCategoriesController');
 //renewal_statuses
 Route::resource('/admin/renewal_statuses', 'RenewalStatusesController');
 
+//employment status and employment location
+Route::resource('/admin/employment_statuses', 'EmploymentStatusController');
+Route::resource('/admin/employment_locations', 'EmploymentLocationController');
+
+
 //operational_statuses
 Route::resource('/admin/operational_statuses', 'OperationalStatusesController');
 
@@ -56,6 +61,20 @@ Route::resource('/admin/registration_fees', 'RegistrationFeesController');
 
 //practitioner renewal fees
 Route::resource('/admin/renewal_fees', 'RenewalFeesController');
+Route::resource('/admin/tires', 'TireController');
+Route::get('/admin/tires/{tire}/delete', 'TireController@destroy');
+Route::resource('/admin/profession_tires', 'ProfessionTireController');
+Route::resource('/admin/rates', 'RatesController');
+Route::get('/admin/rates/{rate}/delete', 'RatesController@destroy');
+Route::resource('/admin/profession_tires', 'ProfessionTireController@destroy');
+Route::post('/admin/profession_tires/delete', 'ProfessionTireController@destroy');
+Route::post('/admin/profession_tires', 'ProfessionTireController@store');
+Route::resource('/admin/renewal_criterias', 'RenewalCriteriaController');
+
+Route::get('/admin/cpd_criterias/index', 'CpdCriteriaController@index');
+Route::get('/admin/cpd_criterias/{profession}/create', 'CpdCriteriaController@create');
+Route::post('/admin/cpd_criterias/store', 'CpdCriteriaController@store');
+
 
 //student registration fees
 Route::resource('/admin/student_registration_fees', 'StudentRegistrationFeesController');
@@ -91,7 +110,7 @@ Route::resource('/admin/payment_items/categories', 'PaymentItemsCategoryControll
 
 Route::resource('/admin/payment_items/fees', 'PaymentItemsCategoryController');
 
-//check submitted officer statys
+//check submitted officer status
 Route::get('/admin/submit_requirements/{practitionerRequirement}', 'SubmittedRequirementsController@store');
 Route::delete('/admin/submit_requirements/{practitionerRequirement}', 'SubmittedRequirementsController@destroy');
 
@@ -173,11 +192,25 @@ Route::get('/admin/practitioners/experience/{practitionerExperience}/show', 'Pra
 
 
 //practitioner renewals payments
-Route::get('/admin/practitioners/renewals/{practitioner}/create', 'RenewalController@create');
-Route::get('/admin/practitioners/renewals/{renewal}/payments_list', 'RenewalController@index');
+//we redirect to the page where we get to create the new renewal
+Route::get('/admin/practitioner_renewals/{practitioner}/create', 'RenewalController@create');
+//display all the renewal payments for a specific period
+Route::get('/admin/practitioner_renewals/{renewal}/index', 'RenewalController@index');
+
 Route::get('/admin/practitioners/renewals/{renewal}/create_payment', 'RenewalController@createPayment');
 Route::post('/admin/practitioners/renewals/{renewal}/make_payment', 'RenewalController@makePayment');
 Route::get('/admin/practitioners/renewals/{practitioner}/practitionerBalances', 'RenewalController@practitionerBalances');
+
+
+//update payment method, renewal category
+Route::get('/admin/practitioner_payment_info/{practitioner}/create', 'PractitionerPaymentInfoController@create');
+Route::post('/admin/practitioner_payment_info/{practitioner}/store', 'PractitionerPaymentInfoController@store');
+
+Route::get('/admin/practitioners/payment_requirement/{practitioner}/update', 'PractitionerUpdateController@paymentMethodsUpdate');
+Route::patch('/admin/practitioners/payment_requirement/{practitioner}/payments_renewal', 'RenewalController@paymentsRequirementUpdate');
+Route::patch('/admin/practitioners/payment_requirement/{practitioner}/payments_registration', 'RegistrationController@paymentsRequirementUpdate');
+
+
 
 //get invoice
 Route::get('/admin/practitioners/renewals/{practitioner}/checkPaymentStatusRegistration', 'RegistrationController@checkPaymentStatus');
@@ -225,12 +258,6 @@ Route::get('/renewal/payment_item_category_id/{payment_item_category_id}', 'Dyna
 //getting the fee in paymentItems where id = payment_item_id
 Route::get('/renewal/payment_items/{payment_item_id}/{renewal}', 'DynamicDataController@paymentItemFee');
 //get professional qualification where profession is passed
-
-
-//update payment method, renewal category
-Route::get('/admin/practitioners/payment_requirement/{practitioner}/update', 'PractitionerUpdateController@paymentMethodsUpdate');
-Route::patch('/admin/practitioners/payment_requirement/{practitioner}/payments_renewal', 'RenewalController@paymentsRequirementUpdate');
-Route::patch('/admin/practitioners/payment_requirement/{practitioner}/payments_registration', 'RegistrationController@paymentsRequirementUpdate');
 
 //Application approvals
 Route::get('/admin/practitioners/approval/{practitioner}/approve', 'PractitionerUpdateController@approve');
@@ -306,7 +333,7 @@ Route::get('/json/test', 'APIController@testBoth');
 Route::get('/testme', 'PractitionersController@testme');
 
 //portal teste
-Route::get('/checkUpdate', 'APIController@updateq');
-Route::get('/updatepaymentinfor', 'APIController@updatepaymentinfor');
+Route::get('/update_qualification', 'APIController@update_qualification');
+Route::get('/update_practitioner_payment_info', 'APIController@update_practitioner_payment_info');
 
 

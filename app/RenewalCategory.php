@@ -25,4 +25,9 @@ class RenewalCategory extends Model
     }
 
 
+    public function renewal_criterias(){
+        return $this->hasMany(RenewalCriteria::class);
+    }
+
+
 }

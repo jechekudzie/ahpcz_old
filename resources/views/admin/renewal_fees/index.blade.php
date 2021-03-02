@@ -9,8 +9,9 @@
         <!-- Bread crumb and right sidebar toggle -->
         <div class="row page-titles">
             <div class="col-md-7 align-self-center">
-                 <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
-                 <a href="renewal_fees/create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add Practitioner Renewal Fee</a>
+                <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
+                <a href="renewal_fees/create" class="btn btn-success"><i class="fa fa-plus-circle"></i> Add Practitioner
+                    Renewal Fee</a>
             </div>
             <div class="col-md-5 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">
@@ -29,48 +30,59 @@
         <div class="row">
             <div class="col-12">
                 @if (session('message'))
-                    <div class="alert alert-success alert-rounded col-md-6"><i class="fa fa-check-circle"></i>  {{ session('message') }}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                    <div class="alert alert-success alert-rounded col-md-6"><i
+                            class="fa fa-check-circle"></i> {{ session('message') }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
                     </div>
                 @endif
                 <div class="card">
+
                     <div class="card-body">
-                        <h4 class="card-title">Practitioner Renewal Fees</h4>
+                        <h4 class="card-title">Renewal Tires</h4>
+                        <a href="{{url('/admin/tires/create')}}" class="btn btn-success"><i
+                                class="fa fa-plus-circle"></i> Add a tire</a>
                         <div class="table-responsive m-t-40">
-                            <table id="renewal_fees" class="display nowrap table table-hover table-striped table-bordered"
+                            <table id="renewal_fees"
+                                   class="display nowrap table table-hover table-striped table-bordered"
                                    cellspacing="0" width="100%">
                                 <thead>
                                 <tr>
-                                    <th>Profession</th>
-                                    <th>Renewal Category</th>
-                                    <th>Fee ($RTGS)</th>
-                                    <th>VAT 15% ($RTGS)</th>
-                                    <th>Total ($RTGS) <i style="color: red;">VAT Inclusive</i></th>
+                                    <th>Tire</th>
+                                    <th>Renewal Fee RTGS</th>
+                                    <th>Renewal Fee USD</th>
+                                    <th>Professions</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
-                                    <th>Profession</th>
-                                    <th>Renewal Category</th>
-                                    <th>Fee ($RTGS)</th>
-                                    <th>VAT 15% ($RTGS)</th>
-                                    <th>Total ($RTGS) <i style="color: red;">VAT Inclusive</i></th>
+                                    <th>Tire</th>
+                                    <th>Renewal Fee RTGS</th>
+                                    <th>Renewal Fee USD</th>
+                                    <th>Professions</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                @foreach($renewal_fees as $renewal_fee)
+                                @foreach($tires as $tire)
                                     <tr>
-                                        <td> {{$renewal_fee->profession->name}}</td>
-                                        <td>{{$renewal_fee->renewalCategory->name}}</td>
-                                        <td>{{$renewal_fee->fee}}</td>
-                                        <td>{{$vat  = $renewal_fee->fee*0.15}}</td>
-                                        <td>{{$total  = $renewal_fee->fee + $vat}}</td>
-                                        <td><a href="/admin/renewal_fees/{{$renewal_fee->id}}/edit"><i class="fa fa-pencil"></i> Edit</a> </td>
-                                        <td><a href="/admin/renewal_fees/{{$renewal_fee->id}}"><i class="fa fa-trash"></i> Delete</a> </td>
+                                        <td> {{$tire->name}}</td>
+                                        <td>{{$tire->fee}}</td>
+                                        <td>{{$tire->fee}}</td>
+                                        <td><a href="/admin/tires/{{$tire->id}}"><i class="fa fa-user-check"></i>
+                                                Professions @if($tire->profession_tires)
+                                                    ({{$tire->profession_tires->count()}})
+                                                @else
+                                                    {{'(0)'}}
+                                                @endif
+                                            </a></td>
+                                        <td><a href="/admin/tires/{{$tire->id}}/edit"><i class="fa fa-pencil"></i> Edit</a>
+                                        </td>
+                                        <td><a href="/admin/tires/{{$tire->id}}/delete"><i class="fa fa-trash"></i>
+                                                Delete</a></td>
                                     </tr>
                                 @endforeach
 
@@ -81,6 +93,56 @@
                 </div>
             </div>
         </div>
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Rates</h4>
+                        <a href="{{url('/admin/rates/create')}}" class="btn btn-success"><i
+                                class="fa fa-plus-circle"></i> Add a rate</a>
+
+                        <div class="table-responsive m-t-40">
+                            <table id="rates" class="display nowrap table table-hover table-striped table-bordered"
+                                   cellspacing="0" width="100%">
+                                <thead>
+                                <tr>
+                                    <th>Base Currency</th>
+                                    <th>Rate</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>Base Currency</th>
+                                    <th>Rate</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                @foreach($rates as $rate)
+                                    <tr>
+                                        <td> {{$rate->name}}</td>
+                                        <td>{{$rate->rate}}</td>
+
+                                        <td><a href="/admin/rates/{{$rate->id}}/edit"><i class="fa fa-pencil"></i> Edit</a>
+                                        </td>
+                                        <td><a href="/admin/rates/{{$rate->id}}/delete"><i class="fa fa-trash"></i>
+                                                Delete</a></td>
+                                    </tr>
+                                @endforeach
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 @endsection
@@ -101,6 +163,14 @@
     <script>
 
         $('#renewal_fees').DataTable({
+            /*order: [],*/
+            dom: 'Bfrtip',
+
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
+        $('#rates').DataTable({
             /*order: [],*/
             dom: 'Bfrtip',
 

@@ -25,10 +25,10 @@ use Illuminate\Http\Request;
 class RenewalController extends Controller
 {
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->middleware('auth');
-    }
+    }*/
 
     //list all renewal yearly payments
     public function index(Renewal $renewal)
@@ -36,44 +36,33 @@ class RenewalController extends Controller
         return view('admin.practitioner_payments.payments_list', compact('renewal'));
     }
 
-
-    //payments requirements
-    public function paymentsRequirementUpdate(Practitioner $practitioner)
-    {
-        $practitioner->update(request()->validate([
-            'payment_method_id' => 'required',
-            'renewal_category_id' => 'required',
-            'register_category_id' => 'required',
-        ]));
-
-        /**here after updating the payment methods, check to see if this practitioner has
-         * anything in renewals, if yes redirect to renewal checkStatus, if not go to registration route
-         */
-
-        return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/create');
-
-
-    }
-
-    public function checkPaymentStatus(Practitioner $practitioner)
-    {
-        if ($practitioner->payment_method_id == null && $practitioner->renewal_category_id == null) {
-            return redirect('/admin/practitioners/payment_requirement/' . $practitioner->id . '/update');
-        }
-
-        return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/create');
-
-
-
-
-    }
-
     //Initial renewal payment
     public function create(Practitioner $practitioner)
     {
+        //stage 1
+        /**Check for practitioner payment information
+         *renewal_category(which category do you belong to), register_category(which register do you belong to), payment_method(who is paying for you)
+         */
+
+        if ($practitioner->practitioner_payment_information)
+        {
+            if ($practitioner->practitioner_payment_information->payment_method_id == null
+                && $practitioner->practitioner_payment_information->renewal_category_id == null)
+            {
+                return redirect('/admin/practitioner_payment_info/' . $practitioner->id . '/create');
+            }
+        }
+        else
+        {
+            return redirect('/admin/practitioner_payment_info/' . $practitioner->id . '/create');
+        }
 
         $vat = Vat::where('id', 1)->first();
-        $renewal_fee = RenewalFee::whereRenewal_category_idAndProfession_id($practitioner->renewal_category_id, $practitioner->profession_id)->first();
+        $renewal_fee = RenewalFee::whereRenewal_category_idAndProfession_id
+        ($practitioner->practitioner_payment_information->renewal_category_id, $practitioner->profession_id)
+            ->first();
+
+
         $payment_types = PaymentType::all()->sortBy('name');
         $payment_channels = PaymentChannel::all();
         $renewal_periods = RenewalPeriod::all()->sortByDesc('period');
@@ -92,12 +81,12 @@ class RenewalController extends Controller
             'renewal_period_id' => 'required',
             'payment_channel_id' => 'required',
             'amount_paid' => 'required',
-            'receipt_number' => ['required','digits_between:4,8','numeric','unique:payments'],
+            'receipt_number' => ['required', 'digits_between:4,8', 'numeric', 'unique:payments'],
             'pop' => 'nullable',
         ]);
 
         /** get @var $renewal_fee */
-        $renewal_fee = RenewalFee::where('renewal_category_id', '=', $practitioner->renewal_category_id, 'AND', 'profession_id', '=', $practitioner->profession_id)->first();
+        $renewal_fee = RenewalFee::where('renewal_category_id', '=', $practitioner->practitioner_payment_information->renewal_category_id, 'AND', 'profession_id', '=', $practitioner->profession_id)->first();
 
         /** get the renewal period @var $renewal_period_id */
         $renewal_period_id = request('renewal_period_id');
@@ -108,8 +97,8 @@ class RenewalController extends Controller
 
         /** add attributes to @var $renewals */
         $renewals['renewal_period_id'] = request('renewal_period_id');
-        $renewals['payment_method_id'] = $practitioner->payment_method_id;
-        $renewals['renewal_category_id'] = $practitioner->renewal_category_id;
+        $renewals['payment_method_id'] = $practitioner->practitioner_payment_information->payment_method_id;
+        $renewals['renewal_category_id'] = $practitioner->practitioner_payment_information->renewal_category_id;
         $renewals['balance'] = $renewal_balance;
 
         /** check renewal balance to update status either paid or owing @var $renewal_balance */
@@ -180,7 +169,7 @@ class RenewalController extends Controller
             }
 
             //update approval statuses
-            if(
+            if (
                 $practitioner->approval_status == 0 && $practitioner->registration_officer == 0
                 && $practitioner->accountant == 0 && $practitioner->member == 0
                 && $practitioner->registrar == 0
@@ -197,11 +186,11 @@ class RenewalController extends Controller
 
 
             $practitioner_requirements = $practitioner->practitionerRequirements;
-            foreach ($practitioner_requirements as $practitioner_requirement){
+            foreach ($practitioner_requirements as $practitioner_requirement) {
 
                 $practitioner_requirement->update([
-                    'status'=>1,
-                    'member_status'=>1
+                    'status' => 1,
+                    'member_status' => 1
                 ]);
 
             }
@@ -213,7 +202,7 @@ class RenewalController extends Controller
         }
     }
 
-    
+
     //Create renewal payments (fetch form)
     public function createPayment(Renewal $renewal)
     {
@@ -223,7 +212,6 @@ class RenewalController extends Controller
         return view('admin.practitioner_payments.renewal_payments',
             compact('renewal', 'payment_items', 'payment_channels', 'payment_item_categories')
         );
-
 
     }
 
@@ -238,7 +226,7 @@ class RenewalController extends Controller
             'amount_invoiced' => ['required'],
             'amount_paid' => ['required'],
             'payment_date' => ['required'],
-            'receipt_number' => ['required','digits_between:4,8','numeric','unique:payments'],
+            'receipt_number' => ['required', 'digits_between:4,8', 'numeric', 'unique:payments'],
             'payment_item_category_id' => 'required',
             'payment_item_id' => 'required',
             'pop' => 'nullable',
@@ -299,12 +287,7 @@ class RenewalController extends Controller
         return view('admin.practitioner_payments.balances', compact('balances', 'practitioner'));
     }
 
-    
-    
-    
-    
-    
-    
+
     //check cd points
     public function cdpoints(Practitioner $practitioner)
     {
@@ -428,9 +411,10 @@ class RenewalController extends Controller
     }
 
     //view placement letter
-    public function viewPlacement($id){
+    public function viewPlacement($id)
+    {
         $placement = PractitionerPlacement::find($id);
-        return view('admin.practitioner_placement.view',compact('placement'));
+        return view('admin.practitioner_placement.view', compact('placement'));
     }
 
     //invoice balance
@@ -453,7 +437,7 @@ class RenewalController extends Controller
 
         $fee = ($renewal_fee->fee * $vat->vat) + $renewal_fee->fee;
         return view('admin.practitioner_payments.renewal_invoice',
-               compact('practitioner', 'renewal_fee', 'vat', 'fee'));
+            compact('practitioner', 'renewal_fee', 'vat', 'fee'));
 
     }
 

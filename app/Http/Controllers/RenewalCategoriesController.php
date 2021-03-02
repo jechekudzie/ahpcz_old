@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\CpdCriteria;
+use App\EmploymentLocation;
+use App\EmploymentStatus;
+use App\Profession;
 use App\RenewalCategory;
+use App\RenewalCriteria;
 use Illuminate\Http\Request;
 
 class RenewalCategoriesController extends Controller
@@ -18,7 +23,14 @@ class RenewalCategoriesController extends Controller
     {
         //
         $renewal_categories = RenewalCategory::all()->sortBy('name');
-        return view('admin.renewal_categories.index',compact('renewal_categories'));
+        $employment_statuses = EmploymentStatus::all()->sortBy('name');
+        $employment_locations = EmploymentLocation::all()->sortBy('name');
+        $renewal_criteria = RenewalCriteria::all();
+        $professions = Profession::all()->sortBy('name');
+        $cpd_criterias = CpdCriteria::all();
+        return view('admin.renewal_categories.index',
+            compact('renewal_categories','employment_statuses',
+                'employment_locations','renewal_criteria','professions','cpd_criterias'));
 
 
 
@@ -108,7 +120,7 @@ class RenewalCategoriesController extends Controller
 
     }
 
-   
+
     public function destroy(RenewalCategory $renewalCategory)
     {
         //

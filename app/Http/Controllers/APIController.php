@@ -6,6 +6,7 @@ use App\Practitioner;
 use App\PractitionerPaymentInformation;
 use App\PractitionerQualification;
 use App\Prefix;
+use App\Profession;
 use App\ProfessionalQualification;
 use App\User;
 use Illuminate\Http\Request;
@@ -15,14 +16,14 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 class APIController extends Controller
 {
 
-    public function updateq()
+    public function update_qualification()
     {
 
         $practitioners = Practitioner::all();
 
         foreach ($practitioners as $practitioner) {
 
-            if ($practitioner->professional_qualification) {
+            if ($practitioner->practitionerQualifications->count()) {
                 ///if relationship exists then nullify all fields in practitioner table
                 $practitioner->update([
                     'qualification_category_id' => null,
@@ -49,8 +50,10 @@ class APIController extends Controller
         }
     }
 
-    public function updatepaymentinfor()
+    public function update_practitioner_payment_info()
     {
+        //please note that for the first time, we dont have a single record in practitioner payment since
+        //its a new table
 
         $practitioners = Practitioner::all();
 
@@ -119,13 +122,15 @@ class APIController extends Controller
             }
         }
 
+        //practitioner employment status and location
+        $practitioner->employment_status;
+        $practitioner->employment_location;
 
         //practitioner employer
         if ($practitioner->employer) {
             $practitioner->employer->city;
             $practitioner->employer->province;
         }
-
 
         //practitioner contacts
         if ($practitioner->practitioner_payment_information) {
@@ -134,10 +139,10 @@ class APIController extends Controller
             $practitioner->practitioner_payment_information->payment_method;
         }
 
-
+        $professions = Profession::all();
         return response()->json([
             'practitioner' => $practitioner->toArray(),
-
+            'professions' => $professions,
         ]);
 
 

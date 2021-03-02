@@ -191,6 +191,37 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
+                                                            <label for="wlocation2"> Profession : <span
+                                                                    class="danger">*</span>
+                                                            </label>
+                                                            <select class="custom-select form-control"
+                                                                    id="wlocation2" name="profession_id">
+                                                                <option value="">Choose Profession</option>
+                                                                @foreach($professions as $profession)
+                                                                    <option value="{{$profession->id}}"
+                                                                    @if($profession->id ==$practitioner->profession_id)
+                                                                        {{'selected'}}
+                                                                        @endif
+                                                                    >
+                                                                        {{$profession->name}}
+                                                                    </option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Registration Number</label>
+                                                            <input type="text" name="registration_number"
+                                                                   value="{{$practitioner->registration_number}}"
+                                                                   class="form-control" id="">
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
                                                             <label for="wlocation2"> Register Category : <span
                                                                     class="danger">*</span>
                                                             </label>
@@ -205,6 +236,45 @@
                                                                             @endif
                                                                         @endif>
                                                                         {{$register_category->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="wlocation2"> Employment Status :
+                                                                <span
+                                                                    class="danger">*</span>
+                                                            </label>
+                                                            <select class="custom-select form-control" required
+                                                                    id="" name="employment_status_id">
+                                                                <option value="">Choose Employment Status</option>
+                                                                @foreach($employment_statuses as $employment_status)
+                                                                    <option
+                                                                        value="{{$employment_status->id}}"
+                                                                    @if($employment_status->id==$practitioner->employment_status_id){{'selected'}}@endif
+                                                                    >
+                                                                        {{$employment_status->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="wlocation2"> Residence : <span
+                                                                    class="danger">*</span>
+                                                            </label>
+                                                            <select class="custom-select form-control " required
+                                                                    id="" name="employment_location_id">
+                                                                <option value="">Choose Residence</option>
+                                                                @foreach($employment_locations as $employment_location)
+                                                                    <option
+                                                                        value="{{$employment_location->id}}"
+                                                                    @if($employment_location->id==$practitioner->employment_location_id){{'selected'}}@endif
+                                                                    >
+                                                                        {{$employment_location->name}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>

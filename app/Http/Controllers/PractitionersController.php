@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\City;
 use App\Document;
 use App\DocumentCategory;
+use App\EmploymentLocation;
+use App\EmploymentStatus;
 use App\Gender;
 use App\Http\Resources\PractitionerResource;
 use App\Http\Resources\PractitionerResourceCollection;
@@ -98,10 +100,13 @@ class PractitionersController extends Controller
         $genders = Gender::all()->sortBy('name');
         $professions = Profession::whereNotIn('id', [19])->get()->sortBy('name');//skip profession 19
         $qualification_categories = QualificationCategory::all()->sortBy('name');
+        $employment_statuses = EmploymentStatus::all()->sortBy('name');
+        $employment_locations = EmploymentLocation::all()->sortBy('name');
 
         return view('admin.practitioners.create',
             compact('titles', 'genders',
-                'professions', 'qualification_categories'
+                'professions', 'qualification_categories', 'employment_statuses',
+                'employment_locations'
             ));
 
     }
@@ -115,6 +120,8 @@ class PractitionersController extends Controller
         request()->validate([
             'id_number' => 'required',
             'profession_id' => 'required',
+            'employment_status_id' => 'required',
+            'employment_location_id' => 'required',
         ]);
         $check_id_number = request('id_number');
         $check_profession_id = request('profession_id');
@@ -153,6 +160,10 @@ class PractitionersController extends Controller
             //create registration data with Year and Month
             $personal_details['registration_period'] = date('Y');
             $personal_details['registration_month'] = date('m');
+
+            //get employment status and residence details
+            $personal_details['employment_status_id'] = request('employment_status_id');
+            $personal_details['employment_location_id'] = request('employment_location_id');
 
             //get profession_id
             $profession_id = request('profession_id');
@@ -387,10 +398,13 @@ class PractitionersController extends Controller
         $genders = Gender::all()->sortBy('name');
         $register_categories = RegisterCategory::all()->sortBy('name');
         $nationalities = Nationality::all()->sortBy('name');
-
+        $employment_statuses = EmploymentStatus::all()->sortBy('name');
+        $employment_locations = EmploymentLocation::all()->sortBy('name');
+        $professions = Profession::all()->sortBy('name');
         return view('admin.practitioners.edit',
-            compact('practitioner', 'titles', 'genders','nationalities',
-                'register_categories'
+            compact('practitioner', 'titles', 'genders', 'nationalities',
+                'register_categories', 'employment_statuses', 'employment_locations',
+                'professions'
             ));
     }
 
@@ -407,31 +421,42 @@ class PractitionersController extends Controller
             'previous_name' => ['nullable'],
             'dob' => ['nullable'],
             'nationality_id' => ['nullable'],
-
-            'registration_number' => ['nullable'],
+            'profession_id' => 'required',
+            'employment_status_id' => 'required',
+            'employment_location_id' => 'required',
             'registration_date' => 'nullable',
             'commencement_date' => ['nullable'],
             'completion_date' => ['nullable'],
 
         ]);
 
+        //get profession_id
+        if($practitioner->profession_id != $personal_details['profession_id']){
+            $profession_id = $personal_details['profession_id'];
+            $prefix = Prefix::whereProfession_id($profession_id)->first();
+            //assign registration prefix
+            $personal_details['prefix'] = $prefix->name;
+            $practitioner->update(['registration_number' => null]);
+        }else{
+            $personal_details['registration_number'] = request('registration_number');
+        }
 
         //update practitioner personal details
         $practitioner->update($personal_details);
 
         //validate register category to required
         $register_category_id = request()->validate([
-            'register_category_id'=>'required',
+            'register_category_id' => 'required',
         ]);
 
         //check to see if practitioner has any payment information recorded
         if ($practitioner->practitioner_payment_information) {
 
-            $practitioner_payment_information['register_category_id']  = request('register_category_id');
+            $practitioner_payment_information['register_category_id'] = request('register_category_id');
             $practitioner->practitioner_payment_information->update($practitioner_payment_information);
 
         } else {
-            $practitioner_payment_information['register_category_id']  = request('register_category_id');
+            $practitioner_payment_information['register_category_id'] = request('register_category_id');
             $practitioner->addPractitionerPaymentInformation($practitioner_payment_information);
 
         }
