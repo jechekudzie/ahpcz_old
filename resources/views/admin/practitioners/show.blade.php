@@ -170,7 +170,7 @@
                                         </div>
                                         <div class="col-md-4 col-xs-6 b-r"><strong>Date Of Birth</strong>
                                             <br>
-                                            <p class="text-muted">{{ date("d F Y",strtotime($practitioner->dob))}}</p>
+                                            <p class="text-muted">@if($practitioner->dob !=null){{ date("Y-m-d",strtotime($practitioner->dob))}}@endif</p>
                                         </div>
                                         <div class="col-md-4 col-xs-6 b-r"><strong>Gender</strong>
                                             <br>

@@ -221,9 +221,13 @@ Route::get('/admin/practitioners/renewals/{practitioner}/invoiceRenewal', 'Renew
 //Print Invoices
 Route::get('/admin/invoices/{practitioner}', 'InvoicesController@viewInvoice');
 //Route::get('/admin/invoices/download', 'InvoicesController@downloadInvoice');
-
 Route::post('/admin/practitioners/renewals/{practitioner}/store', 'RenewalController@store');
 Route::get('/admin/practitioners/renewals/{renewal}/show', 'RenewalController@show');
+
+
+//renewals
+
+
 
 Route::get('/admin/practitioners/{practitioner}/cdpoints', 'RenewalController@cdpoints');
 Route::post('/admin/practitioners/{practitioner}/storeCdpoints', 'RenewalController@storeCdpoints');
@@ -320,6 +324,11 @@ Route::get('/admin/other/{practitioner}', 'PractitionersController@other');
 Route::get('/json/practitioners', 'APIController@index');
 //get one practitioner by practitioner->id and renewal status
 Route::get('/json/practitioners/{practitioner}', 'APIController@show');
+//post practitioner ID
+Route::post('/json/practitioners/post', 'APIController@postPractitioner');
+
+
+
 //get practitioner by registration_number and Id_number
 Route::get('/json/practitioners/{registration_number}/{id_number}', 'APIController@byRegID');
 

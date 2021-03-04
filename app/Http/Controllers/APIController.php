@@ -16,6 +16,65 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 class APIController extends Controller
 {
 
+
+    public function create()
+    {
+        $professions = Profession::all()->sortBy('name');
+        $prefixes = Prefix::all()->sortBy('name');
+
+        return response()->json([
+            'professions' => $professions->toArray(),
+            'prefixes' => $prefixes->toArray()
+
+        ]);
+    }
+
+
+    public function show(Practitioner $practitioner)
+    {
+        //practitioner contacts
+        if ($practitioner->contact) {
+            $practitioner->contact->city;
+            $practitioner->contact->province;
+        }
+        //practitioner qualifications
+        if($practitioner->practitionerQualifications) {
+            foreach ($practitioner->practitionerQualifications as $practitionerQualification) {
+                $practitionerQualification;
+                $practitionerQualification->profession;
+                $practitionerQualification->professionalQualification;
+                $practitionerQualification->accreditedInstitution;
+                $practitionerQualification->qualificationCategory;
+            }
+        }
+        //practitioner employment status and location
+        $practitioner->employment_status;
+        $practitioner->employment_location;
+
+        //practitioner employer
+        if ($practitioner->employer) {
+            $practitioner->employer->city;
+            $practitioner->employer->province;
+        }
+
+        //practitioner contacts
+        if ($practitioner->practitioner_payment_information) {
+            $practitioner->practitioner_payment_information->renewal_category;
+            $practitioner->practitioner_payment_information->register_category;
+            $practitioner->practitioner_payment_information->payment_method;
+        }
+
+        $professions = Profession::all();
+        return response()->json([
+            'practitioner' => $practitioner,
+            'professions' => $professions,
+        ]);
+
+
+    }
+
+
+
     public function update_qualification()
     {
 
@@ -102,11 +161,12 @@ class APIController extends Controller
 
     }
 
-    public
-    function show(Request $request, Practitioner $practitioner)
+    public function postPractitioner(Request $request)
     {
+        $id = request('id');
+        $practitioner = Practitioner::where('id', $id)->first();
         //practitioner contacts
-        if ($practitioner->contact) {
+        if (!empty($practitioner->contact)) {
             $practitioner->contact->city;
             $practitioner->contact->province;
         }
@@ -147,6 +207,7 @@ class APIController extends Controller
 
 
     }
+
 
     //registration number digit only
     public

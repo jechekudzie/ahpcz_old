@@ -44,32 +44,22 @@ class RenewalController extends Controller
          *renewal_category(which category do you belong to), register_category(which register do you belong to), payment_method(who is paying for you)
          */
 
-        if ($practitioner->practitioner_payment_information)
-        {
+        if ($practitioner->practitioner_payment_information) {
             if ($practitioner->practitioner_payment_information->payment_method_id == null
-                && $practitioner->practitioner_payment_information->renewal_category_id == null)
-            {
+                && $practitioner->practitioner_payment_information->renewal_category_id == null) {
                 return redirect('/admin/practitioner_payment_info/' . $practitioner->id . '/create');
             }
-        }
-        else
-        {
+        } else {
             return redirect('/admin/practitioner_payment_info/' . $practitioner->id . '/create');
         }
+        $dateof = $practitioner->dob;
 
-        $vat = Vat::where('id', 1)->first();
-        $renewal_fee = RenewalFee::whereRenewal_category_idAndProfession_id
-        ($practitioner->practitioner_payment_information->renewal_category_id, $practitioner->profession_id)
-            ->first();
+        return view('renewals.create')
+        ->with([
+            'practitioner'=>$practitioner,
+            'dateof'=>$dateof,
+        ]);
 
-
-        $payment_types = PaymentType::all()->sortBy('name');
-        $payment_channels = PaymentChannel::all();
-        $renewal_periods = RenewalPeriod::all()->sortByDesc('period');
-
-        return view('admin.practitioner_payments.create', compact(
-            'practitioner', 'payment_channels', 'payment_types',
-            'renewal_periods', 'renewal_fee', 'vat'));
 
     }
 

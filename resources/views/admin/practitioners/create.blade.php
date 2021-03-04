@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title','AHPCZ - Edit Institution')
+@section('title','AHPCZ)
 @section('plugins-css')
     <link href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
           rel="stylesheet">
@@ -354,9 +354,6 @@
 
 @section('plugins-js')
 
-
-@section('plugins-js')
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.0.7/jquery.steps.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.0.7/jquery.steps.min.js"></script>
 
@@ -377,6 +374,7 @@
         });
 
     </script>
+
     <script type="text/javascript" src="{{asset('js/functions.js')}}"></script>
     <script src="{{asset('../assets/node_modules/moment/moment.js')}}"></script>
     <script src="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>
@@ -458,4 +456,4 @@
 
     </script>
 
-@endsection
+@stop

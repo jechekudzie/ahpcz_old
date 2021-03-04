@@ -19,6 +19,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 //APIS
+//this route loads all the data required to get practitioner started
+Route::get('/practitioner_create', 'APIController@create');
+
+
+
+
+
+
+
 //1. get all practitioners API
 Route::get('/json/practitioners', 'APIController@index');
 //get one practitioner by practitioner->id and renewal status

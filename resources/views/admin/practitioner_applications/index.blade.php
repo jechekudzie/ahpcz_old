@@ -6,7 +6,8 @@
     <link href="{{asset('../assets/node_modules/wizard/steps.css')}}" rel="stylesheet">
 @endsection
 <?php
-use App\Practitioner;use Carbon\CarbonInterval;
+use App\Practitioner;
+use Carbon\CarbonInterval;
 
 function getDiffApp($created_at, $now)
 {
