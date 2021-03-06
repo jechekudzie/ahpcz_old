@@ -10,6 +10,9 @@
 
         <div class="row page-titles">
             <div class="col-md-5 align-self-center">
+
+                    <a href="{{url('/admin/practitioners/'.$practitioner->id)}}" class="btn btn-success"> Back to Practitioner dashboard</a>
+
             </div>
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">

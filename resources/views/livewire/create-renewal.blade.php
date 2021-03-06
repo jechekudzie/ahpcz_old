@@ -17,8 +17,9 @@
                                 <span aria-hidden="true">&times;</span></button>
                         </div>
                     @endif
-                    <h4 class="card-title">Add New Renewal Criteria</h4>
-                    <h6 class="card-subtitle"></h6>
+                    <h4 class="card-title"> @if($renewal_criteria != null){{$renewal_criteria->percentage}}@else{{$message}}@endif</h4>
+                        {{$renewal_criteria}}
+                    <h6 class="card-subtitle">RenewalCategory:{{$renewal_category_id}} Emp_status:{{$employment_status_id}} Emp_location:{{$employment_location_id}} Certificate request:{{$certificate_request}} </h6>
                 </div>
 
             </div>
@@ -31,18 +32,31 @@
                         {{csrf_field()}}
 
                         <div class="row">
-                            <div class="col-sm-12 col-md-4 col-lg-4">
-                                <h5 style="color: black; font-weight: bolder">{{$dob}} Enter Date of birth dob: {{$dob}} Age: {{$age}}</h5>
-                                <p style="color: yellowgreen;">Please enter Date Of Birth</p>
+                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                <h5 style="color: black; font-weight: bolder"> {{$dob}} Age: {{$age}}</h5>
                                 <div>
                                     <div wire:ignore class="form-group">
                                         <label>Date Of Birth</label>
-                                        <input wire:model="dob" type="text" name="dob" value="{{$practitioner->dob}}"
-                                               class="form-control datepicker" id=""
-                                               data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy/mm/dd"
-                                               data-date-today-highlight="true"
-                                               onchange="this.dispatchEvent(new InputEvent('input'))"
-                                        >
+                                        @if($dob == null)
+                                        <p style="color: red;">{{'Please enter your date of birth first before your proceed!'}}</p>
+                                        @else
+                                        <p style="color: red;">{{'Confirm date of birth, or enter one if you did not submit before!'}}</p>
+                                        @endif
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">D.O.B</span>
+                                            </div>
+                                            <input wire:model="dob" type="text" class="form-control datepicker" aria-label="Dirt Of Birth"
+                                                   value="{{$practitioner->dob}}"
+                                                   data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy/mm/dd"
+                                                   data-date-today-highlight="true"
+                                                   onchange="this.dispatchEvent(new InputEvent('input'))"
+                                            >
+
+                                            {{--<div class="input-group-append">
+                                                <span class="input-group-text">AGE: {{$dob}}</span>
+                                            </div>--}}
+                                        </div>
                                     </div>
 
                                 </div>

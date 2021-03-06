@@ -27,7 +27,7 @@ class RenewalCategoriesController extends Controller
         $employment_locations = EmploymentLocation::all()->sortBy('name');
         $renewal_criteria = RenewalCriteria::all();
         $professions = Profession::all()->sortBy('name');
-        $cpd_criterias = CpdCriteria::all();
+        $cpd_criterias = CpdCriteria::all()->sortByDesc('renewal_category_id');
         return view('admin.renewal_categories.index',
             compact('renewal_categories','employment_statuses',
                 'employment_locations','renewal_criteria','professions','cpd_criterias'));

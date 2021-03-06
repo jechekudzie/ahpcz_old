@@ -71,7 +71,7 @@
                                                         <div>
                                                             <label class="sr-only" for="inlineFormInputGroup">Percentage</label>
                                                             <div class="input-group mb-2">
-                                                                <input type="number" class="form-control" name="percentage" value="{{old('percentage')}}" id="inlineFormInputGroup" placeholder="Enter percentage renewal">
+                                                                <input type="number" class="form-control" name="percentage"  required id="inlineFormInputGroup" placeholder="Enter percentage renewal">
                                                                 <div class="input-group-prepend">
                                                                     <div class="input-group-text">%</div>
                                                                 </div>
@@ -93,7 +93,7 @@
                                                                 <input class="form-check-input" type="radio"
                                                                        name="renewal_category_id"
                                                                        id="exampleRadios1"
-                                                                       value="{{$renewal_category->id}} {{old('renewal_category')}}">
+                                                                       value="{{$renewal_category->id}}">
                                                                 <label class="form-check-label" for="exampleRadios1">
                                                                     {{$renewal_category->name}}
                                                                 </label>
@@ -114,7 +114,7 @@
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
                                                                name="employment_status_id"
-                                                               id="exampleRadios1" value="{{$employment_status->id}} {{old('employment_status')}}">
+                                                               id="exampleRadios1" value="{{$employment_status->id}}">
                                                         <label class="form-check-label" for="exampleRadios1">
                                                             {{$employment_status->name}}
                                                         </label>
@@ -133,7 +133,7 @@
                                                     <div class="form-check">
                                                         <input class="form-check-input" type="radio"
                                                                name="employment_location_id"
-                                                               id="exampleRadios1" value="{{$employment_location->id}} {{old('employment_location')}}">
+                                                               id="exampleRadios1" value="{{$employment_location->id}}">
                                                         <label class="form-check-label" for="exampleRadios1">
                                                             {{$employment_location->name}}
                                                         </label>
@@ -152,7 +152,7 @@
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="radio"
                                                            name="certificate_request"
-                                                           id="exampleRadios1" value="1 {{old('certificate_request')}}" >
+                                                           id="exampleRadios1" value="1" >
                                                     <label class="form-check-label" for="exampleRadios1">
                                                         {{'Yes'}}
                                                     </label>
