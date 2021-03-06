@@ -14,4 +14,5 @@ class Tire extends Model
     public  function profession_tires(){
         return $this->hasMany(ProfessionTire::class);
     }
+
 }

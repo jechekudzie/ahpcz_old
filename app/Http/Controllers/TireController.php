@@ -68,6 +68,7 @@ class TireController extends Controller
     public function show(Tire $tire)
     {
         //
+
         $professions = Profession::all()->sortBy('name');
         $rates = Rate::all()->sortBy('name');
         return view('admin.tires.show',compact('tire','professions','rates'));

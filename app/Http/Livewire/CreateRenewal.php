@@ -26,7 +26,10 @@ class CreateRenewal extends Component
     public $profession;
     public $created_at;
     public $renewal_criteria;
+    public $profession_tire_fee;
+    public $renewal_fee;
     public $renewal_category_id;
+    public $renewal_criteria_percentage;
     public $message = 'Please choose from the following option to get your renewal status and fees';
 
     public function get_renewal_category()
@@ -78,6 +81,10 @@ class CreateRenewal extends Component
             }
         }
     }
+
+    public function get_renewal_fee(){
+
+    }
     public function mount()
     {
         $this->dob = $this->practitioner->dob;
@@ -87,7 +94,11 @@ class CreateRenewal extends Component
             ->where('employment_status_id', $this->employment_status_id)
             ->where('employment_location_id', $this->employment_location_id)
             ->where('certificate_request', $this->certificate_request)->first();
+            $this->profession_tire_fee = $this->practitioner->profession->profession_tire->tire->fee;
 
+            if($this->renewal_criteria){
+                $this->renewal_criteria_percentage = $this->renewal_criteria->percentage / 100 ;
+            }
 
     }
 
@@ -101,6 +112,9 @@ class CreateRenewal extends Component
             ->where('employment_location_id', $this->employment_location_id)
             ->where('certificate_request', $this->certificate_request)->first();
 
+        if($this->renewal_criteria){
+            $this->renewal_criteria_percentage = $this->renewal_criteria->percentage / 100 ;
+        }
     }
 
     public function render()

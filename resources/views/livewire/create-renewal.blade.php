@@ -17,8 +17,9 @@
                                 <span aria-hidden="true">&times;</span></button>
                         </div>
                     @endif
-                    <h4 class="card-title"> @if($renewal_criteria != null){{$renewal_criteria->percentage}}@else{{$message}}@endif</h4>
-                        {{$renewal_criteria}}
+                    <h4 class="card-title"> @if($renewal_criteria != null)P{{$renewal_criteria->percentage}} R{{$renewal_criteria->renewal_category->name}}@else{{$message}}@endif</h4>
+                         fee {{$profession_tire_fee}} <br/>
+                        Pecerntage{{$renewal_criteria_percentage}}
                     <h6 class="card-subtitle">RenewalCategory:{{$renewal_category_id}} Emp_status:{{$employment_status_id}} Emp_location:{{$employment_location_id}} Certificate request:{{$certificate_request}} </h6>
                 </div>
 

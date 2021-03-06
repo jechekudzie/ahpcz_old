@@ -25,11 +25,9 @@ class Profession extends Model
         return $this->hasMany(RenewalFee::class);
     }
 
-    public  function profession_tires(){
-        return $this->hasMany(ProfessionTire::class);
+    public  function profession_tire(){
+        return $this->hasOne(ProfessionTire::class);
     }
-
-
 
 
     public function professionApprover(){

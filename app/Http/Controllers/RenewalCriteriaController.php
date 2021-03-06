@@ -28,9 +28,9 @@ class RenewalCriteriaController extends Controller
     public function create()
     {
         //
-        $renewal_categories = RenewalCategory::all()->sortBy('name');
-        $employment_statuses = EmploymentStatus::all()->sortBy('name');
-        $employment_locations = EmploymentLocation::all()->sortBy('name');
+        $renewal_categories = RenewalCategory::all();
+        $employment_statuses = EmploymentStatus::all();
+        $employment_locations = EmploymentLocation::all();
 
         return view('admin.renewal_criteria.create',
             compact('renewal_categories','employment_statuses','employment_locations'));

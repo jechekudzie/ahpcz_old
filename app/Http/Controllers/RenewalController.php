@@ -52,12 +52,12 @@ class RenewalController extends Controller
         } else {
             return redirect('/admin/practitioner_payment_info/' . $practitioner->id . '/create');
         }
-        $dateof = $practitioner->dob;
+
+
 
         return view('renewals.create')
         ->with([
             'practitioner'=>$practitioner,
-            'dateof'=>$dateof,
         ]);
 
 
