@@ -44,16 +44,14 @@ class RenewalController extends Controller
          *renewal_category(which category do you belong to), register_category(which register do you belong to), payment_method(who is paying for you)
          */
 
-        if ($practitioner->practitioner_payment_information) {
+        /*if ($practitioner->practitioner_payment_information) {
             if ($practitioner->practitioner_payment_information->payment_method_id == null
                 && $practitioner->practitioner_payment_information->renewal_category_id == null) {
                 return redirect('/admin/practitioner_payment_info/' . $practitioner->id . '/create');
             }
         } else {
             return redirect('/admin/practitioner_payment_info/' . $practitioner->id . '/create');
-        }
-
-
+        }*/
 
         return view('renewals.create')
         ->with([
@@ -102,7 +100,7 @@ class RenewalController extends Controller
 
         $renewals['payment_type_id'] = 1;
 
-        //temporarily pdate the placement, cpd points
+        //temporarily update the placement, cpd points
         $renewals['cdpoints'] = 1;
         $renewals['placement'] = 1;
 
@@ -162,9 +160,7 @@ class RenewalController extends Controller
             if (
                 $practitioner->approval_status == 0 && $practitioner->registration_officer == 0
                 && $practitioner->accountant == 0 && $practitioner->member == 0
-                && $practitioner->registrar == 0
-
-            ) {
+                && $practitioner->registrar == 0) {
                 $practitioner->update([
                     'approval_status' => 1,
                     'registration_officer' => 2,
@@ -188,7 +184,9 @@ class RenewalController extends Controller
             return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Payment completed successfully.');
 
         } else {
-            return back()->with('message', 'A renewal subscription for the selected period is already active, not that if this a regular payment click the payment link to proceed');
+            return back()->with('message',
+                'A renewal subscription for the selected period is already active,
+                not that if this a regular payment click the payment link to proceed');
         }
     }
 

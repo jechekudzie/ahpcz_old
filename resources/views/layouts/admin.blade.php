@@ -119,6 +119,7 @@ function countPendingItems()
     <!-- Dashboard 1 Page CSS -->
     <link href="{{asset('dist/css/pages/dashboard1.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/style-horizontal.min.css')}}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     @yield('plugins-css')
 </head>

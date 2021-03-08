@@ -110,7 +110,6 @@
                                                         </select>
                                                     </div>
                                                 </div>
-
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Amount Invoiced</label>
@@ -133,9 +132,6 @@
                                                                id="commencement_date">
                                                     </div>
                                                 </div>
-
-
-
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Receipt Number</label>
