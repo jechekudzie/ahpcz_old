@@ -47,9 +47,6 @@ class APIController extends Controller
                 $practitionerQualification->qualificationCategory;
             }
         }
-        //practitioner employment status and location
-        $practitioner->employment_status;
-        $practitioner->employment_location;
 
         //practitioner employer
         if ($practitioner->employer) {
@@ -63,6 +60,7 @@ class APIController extends Controller
             $practitioner->practitioner_payment_information->register_category;
             $practitioner->practitioner_payment_information->payment_method;
         }
+
 
         $professions = Profession::all();
         return response()->json([

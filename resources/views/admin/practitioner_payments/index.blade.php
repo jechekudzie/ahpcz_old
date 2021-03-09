@@ -1,8 +1,9 @@
 @extends('layouts.admin')
 @section('title','AHPCZ - Create Institution')
 @section('plugins-css')
-    <link href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
-          rel="stylesheet">
+    <link
+        href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
+        rel="stylesheet">
     <link href="{{asset('../assets/node_modules/wizard/steps.css')}}" rel="stylesheet">
 @endsection
 
@@ -19,7 +20,7 @@
                     <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                 @endcan
                 <a href="/admin/practitioners/{{$renewal->practitioner->id}}"
-                   class="btn btn-success"></i> Dash Board</a>
+                   class="btn btn-success"> Dash Board</a>
             </div>
 
             <div class="col-md-7 align-self-center text-right">
@@ -47,10 +48,10 @@
                                 @endif
                                 @if (session('message'))
                                     <div class="alert alert-success alert-rounded col-md-6"><i
-                                                class="fa fa-check-circle"></i> {{ session('message') }}
+                                            class="fa fa-check-circle"></i> {{ session('message') }}
                                         <button type="button" class="close" data-dismiss="alert"
                                                 aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
+                                                aria-hidden="true">&times;</span></button>
                                     </div>
                                 @endif
                             </div>
@@ -76,6 +77,7 @@
                                                         <th>Amount Invoiced</th>
                                                         <th>Amount Paid</th>
                                                         <th>Balance</th>
+                                                        <th>Currency</th>
                                                         <th>Payment Chanel</th>
                                                         <th>Receipt</th>
                                                         <th>Payment Date</th>
@@ -89,6 +91,7 @@
                                                         <th>Amount Invoiced</th>
                                                         <th>Amount Paid</th>
                                                         <th>Balance</th>
+                                                        <th>Currency</th>
                                                         <th>Payment Chanel</th>
                                                         <th>Receipt</th>
                                                         <th>Payment Date</th>
@@ -105,6 +108,13 @@
                                                                 <td>{{$payment->amount_invoiced}}</td>
                                                                 <td>{{$payment->amount_paid}}</td>
                                                                 <td>{{$payment->balance}}</td>
+                                                                <td>
+                                                                    @if($payment->currency == 0 || $payment->currency == null )
+                                                                        {{'$ZWD (RTGS)'}}
+                                                                    @else
+                                                                        {{'$USD'}}
+                                                                    @endif
+                                                                </td>
                                                                 <td>{{$payment->paymentChannel->name}}</td>
                                                                 <td>{{$payment->receipt_number}}</td>
                                                                 <td>{{date("d M Y", strtotime( $payment->payment_date))}}</td>

@@ -21,6 +21,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //APIS
 //this route loads all the data required to get practitioner started
 Route::get('/sign_up', 'PortalApiController@sign_up');
+Route::post('/check_practitioner', 'PortalApiController@check_practitioner');
+
 Route::get('/profession_prefix/{prefix}', 'PortalApiController@profession_prefixes');
 Route::get('/practitioner_create', 'APIController@create');
 

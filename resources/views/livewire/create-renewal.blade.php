@@ -8,14 +8,7 @@
                     @if($errors->any())
                         @include('errors')
                     @endif
-                    @if(session('message'))
-                        <div class="alert alert-success alert-rounded col-md-12"><i
-                                class="fa fa-check-circle"></i> {{session('message')}}
-                            <button type="button" class="close" data-dismiss="alert"
-                                    aria-label="Close"><span
-                                    aria-hidden="true">&times;</span></button>
-                        </div>
-                    @endif
+
                 </div>
 
             </div>
@@ -217,12 +210,23 @@
 
                             <div class="card ">
                                 <div class="card-header card-primary">
-                                    Renewal Payment
+                                    Renewal Payment {{$rate}}
                                 </div>
                                 <div class="card-body">
+
                                     <h5 class="card-title">{{date('Y')}} Renewal Payment</h5>
-                                    <p class="card-text" style="color: yellowgreen">Please note that, you are required
+                                    @if(session('message'))
+                                        <div class="alert alert-success alert-rounded col-md-12"><i
+                                                class="fa fa-check-circle"></i> {{session('message')}}
+                                            <button type="button" class="close" data-dismiss="alert"
+                                                    aria-label="Close"><span
+                                                    aria-hidden="true">&times;</span></button>
+                                        </div>
+                                    @else
+                                        <p class="card-text" style="color: yellowgreen">Please note that, you are required
                                         make full payment in order to get your certificate processed.</p>
+                                    @endif
+
                                     <div>
                                         <div class="col-sm-12 col-md-12 col-lg-12">
                                             <div class="form-group">
@@ -242,6 +246,7 @@
                                             @endif
 
                                         </div>
+
                                         <div class="col-sm-12 col-md-12 col-lg-12">
                                             <div class="form-group">
                                                 <label for="wlocation2"> Payment Channel : <span
@@ -262,6 +267,25 @@
                                                 style="color: red;"> @error('payment_channel_id'){{$message}}@enderror </span>@endif
 
                                         </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-12">
+                                            <div class="form-group">
+                                                <label for="wlocation2"> Choose Payment Currency : <span
+                                                        class="danger">*</span>
+                                                </label>
+                                                <select wire:model="currency"
+                                                        class="custom-select form-control" required
+                                                        id="currency" name="currency">
+                                                    <option value="">Choose Payment Currency</option>
+                                                    <option value="0">$ZWD (RTGS)</option>
+                                                    <option value="1">$USD</option>
+
+                                                </select>
+                                            </div>
+                                            @if ($errors->any()) <span
+                                                style="color: red;"> @error('currency'){{$message}}@enderror </span>@endif
+
+                                        </div>
+
                                         <div class="col-sm-12 col-md-12 col-lg-12">
                                             <div class="form-group">
                                                 <label>Amount Invoiced</label>

@@ -9,8 +9,10 @@ use App\EmploymentStatus;
 use App\Payment;
 use App\PaymentChannel;
 use App\Profession;
+use App\Rate;
 use App\Renewal;
 use App\RenewalCriteria;
+use App\Vat;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -61,7 +63,8 @@ class CreateRenewal extends Component
     public $renewals;
     public $payments;
     public $cpd_points;
-    public $check_renewal;
+    public $rate;
+    public $currency = 0;
     public $add_renewal;
     public $add_renewal_payment;
 
@@ -74,6 +77,7 @@ class CreateRenewal extends Component
             'receipt_number' => ['required', 'digits_between:4,8', 'numeric', 'unique:payments'],
             'payment_date' => 'required',
             'payment_channel_id' => 'required',
+            'currency' => 'required',
             'pop' => 'nullable',
 
             'points' => 'required',
@@ -102,8 +106,10 @@ class CreateRenewal extends Component
         $this->renewals['practitioner_id'] = $this->practitioner->id;
         $this->renewals['payment_method_id'] = 1;
         $this->renewals['renewal_category_id'] = $this->renewal_category_id;
+        $this->renewals['currency'] = $this->currency;
         $this->renewals['balance'] = $this->renewal_balance;
         $this->renewals['payment_type_id'] = 1; //a renewal payment type
+        $this->renewals['payment_date'] = $this->payment_date;
         $this->renewals['certificate_request'] = $this->certificate_request;
         $this->renewals['placement'] = 1;
         if ($this->renewal_balance > 0) {
@@ -143,8 +149,11 @@ class CreateRenewal extends Component
             $this->payments['amount_invoiced'] = $this->amount_invoiced;
             $this->payments['amount_paid'] = $this->amount_paid;
             $this->payments['payment_channel_id'] = $this->payment_channel_id;
+            $this->payments['rate'] = $this->rate;
+            $this->payments['currency'] = $this->currency;
             $this->payments['receipt_number'] = $this->receipt_number;
             $this->payments['payment_item_category_id'] = 1;
+            $this->payments['payment_date'] = $this->payment_date;
             $this->payments['payment_item_id'] = 33;
             $this->add_renewal_payment = $this->add_renewal->addPayments($this->payments);
 
@@ -173,7 +182,7 @@ class CreateRenewal extends Component
                 }
 
             }
-            return redirect('/admin/practitioners/' . $this->practitioner->id);
+            return redirect('/admin/practitioners/' . $this->practitioner->id)->with('message','Renewal payment was successful!');
 
         }
     }
@@ -318,7 +327,14 @@ class CreateRenewal extends Component
     public function calculate_renewal_fee()
     {
         $this->renewal_fee = $this->profession_tire_fee * $this->renewal_criteria_percentage;
-        $this->amount_invoiced = $this->renewal_fee + $this->balance;
+        if($this->currency == 0){
+            $this->amount_invoiced = $this->renewal_fee + $this->balance;
+        }
+        if($this->currency == 1){
+            $this->amount_invoiced = $this->renewal_fee + $this->balance;
+            $this->amount_invoiced = round($this->amount_invoiced / $this->rate,3);
+        }
+
     }
 
     public function mount()
@@ -327,6 +343,7 @@ class CreateRenewal extends Component
         $this->profession = $this->practitioner->profession;
         $this->age = date('Y') - date('Y', strtotime($this->dob));
         $this->profession_tire_fee = $this->practitioner->profession->profession_tire->tire->fee;
+        $this->rate = Rate::find(1)->rate;
         $this->get_renewal_category();
         $this->get_renewal_criteria();
         $this->get_cpd_criteria();

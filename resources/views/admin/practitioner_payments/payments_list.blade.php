@@ -19,7 +19,7 @@
                     <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                 @endcan
                 <a href="/admin/practitioners/{{$renewal->practitioner->id}}"
-                   class="btn btn-success"></i> Dash Board</a>
+                   class="btn btn-success"> Dash Board</a>
             </div>
 
             <div class="col-md-7 align-self-center text-right">
@@ -81,6 +81,7 @@
                                                         <th>Payment Item</th>
                                                         <th>Amount Invoiced C/F</th>
                                                         <th>Amount Paid</th>
+                                                        <th>Currency</th>
                                                         <th>Current Balances</th>
                                                         <th>Payment Chanel</th>
                                                         <th>Receipt</th>
@@ -94,6 +95,7 @@
                                                         <th>Payment Item</th>
                                                         <th>Amount Invoiced C/F</th>
                                                         <th>Amount Paid</th>
+                                                        <th>Currency</th>
                                                         <th>Current Balances</th>
                                                         <th>Payment Chanel</th>
                                                         <th>Receipt</th>
@@ -110,6 +112,13 @@
                                                                 <td>{{$payment->paymentItem->name}}</td>
                                                                 <td>{{$payment->amount_invoiced}}</td>
                                                                 <td>{{$payment->amount_paid}}</td>
+                                                                <td>
+                                                                    @if($payment->currency == 0 || $payment->currency == null )
+                                                                        {{'$ZWD (RTGS)'}}
+                                                                    @else
+                                                                        {{'$USD'}}
+                                                                    @endif
+                                                                </td>
                                                                 <td>{{$payment->balance}}</td>
                                                                 <td>{{$payment->paymentChannel->name}}</td>
                                                                 <td>{{$payment->receipt_number}}</td>
