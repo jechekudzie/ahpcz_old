@@ -32,11 +32,12 @@ class APIController extends Controller
 
     public function show(Practitioner $practitioner)
     {
+
         //practitioner contacts
-        if ($practitioner->contact) {
-            $practitioner->contact->city;
-            $practitioner->contact->province;
+        if ($practitioner->profession) {
+            $practitioner->profession;
         }
+
         //practitioner qualifications
         if($practitioner->practitionerQualifications) {
             foreach ($practitioner->practitionerQualifications as $practitionerQualification) {
@@ -62,10 +63,23 @@ class APIController extends Controller
         }
 
 
-        $professions = Profession::all();
+        //practitioner contacts
+        if ($practitioner->renewals) {
+
+            foreach ($practitioner->renewals as $renewal){
+                if($renewal->payments){
+                    $renewal->payments;
+                }
+            }
+        }
+
+        //practitioner contacts
+        if ($practitioner->contact) {
+            $practitioner->contact->city;
+            $practitioner->contact->province;
+        }
         return response()->json([
             'practitioner' => $practitioner,
-            'professions' => $professions,
         ]);
 
 

@@ -263,7 +263,7 @@ class RenewalController extends Controller
             ]);
         }
 
-        return redirect('/admin/practitioners/renewals/' . $renewal->id . '/payments_list')->with('message', 'Payment was successful.');
+        return redirect('/admin/practitioner_renewals/' . $renewal->id . '/index')->with('message', 'Payment was successful.');
     }
 
 

@@ -5,9 +5,9 @@
                 <div class="col-2">
                 </div>
                 <div class="col-8">
-                    @if($errors->any())
+                    {{--@if($errors->any())
                         @include('errors')
-                    @endif
+                    @endif--}}
 
                 </div>
 
@@ -61,7 +61,8 @@
                                                             >
                                                         </div>
                                                         <span
-                                                            style="color: red;">@error('dob'){{$message}}@enderror</span>
+                                                            style="color: red;">@error('dob'){{$message}}@enderror
+                                                        </span>
                                                     </div>
 
                                                 </div>

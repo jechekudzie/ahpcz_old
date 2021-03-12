@@ -851,7 +851,6 @@
                                                                 <td>{{number_format($renewal->payments->sum('balance'),2)}}</td>
                                                                 <td>
 
-
                                                                     {{$renewal->renewalStatus->name}}
                                                                 </td>
                                                                 <td>

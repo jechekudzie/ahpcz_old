@@ -26,7 +26,6 @@ class ProfessionalQualification extends Model
     }
 
 
-
     public function accreditation(){
 
         return $this->hasMany(Accreditation::class);

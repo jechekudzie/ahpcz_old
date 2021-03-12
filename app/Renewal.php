@@ -38,8 +38,6 @@ class Renewal extends Model
     }
 
 
-
-
     //add
     public function addPayments($payment){
 

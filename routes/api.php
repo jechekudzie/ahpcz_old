@@ -17,20 +17,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-//APIS
+//Custom APIs
 //this route loads all the data required to get practitioner started
-Route::get('/sign_up', 'PortalApiController@sign_up');
-Route::post('/check_practitioner', 'PortalApiController@check_practitioner');
+Route::get('/get_professions', 'PortalApiController@get_professions');
+Route::post('/verify_ahpcz_account', 'PortalApiController@verify_ahpcz_account');
+Route::get('/update_tracker/{practitioner}', 'PortalApiController@update_tracker');
+Route::get('/update_information/create', 'PortalApiController@update_information_create');
+Route::post('/update_information/store', 'PortalApiController@update_information_store');
 
+
+
+
+
+
+
+Route::get('/json/practitioners/{practitioner}', 'APIController@show');
 Route::get('/profession_prefix/{prefix}', 'PortalApiController@profession_prefixes');
 Route::get('/practitioner_create', 'APIController@create');
-
-
-
-
-
-
 
 //1. get all practitioners API
 Route::get('/json/practitioners', 'APIController@index');

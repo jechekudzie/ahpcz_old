@@ -1,10 +1,9 @@
 @extends('layouts.admin')
-@section('title','AHPCZ)
 @section('plugins-css')
     <link href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
           rel="stylesheet">
     <link href="{{asset('../assets/node_modules/wizard/steps.css')}}" rel="stylesheet">
-@endsection
+@stop
 
 @section('content')
     <div class="container-fluid">
@@ -350,7 +349,7 @@
             </div>
         </div>
     </div>
-@endsection
+@stop
 
 @section('plugins-js')
 
