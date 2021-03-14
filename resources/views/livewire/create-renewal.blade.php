@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title" style="color: black; font-weight: bolder;">Renewal</h5>
-                                    <p class="card-text">{{$message}}</p>
+                                    <p class="card-text">{{$message}} </p>
                                     <div>
                                         <div class="row">
                                             <div class="col-sm-12 col-md-6 col-lg-6">
@@ -82,7 +82,9 @@
                                                                    type="radio"
                                                                    name="employment_status_id"
                                                                    id="exampleRadios1"
-                                                                   value="{{$employment_status->id}}">
+                                                                   value="{{$employment_status->id}}"
+                                                                {{$employment_status->id == $practitioner->employment_status_id ? 'checked': ''}}
+                                                            >
                                                             <label class="form-check-label" for="exampleRadios1">
                                                                 {{$employment_status->name}}
                                                             </label>
@@ -108,7 +110,9 @@
                                                                    type="radio"
                                                                    name="employment_location_id"
                                                                    id="exampleRadios1"
-                                                                   value="{{$employment_location->id}} {{old('employment_location')}}">
+                                                                   value="{{$employment_location->id}}">
+                                                            {{$employment_location->id == $practitioner->employment_location_id ? 'checked': ''}}
+
                                                             <label class="form-check-label" for="exampleRadios1">
                                                                 {{$employment_location->name}}
                                                             </label>
@@ -172,7 +176,7 @@
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">Required CPD Points
-                                        : @if($cpd_criteria !=null){{$cpd_criteria->points}}@endif</h5>
+                                        : {{$cpd_criteria}} </h5>
 
                                     <p class="card-text" style="color: yellowgreen">Please note that, you are required
                                         to submit the copy
@@ -225,7 +229,7 @@
                                         </div>
                                     @else
                                         <p class="card-text" style="color: yellowgreen">Please note that, you are required
-                                        make full payment in order to get your certificate processed.</p>
+                                            make full payment in order to get your certificate processed.</p>
                                     @endif
 
                                     <div>

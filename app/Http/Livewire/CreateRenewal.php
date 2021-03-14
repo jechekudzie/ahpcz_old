@@ -24,7 +24,6 @@ class CreateRenewal extends Component
 {
     use WithFileUploads;
 
-
     public $professions;
     public $practitioner;
     public $employment_status_id;
@@ -109,7 +108,6 @@ class CreateRenewal extends Component
         $this->renewals['currency'] = $this->currency;
         $this->renewals['balance'] = $this->renewal_balance;
         $this->renewals['payment_type_id'] = 1; //a renewal payment type
-        $this->renewals['payment_date'] = $this->payment_date;
         $this->renewals['certificate_request'] = $this->certificate_request;
         $this->renewals['placement'] = 1;
         if ($this->renewal_balance > 0) {
@@ -118,7 +116,7 @@ class CreateRenewal extends Component
             $this->renewals['renewal_status_id'] = 1;
         }
 
-        if ($this->points >= $this->cpd_criteria->points) {
+        if ($this->points >= $this->cpd_criteria) {
             $this->renewals['cdpoints'] = 1;
             $this->cpd_points['practitioner_id'] = $this->practitioner->id;
             $this->cpd_points['renewal_period_id'] = $this->period;
@@ -182,14 +180,14 @@ class CreateRenewal extends Component
                 }
 
             }
-            return redirect('/admin/practitioners/' . $this->practitioner->id)->with('message','Renewal payment was successful!');
+            session()->flash('message', 'Renewal payment was successful!.');
+            return redirect('/admin/practitioners/' . $this->practitioner->id);
 
         }
     }
 
     public function increase_step()
     {
-
         if ($this->step == 0) {
             $this->validate([
                 'dob' => 'required',
@@ -204,8 +202,6 @@ class CreateRenewal extends Component
                     'employment_location_id.required' => 'Country of residence is required',
                     'certificate_request.required' => 'Please specify if you need a certificate or note.',
                 ]);
-
-
         }
 
         if ($this->step == 1) {
@@ -236,7 +232,7 @@ class CreateRenewal extends Component
 
         }
         $this->step++;
-
+    //dd($this->cpd_criteria);
 
     }
 
@@ -250,12 +246,9 @@ class CreateRenewal extends Component
 
     public function save_cpd_file()
     {
-       if($this->file !=null){
-           $this->path = $this->file->store('public/cpd_points');
-       }
-
-
-
+        if($this->file !=null){
+            $this->path = $this->file->store('public/cpd_points');
+        }
     }
 
     public function get_renewal_category()
@@ -297,18 +290,22 @@ class CreateRenewal extends Component
             }
         }
     }
+    public function get_cpd_criteria()
+    {
+        $this->cpd_criteria = CpdCriteria::where('profession_id', $this->profession->id)
+            ->where('employment_status_id', $this->employment_status_id)->first();
+        if ($this->cpd_criteria == null){
+            $this->cpd_criteria = 0;
+        }else{
+            $this->cpd_criteria = $this->cpd_criteria->points;
+        }
+    }
 
     public function get_renewal_criteria(){
         $this->renewal_criteria = RenewalCriteria::where('renewal_category_id', $this->renewal_category_id)
             ->where('employment_status_id', $this->employment_status_id)
             ->where('employment_location_id', $this->employment_location_id)
             ->where('certificate_request', $this->certificate_request)->first();
-    }
-
-    public function get_cpd_criteria()
-    {
-        $this->cpd_criteria = CpdCriteria::where('profession_id', $this->profession->id)
-            ->where('employment_status_id', $this->employment_status_id)->first();
     }
 
     public function get_percentage_and_balance()
@@ -340,6 +337,8 @@ class CreateRenewal extends Component
     public function mount()
     {
         $this->dob = $this->practitioner->dob;
+        $this->employment_status_id = $this->practitioner->employment_status_id;
+        $this->employment_location_id = $this->practitioner->employment_location_id;
         $this->profession = $this->practitioner->profession;
         $this->age = date('Y') - date('Y', strtotime($this->dob));
         $this->profession_tire_fee = $this->practitioner->profession->profession_tire->tire->fee;

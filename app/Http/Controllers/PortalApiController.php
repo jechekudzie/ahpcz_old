@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\City;
+use App\CpdCriteria;
 use App\EmploymentLocation;
 use App\EmploymentStatus;
 use App\Gender;
+use App\PaymentChannel;
 use App\Practitioner;
 use App\Prefix;
 use App\Profession;
 use App\Province;
 use App\QualificationCategory;
+use App\Rate;
 use App\RegisterCategory;
+use App\RenewalCriteria;
 use App\Title;
 use Illuminate\Http\Request;
 use function GuzzleHttp\Promise\all;
@@ -95,7 +99,6 @@ class PortalApiController extends Controller
                 }
             }
 
-
             //practitioner contacts
             if ($practitioner->contact) {
                 $practitioner->contact->city;
@@ -111,6 +114,7 @@ class PortalApiController extends Controller
     {
         if ($practitioner->profession) {
             $practitioner->profession;
+            $practitioner->profession->profession_tire->tire;
         }
         if ($practitioner->title) {
             $practitioner->title;
@@ -159,7 +163,9 @@ class PortalApiController extends Controller
                 }
             }
         }
-
+        if ($practitioner->payments) {
+            $practitioner->payments;
+        }
         return response()->json([
             'practitioner' => $practitioner,
         ]);
@@ -209,7 +215,7 @@ class PortalApiController extends Controller
     public function update_information_store()
     {
         $practitioner_id = request('practitioner_id');
-        $practitioner = Practitioner::where('id',$practitioner_id)->first();
+        $practitioner = Practitioner::where('id', $practitioner_id)->first();
         $data = request()->validate([
             'practitioner_id' => 'nullable',
             'title_id' => 'nullable',
@@ -260,6 +266,48 @@ class PortalApiController extends Controller
 
         return response()->json([
             'message' => 'Successfully updated details',
+        ]);
+
+    }
+
+
+    public function renewal_criteria
+    (
+        $renewal_category_id,
+        $employment_status_id,
+        $employment_location_id,
+        $certificate_request
+    )
+    {
+        $renewal_criteria = RenewalCriteria::
+            where('renewal_category_id', $renewal_category_id)
+            ->where('employment_status_id', $employment_status_id)
+            ->where('employment_location_id', $employment_location_id)
+            ->where('certificate_request', $certificate_request)->first();
+
+        return response()->json([
+            'renewal_criteria' => $renewal_criteria,
+        ]);
+    }
+
+
+    public function create_renewal()
+    {
+        $cpd_criterias = CpdCriteria::all();
+        $renewal_criterias = RenewalCriteria::all();
+        $employment_statuses = EmploymentStatus::all();
+        $employment_locations = EmploymentLocation::all();
+        $payment_channels = PaymentChannel::all();
+        $rate = Rate::find(1);
+
+        return response()->json([
+
+            'cpd_criterias' => $cpd_criterias,
+            'renewal_criterias' => $renewal_criterias,
+            'employment_statuses' => $employment_statuses,
+            'employment_locations' => $employment_locations,
+            'payment_channels' => $payment_channels,
+            'rate' => $rate,
         ]);
 
     }

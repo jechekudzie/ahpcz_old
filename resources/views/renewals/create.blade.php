@@ -32,7 +32,6 @@
             [
             'practitioner'=>$practitioner,
 
-
             ])
 
         </div>
