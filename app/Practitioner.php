@@ -79,12 +79,11 @@ class Practitioner extends Model
 
 
 
-
-
     public function employer()
     {
         return $this->hasOne(PractitionerEmployer::class);
     }
+
 
 
     public function registration()
@@ -140,6 +139,9 @@ class Practitioner extends Model
     {
         $this->contact()->create($contact);
     }
+
+    //add employer
+
 
     //add cpd points
     public function addCdPoints($cdpoints)

@@ -24,14 +24,19 @@ Route::post('/verify_ahpcz_account', 'PortalApiController@verify_ahpcz_account')
 Route::get('/update_tracker/{practitioner}', 'PortalApiController@update_tracker');
 Route::get('/update_information/create', 'PortalApiController@update_information_create');
 Route::post('/update_information/store', 'PortalApiController@update_information_store');
-Route::get('/create_renewal', 'PortalApiController@create_renewal');
 Route::get('/renewal_criteria/{renewal_category_id}/{employment_status_id}/{employment_location_id}/{certificate_request}', 'PortalApiController@renewal_criteria');
+Route::get('/create_renewal', 'PortalApiController@create_renewal');
+Route::post('/make_payment', 'PortalApiController@make_payment');
+
+
+Route::post('/test_paynow', 'APIController@makePayment');
 
 
 
 
 
 
+Route::post('/post_test', 'PortalApiController@post_test');
 
 Route::get('/json/practitioners/{practitioner}', 'APIController@show');
 Route::get('/profession_prefix/{prefix}', 'PortalApiController@profession_prefixes');
