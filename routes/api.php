@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //this route loads all the data required to get practitioner started
 Route::get('/get_professions', 'PortalApiController@get_professions');
 Route::post('/verify_ahpcz_account', 'PortalApiController@verify_ahpcz_account');
+Route::post('/correct_data', 'PortalApiController@correct_data');
 Route::get('/update_tracker/{practitioner}', 'PortalApiController@update_tracker');
 Route::get('/update_information/create', 'PortalApiController@update_information_create');
 Route::post('/update_information/store', 'PortalApiController@update_information_store');

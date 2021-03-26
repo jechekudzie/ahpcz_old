@@ -112,6 +112,48 @@ class PortalApiController extends Controller
         }
     }
 
+    public function correct_data(){
+
+        $practitioner_id = request('practitioner_id');
+
+        $practitioner = Practitioner::where('id', $practitioner_id)->first();
+
+        $data = request()->validate([
+            'first_name'=>'required',
+            'last_name'=>'required',
+            'email'=>'required',
+            'primary_phone'=>'required',
+            'physical_address'=>'required',
+        ]);
+
+         $practitioner->update([
+            'first_name'=>$data['first_name'],
+            'last_name'=>$data['first_name'],
+        ]);
+
+        if($practitioner->contact){
+            $practitioner->contact->update([
+                'email'=>$data['email'],
+                'primary_phone'=>$data['primary_phone'],
+                'physical_address'=>$data['physical_address'],
+            ]);
+        }else{
+            $practitioner->contact->create([
+                'email'=>$data['email'],
+                'primary_phone'=>$data['primary_phone'],
+                'physical_address'=>$data['physical_address'],
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Information successfully correct, will wait for AHPCZ
+             to verify your full name and registration number.',
+        ]);
+
+
+    }
+
+
     public function update_tracker(Practitioner $practitioner)
     {
         if ($practitioner->profession) {
