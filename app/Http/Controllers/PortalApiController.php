@@ -18,6 +18,7 @@ use App\RegisterCategory;
 use App\Renewal;
 use App\RenewalCriteria;
 use App\Title;
+use App\Vat;
 use Illuminate\Http\Request;
 use Paynow\Payments\Paynow;
 use function GuzzleHttp\Promise\all;
@@ -128,7 +129,7 @@ class PortalApiController extends Controller
 
          $practitioner->update([
             'first_name'=>$data['first_name'],
-            'last_name'=>$data['first_name'],
+            'last_name'=>$data['last_name'],
         ]);
 
         if($practitioner->contact){
@@ -377,6 +378,7 @@ class PortalApiController extends Controller
         $employment_locations = EmploymentLocation::all();
         $payment_channels = PaymentChannel::all();
         $rate = Rate::find(1);
+        $vat = Vat::find(1);
 
         return response()->json([
 
@@ -386,6 +388,7 @@ class PortalApiController extends Controller
             'employment_locations' => $employment_locations,
             'payment_channels' => $payment_channels,
             'rate' => $rate,
+            'vat' => $vat->vat,
         ]);
 
     }

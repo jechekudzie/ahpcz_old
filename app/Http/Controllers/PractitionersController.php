@@ -351,7 +351,8 @@ class PractitionersController extends Controller
 
     public function show(Practitioner $practitioner)
     {
-
+        $portal_activate = 0;
+        $portal_de_activate = 1;
         $registration_fee = 0;
 
         //$qualification_category_id = $practitioner->qualificationCategory->id;
@@ -388,7 +389,7 @@ class PractitionersController extends Controller
 
         return view('admin.practitioners.show', compact(
             'practitioner', 'educations', 'identifications', 'professionals',
-            'internship', 'registration_fee', 'registration_fee', 'current_status'));
+            'internship', 'registration_fee', 'registration_fee', 'current_status','portal_activate','portal_de_activate'));
     }
 
     public function edit(Practitioner $practitioner)

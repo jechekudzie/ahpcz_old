@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\City;
 use App\Nationality;
 use App\OperationalStatus;
+use App\Practitioner;
 use App\Profession;
 use App\Province;
 use App\QualificationCategory;
@@ -15,6 +16,7 @@ use App\RenewalFee;
 use App\RenewalStatus;
 use App\StudentRegistrationFee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class AdminController extends Controller
 {
@@ -60,64 +62,37 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Practitioner $practitioner, $id)
     {
         //
+        return view('portal_permissions',compact('practitioner','id'));
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function portal_permissions()
     {
         //
+        $practitioner_id = request('practitioner_id');
+        $id = request('id');
+
+
+
+        $response = Http::post('http://localhost:8001/api/practitioners/verify', [
+            'practitioner_id' => $practitioner_id,
+            'id' => $id,
+        ]);
+
+        if ($response->body()) {
+            $data = json_decode($response);
+            session()->flash('message', $data->message);
+            return redirect('/admin/practitioners/'.$practitioner_id);
+        }
+
+
+
+
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

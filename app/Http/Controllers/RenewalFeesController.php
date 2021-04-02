@@ -20,14 +20,13 @@ class RenewalFeesController extends Controller
     public function index()
     {
         //
-
         $renewal_fees = RenewalFee::all();
         $tires = Tire::all();
-        $rates = Rate::all();
+        $rate = Rate::find(1);
         $profession_tires = ProfessionTire::all();
         return view('admin.renewal_fees.index',
             compact('renewal_fees','profession_tires',
-                'tires','rates'));
+                'tires','rate'));
     }
 
     /**

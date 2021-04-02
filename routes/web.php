@@ -297,6 +297,10 @@ Route::get('/admin/practitioners/certificate/collection/{renewal}', 'Practitione
 Route::patch('/admin/practitioners/certificate/signoff/{renewal}', 'PractitionerCertificateController@signOff');
 Route::patch('/admin/practitioners/certificate/collect/{renewal}', 'PractitionerCertificateController@collect');
 
+//portal permission
+Route::get('/admin/practitioners/{practitioner}/{id}/verify_create', 'AdminController@create');
+Route::post('/admin/practitioners/verify', 'AdminController@portal_permissions');
+
 
 Auth::routes(['verify' => true]);
 

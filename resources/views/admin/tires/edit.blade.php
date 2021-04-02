@@ -21,7 +21,7 @@
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                        <li class="breadcrumb-item active">Create Tire</li>
+                        <li class="breadcrumb-item active">Update Tire</li>
                     </ol>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                                             <span aria-hidden="true">&times;</span></button>
                                     </div>
                                 @endif
-                                <h4 class="card-title">Create Tire</h4>
+                                <h4 class="card-title">Update Tire</h4>
                                 {{--
                                                                     <h6 class="card-subtitle">A Tire is the practitioner's area of practice.</h6>
                                 --}}
@@ -88,7 +88,7 @@
                                         <div class="controls">
                                             <input type="submit" name="add"
                                                    class="btn btn-rounded btn btn-block btn-success"
-                                                   value="Create A Tire">
+                                                   value="Update Tire">
                                         </div>
 
                                     </div>

@@ -49,8 +49,10 @@
                                 <thead>
                                 <tr>
                                     <th>Tire</th>
-                                    <th>Renewal Fee RTGS</th>
-                                    <th>Renewal Fee USD</th>
+                                    <th>USD</th>
+                                    <th>ZWD</th>
+                                    <th>VAT Inclusive RTGS</th>
+                                    <th>VAT Inclusive USD</th>
                                     <th>Professions</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
@@ -59,8 +61,10 @@
                                 <tfoot>
                                 <tr>
                                     <th>Tire</th>
-                                    <th>Renewal Fee RTGS</th>
-                                    <th>Renewal Fee USD</th>
+                                    <th>USD</th>
+                                    <th>ZWD</th>
+                                    <th>VAT Inclusive RTGS</th>
+                                    <th>VAT Inclusive USD</th>
                                     <th>Professions</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
@@ -71,7 +75,9 @@
                                     <tr>
                                         <td> {{$tire->name}}</td>
                                         <td>{{$tire->fee}}</td>
-                                        <td>{{$tire->fee}}</td>
+                                        <td>{{$tire->fee * $rate->rate }}</td>
+                                        <td>{{($tire->fee * $rate->rate) * 1.145 }}</td>
+                                        <td>{{$fee =  ceil(($tire->fee * 1.145)) }}</td>
                                         <td><a href="/admin/tires/{{$tire->id}}"><i class="fa fa-user-check"></i>
                                                 Professions @if($tire->profession_tires)
                                                     ({{$tire->profession_tires->count()}})
@@ -123,17 +129,17 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                @foreach($rates as $rate)
-                                    <tr>
-                                        <td> {{$rate->name}}</td>
-                                        <td>{{$rate->rate}}</td>
 
-                                        <td><a href="/admin/rates/{{$rate->id}}/edit"><i class="fa fa-pencil"></i> Edit</a>
-                                        </td>
-                                        <td><a href="/admin/rates/{{$rate->id}}/delete"><i class="fa fa-trash"></i>
-                                                Delete</a></td>
-                                    </tr>
-                                @endforeach
+                                <tr>
+                                    <td> {{$rate->name}}</td>
+                                    <td>{{$rate->rate}}</td>
+
+                                    <td><a href="/admin/rates/{{$rate->id}}/edit"><i class="fa fa-pencil"></i> Edit</a>
+                                    </td>
+                                    <td><a href="/admin/rates/{{$rate->id}}/delete"><i class="fa fa-trash"></i>
+                                            Delete</a></td>
+                                </tr>
+
 
                                 </tbody>
                             </table>

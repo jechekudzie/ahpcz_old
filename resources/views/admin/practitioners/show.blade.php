@@ -360,7 +360,7 @@
                                                 </div>
 
                                                 <div class="col-md-3 col-xs-4 b-r"><strong>Commencement Date
-                                                        </strong>
+                                                    </strong>
                                                     <br>
                                                     <p class="text-muted">@if($practitioner_qualification->commencement_date){{date('d F Y',strtotime($practitioner_qualification->commencement_date))}}@endif</p>
                                                 </div>
@@ -927,6 +927,17 @@
                                         </ul>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="col-md-9 col-xs-12">
+                                <h1>Portal Account Permissions</h1>
+                                <a href="{{url('admin/practitioners/'.$practitioner->id.'/'.$portal_activate.'/verify_create')}}"
+                                   class="btn btn-success btn-xs"><i class="fa fa-check"></i> Activate
+                                </a>
+
+                                <a href="/admin/practitioners/{{$practitioner->id}}/{{$portal_de_activate}}/verify_create"
+                                   class="btn btn-success btn-xs"><i class="fa fa-window-close"></i> De-activate
+                                </a>
                             </div>
                         </div>
                     </div>
