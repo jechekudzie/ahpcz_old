@@ -209,11 +209,15 @@ class PortalApiController extends Controller
                 }
             }
         }
+        if($practitioner->currentRenewal){
+            $practitioner->currentRenewal;
+        }
         if ($practitioner->payments) {
             $practitioner->payments;
         }
         return response()->json([
             'practitioner' => $practitioner,
+            'rate'=>Rate::find(1)
         ]);
     }
 

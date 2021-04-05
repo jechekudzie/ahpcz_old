@@ -28,9 +28,7 @@ Route::post('/update_information/store', 'PortalApiController@update_information
 Route::get('/renewal_criteria/{renewal_category_id}/{employment_status_id}/{employment_location_id}/{certificate_request}', 'PortalApiController@renewal_criteria');
 Route::get('/create_renewal', 'PortalApiController@create_renewal');
 Route::post('/make_payment', 'PortalApiController@make_payment');
-
-
-Route::post('/test_paynow', 'APIController@makePayment');
+Route::post('/make_online_payment', 'PortalApiController@make_online_payment');
 
 
 

@@ -13,7 +13,11 @@ class Practitioner extends Model
     public function currentRenewal()
     {
         $year = date('Y');
-        return $this->hasOne(Renewal::class)->where('renewal_period_id', $year);
+        return $this->hasOne(Renewal::class)
+            ->where('renewal_period_id', $year)
+            ->where('renewal_status_id', 1)
+            ->where('placement', 1)
+            ->where('cdpoints', 1);
     }
 
     //register, renewal, payment method categories

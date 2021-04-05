@@ -13,7 +13,6 @@ class Payment extends Model
         return $this->belongsTo(Practitioner::class);
     }
 
-
     public function renewal(){
         return $this->belongsTo(Renewal::class);
     }
