@@ -258,7 +258,6 @@ class RenewalController extends Controller
 
     }
 
-
     //list all renewal yearly payments
     public function index(Renewal $renewal)
     {

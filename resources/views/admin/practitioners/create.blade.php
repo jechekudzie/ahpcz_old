@@ -171,6 +171,23 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
+                                                            <label for="wlocation2"> Register Category : <span
+                                                                    class="danger">*</span>
+                                                            </label>
+                                                            <select class="custom-select form-control"
+                                                                    id="wlocation2" required name="register_category_id">
+                                                                <option value="">Select Register Category</option>
+                                                                @foreach($register_categories as $register_category)
+                                                                    <option
+                                                                        value="{{$register_category->id}}" >
+                                                                        {{$register_category->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
                                                             <label for="wphoneNumber2"> Registration Date:</label>
                                                             <input type="text" id="registration_date" class="form-control"
                                                                    name="registration_date">

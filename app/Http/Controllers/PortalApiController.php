@@ -33,6 +33,7 @@ class PortalApiController extends Controller
             'professions' => $professions,
         ]);
     }
+
     //
     public function verify_ahpcz_account()
     {
@@ -113,36 +114,37 @@ class PortalApiController extends Controller
         }
     }
 
-    public function correct_data(){
+    public function correct_data()
+    {
 
         $practitioner_id = request('practitioner_id');
 
         $practitioner = Practitioner::where('id', $practitioner_id)->first();
 
         $data = request()->validate([
-            'first_name'=>'required',
-            'last_name'=>'required',
-            'email'=>'required',
-            'primary_phone'=>'required',
-            'physical_address'=>'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'primary_phone' => 'required',
+            'physical_address' => 'required',
         ]);
 
-         $practitioner->update([
-            'first_name'=>$data['first_name'],
-            'last_name'=>$data['last_name'],
+        $practitioner->update([
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
         ]);
 
-        if($practitioner->contact){
+        if ($practitioner->contact) {
             $practitioner->contact->update([
-                'email'=>$data['email'],
-                'primary_phone'=>$data['primary_phone'],
-                'physical_address'=>$data['physical_address'],
+                'email' => $data['email'],
+                'primary_phone' => $data['primary_phone'],
+                'physical_address' => $data['physical_address'],
             ]);
-        }else{
+        } else {
             $practitioner->contact->create([
-                'email'=>$data['email'],
-                'primary_phone'=>$data['primary_phone'],
-                'physical_address'=>$data['physical_address'],
+                'email' => $data['email'],
+                'primary_phone' => $data['primary_phone'],
+                'physical_address' => $data['physical_address'],
             ]);
         }
 
@@ -209,7 +211,7 @@ class PortalApiController extends Controller
                 }
             }
         }
-        if($practitioner->currentRenewal){
+        if ($practitioner->currentRenewal) {
             $practitioner->currentRenewal;
         }
         if ($practitioner->payments) {
@@ -217,7 +219,7 @@ class PortalApiController extends Controller
         }
         return response()->json([
             'practitioner' => $practitioner,
-            'rate'=>Rate::find(1)
+            'rate' => Rate::find(1)
         ]);
     }
 
@@ -329,20 +331,19 @@ class PortalApiController extends Controller
         $employment_information['province_id'] = $data['employer_province'];
         $employment_information['city_id'] = $data['employer_city'];
 
-       if( empty($practitioner->employer)){
-            $practitioner->addEmployer($employment_information);
-            $practitioner->update([
-                'employment_status_id'=> 1
-            ]);
+        if ($data['employment_status_id'] == 1) {
+            if (empty($practitioner->employer)) {
+                $practitioner->addEmployer($employment_information);
+                $practitioner->update([
+                    'employment_status_id' => 1
+                ]);
 
-        }else{
-
-            $practitioner->employer->update($employment_information);
-            $practitioner->update([
-                'employment_status_id' => 1
-            ]);
-
-
+            } else {
+                $practitioner->employer->update($employment_information);
+                $practitioner->update([
+                    'employment_status_id' => 1
+                ]);
+            }
         }
 
         $practitioner_payment_information['register_category_id'] = $data['register_category_id'];
@@ -426,7 +427,7 @@ class PortalApiController extends Controller
 
         ]);
 
-         $practitioner->update([
+        $practitioner->update([
             'employment_status_id' => $data['employment_status_id'],
             'employment_location_id' => $data['employment_location_id'],
             'dob' => $data['dob'],
@@ -465,11 +466,10 @@ class PortalApiController extends Controller
         //now check if the practitioner already for this current year
         if (Renewal::where('practitioner_id', $practitioner->id)->where('renewal_period_id', $data['period'])->first()) {
             return response()->json([
-                'message'=>
-                'A renewal subscription for the selected period is already active,
+                'message' =>
+                    'A renewal subscription for the selected period is already active,
                 not that if this a regular payment click the payment link to proceed']);
-        }
-        else {
+        } else {
 
             $add_renewal = $practitioner->addRenewal($renewals);
             $payments['renewal_period_id'] = $data['period'];
@@ -514,7 +514,7 @@ class PortalApiController extends Controller
             }
 
             return response()->json([
-                'message' => 'Payment bho',
+                'message' => 'Renewal Payment Was successful.',
             ]);
 
         }
@@ -532,10 +532,16 @@ class PortalApiController extends Controller
         /*'5771',
         '2e958d52-a3f9-4b6b-b845-2654a21a7458',*/
 
-            '5865',
-            '23962222-9610-4f7c-bbd5-7e12f19cdfc6',
+        /*'5865',
+        '23962222-9610-4f7c-bbd5-7e12f19cdfc6',*/
+
+            '11777',
+            '739d23ae-f8c5-45e0-ac0a-a481f615c813',
+
             'http://localhost:8001/check_payment/' . $practitioner_id,
             'http://localhost:8001/check_payment/' . $practitioner_id
+
+
         );
 
         //create a payment and add items required
@@ -558,7 +564,7 @@ class PortalApiController extends Controller
                 'payment_link' => $payment_link,
 
             ]);
-        }else{
+        } else {
             return response()->json([
                 'message' => 'Payment was unsuccessful, try again later',
 
@@ -566,7 +572,6 @@ class PortalApiController extends Controller
         }
 
     }
-
 
 
 }

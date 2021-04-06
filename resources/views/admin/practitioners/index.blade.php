@@ -21,8 +21,8 @@
                 @can('updatePractitioner')
                     <a href="practitioners/create" class="btn btn-success"><i
                             class="fa fa-plus-circle"></i> Add Practitioner</a>
-                    <a href="/admin/practitioners/renewal/create" class="btn btn-success"><i
-                            class="fa fa-plus-circle"></i> Add Practitioner For Renewal</a>
+                   {{-- <a href="/admin/practitioners/renewal/create" class="btn btn-success"><i
+                            class="fa fa-plus-circle"></i> Add Practitioner For Renewal</a>--}}
                 @endcan
             </div>
             <div class="col-md-7 align-self-center text-right">

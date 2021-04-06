@@ -102,11 +102,12 @@ class PractitionersController extends Controller
         $qualification_categories = QualificationCategory::all()->sortBy('name');
         $employment_statuses = EmploymentStatus::all()->sortBy('name');
         $employment_locations = EmploymentLocation::all()->sortBy('name');
+        $register_categories = RegisterCategory::all()->sortBy('name');
 
         return view('admin.practitioners.create',
             compact('titles', 'genders',
                 'professions', 'qualification_categories', 'employment_statuses',
-                'employment_locations'
+                'employment_locations','register_categories'
             ));
 
     }
@@ -210,6 +211,9 @@ class PractitionersController extends Controller
                 'email',
             ]));
 
+            $practitioner_payment_information['register_category_id'] = request('register_category_id');
+            $practitioner->addPractitionerPaymentInformation($practitioner_payment_information);
+
 
             /** get all requirements to create shortfalls */
             if ($practitioner->qualification_category_id == 1) {
@@ -229,11 +233,11 @@ class PractitionersController extends Controller
 
             }
 
-            $user = User::whereRole_id(4)->first();
+            /*$user = User::whereRole_id(4)->first();
 
             $user->notify(
                 new ApplicationSubmitted($practitioner)
-            );
+            );*/
 
             return redirect('/admin/practitioners/' . $practitioner->id);
         }
@@ -452,7 +456,6 @@ class PractitionersController extends Controller
 
         //check to see if practitioner has any payment information recorded
         if ($practitioner->practitioner_payment_information) {
-
             $practitioner_payment_information['register_category_id'] = request('register_category_id');
             $practitioner->practitioner_payment_information->update($practitioner_payment_information);
 
