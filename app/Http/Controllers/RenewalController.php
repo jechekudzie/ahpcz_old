@@ -13,6 +13,7 @@ use App\PaymentType;
 use App\Practitioner;
 use App\PractitionerCpdpoint;
 use App\PractitionerPlacement;
+use App\Rate;
 use App\Registration;
 use App\RegistrationFee;
 use App\Renewal;
@@ -21,6 +22,8 @@ use App\RenewalFee;
 use App\RenewalPeriod;
 use App\Vat;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class RenewalController extends Controller
 {
@@ -29,6 +32,232 @@ class RenewalController extends Controller
     {
         $this->middleware('auth');
     }*/
+
+    public function check_restoration_penalties(Practitioner $practitioner)
+    {
+        $rate = Rate::find(1);
+        $tire = $practitioner->profession->profession_tire->tire;
+
+        $current_period = date('Y');
+        $current_month = date('m');
+
+        $restoration_penalty_fee  = 0;
+        $restoration_penalty_name = '';
+        $total = 0;
+        $balance = 0;
+
+
+        if (count($practitioner->renewals)) {
+            $renewals = $practitioner->renewals;
+            $size = sizeof($renewals);
+            $last_renewal_period = $renewals[$size - 1]->renewal_period_id;
+
+            //check restoration or penalty
+            $result = $current_period - $last_renewal_period;
+            if ($result == 1 && $current_month > 06) {
+                $restoration_penalty_name = 'Restoration current year';
+                if ($tire->id == 1) {
+                    $restoration_penalty_fee = $tire->fee * 1.397;
+                }
+
+                if ($tire->id == 2) {
+                    $restoration_penalty_fee = $tire->fee * 1.657;
+                }
+
+                if ($tire->id == 3) {
+                    $restoration_penalty_fee = $tire->fee * 1.2;
+                }
+
+            } elseif ($result == 2) {
+                $restoration_penalty_name = 'Restoration level 1';
+                if ($tire->id == 1) {
+                    $restoration_penalty_fee = $tire->fee * 1.793;
+                }
+
+                if ($tire->id == 2) {
+                    $restoration_penalty_fee = $tire->fee * 2.314;
+                }
+            } elseif ($result >= 3 && $result <= 5) {
+                $restoration_penalty_name = 'Restoration level 2';
+                if ($tire->id == 1) {
+                    $restoration_penalty_fee = $tire->fee * 2.172;
+                }
+
+                if ($tire->id == 2) {
+                    $restoration_penalty_fee = $tire->fee * 2.971;
+                }
+
+            } elseif ($result > 5) {
+                $restoration_penalty_name = 'Restoration level 3';
+                if ($tire->id == 1) {
+                    $restoration_penalty_fee = $tire->fee * 2.569;
+                }
+                if ($tire->id == 2) {
+                    $restoration_penalty_fee = $tire->fee * 3.6;
+                }
+            } elseif ($result == 1) {
+                if ($current_month == 04) {
+                    $restoration_penalty_name = 'Penalty level 1 = 5%';
+                    $restoration_penalty_fee = $tire->fee * 0.05;
+                }
+                if ($current_month == 05) {
+                    $restoration_penalty_name = 'Penalty level 2 = 10%';
+                    $restoration_penalty_fee = $tire->fee * 0.10;
+                }
+                if ($current_month == 06) {
+                    $restoration_penalty_name = 'Penalty level 3 = 15%';
+                    $restoration_penalty_fee = $tire->fee * 0.15;
+                }
+
+            } else {
+                $restoration_penalty_name = 'No restoration no penalty';
+                $restoration_penalty_fee = 0;
+            }
+
+            foreach ($practitioner->payments as $payment) {
+                if ($payment->currency == 0) {
+                    $total = ($total) + ($payment->balance / $rate->rate);
+                }
+                if($payment->currency == 1){
+                    $total = $total + $payment->balance;
+                }
+
+            }
+            $balance = $total;
+
+            $restoration = [
+                'restoration_penalty_name' => $restoration_penalty_name,
+                'restoration_penalty_fee' => $restoration_penalty_fee,
+                'balance' => $balance,
+            ];
+
+            Session::get('restoration');
+            Session::forget('restoration');
+
+
+            if(empty(session()->get('restoration'))){
+                session()->put('restoration',$restoration);
+            }
+            //dd(Session::get('restoration'));
+            //return redirect('/create_renewal');
+            return view('renewals.create')->with([
+                'practitioner'=>$practitioner,
+            ]);
+        }
+        else{
+            return view('last_renewal_period',compact('practitioner'));
+        }
+
+    }
+
+    public function manual_restoration_penalties(Practitioner $practitioner){
+        $period = request()->validate([
+            'period'=>'required'
+        ]);
+
+        $practitioner = $practitioner;
+        $rate = Rate::find(1);
+        $tire = $practitioner->profession->profession_tire->tire;
+
+        $current_period = date('Y');
+        $current_month = date('m');
+
+        $restoration_penalty_fee  = 0;
+        $restoration_penalty_name = '';
+        $total = 0;
+        $balance = 0;
+        $last_renewal_period = $period['period'];
+        //check restoration or penalty
+        $result = $current_period - $last_renewal_period;
+        if ($result == 1 && $current_month > 06) {
+            $restoration_penalty_name = 'Restoration current year';
+            if ($tire->id == 1) {
+                $restoration_penalty_fee = $tire->fee * 1.397;
+            }
+
+            if ($tire->id == 2) {
+                $restoration_penalty_fee = $tire->fee * 1.657;
+            }
+
+            if ($tire->id == 3) {
+                $restoration_penalty_fee = $tire->fee * 1.2;
+            }
+
+        } elseif ($result == 2) {
+            $restoration_penalty_name = 'Restoration level 1';
+            if ($tire->id == 1) {
+                $restoration_penalty_fee = $tire->fee * 1.793;
+            }
+
+            if ($tire->id == 2) {
+                $restoration_penalty_fee = $tire->fee * 2.314;
+            }
+        } elseif ($result >= 3 && $result <= 5) {
+            $restoration_penalty_name = 'Restoration level 2';
+            if ($tire->id == 1) {
+                $restoration_penalty_fee = $tire->fee * 2.172;
+            }
+
+            if ($tire->id == 2) {
+                $restoration_penalty_fee = $tire->fee * 2.971;
+            }
+
+        } elseif ($result > 5) {
+            $restoration_penalty_name = 'Restoration level 3';
+            if ($tire->id == 1) {
+                $restoration_penalty_fee = $tire->fee * 2.569;
+            }
+            if ($tire->id == 2) {
+                $restoration_penalty_fee = $tire->fee * 3.6;
+            }
+        } elseif ($result == 1) {
+            if ($current_month == 04) {
+                $restoration_penalty_name = 'Penalty level 1 = 5%';
+                $restoration_penalty_fee = $tire->fee * 0.05;
+            }
+            if ($current_month == 05) {
+                $restoration_penalty_name = 'Penalty level 2 = 10%';
+                $restoration_penalty_fee = $tire->fee * 0.10;
+            }
+            if ($current_month == 06) {
+                $restoration_penalty_name = 'Penalty level 3 = 15%';
+                $restoration_penalty_fee = $tire->fee * 0.15;
+            }
+
+        } else {
+            $restoration_penalty_name = 'No restoration no penalty';
+            $restoration_penalty_fee = 0;
+        }
+
+        foreach ($practitioner->payments as $payment) {
+            if ($payment->currency == 0) {
+                $total = ($total) + ($payment->balance / $rate->rate);
+            }
+            if($payment->currency == 1){
+                $total = $total + $payment->balance;
+            }
+
+        }
+        $balance = $total;
+
+        $restoration = [
+            'restoration_penalty_name' => $restoration_penalty_name,
+            'restoration_penalty_fee' => $restoration_penalty_fee,
+            'balance' => $balance,
+        ];
+
+        Session::get('restoration');
+        Session::forget('restoration');
+
+        if(empty(session()->get('restoration'))){
+            session()->put('restoration',$restoration);
+        }
+
+        //dd(Session::get('restoration'));
+        return redirect('/admin/practitioner_renewals/'.$practitioner->id.'/create');
+
+    }
+
 
     //list all renewal yearly payments
     public function index(Renewal $renewal)
@@ -44,17 +273,8 @@ class RenewalController extends Controller
          *renewal_category(which category do you belong to), register_category(which register do you belong to), payment_method(who is paying for you)
          */
 
-        /*if ($practitioner->practitioner_payment_information) {
-            if ($practitioner->practitioner_payment_information->payment_method_id == null
-                && $practitioner->practitioner_payment_information->renewal_category_id == null) {
-                return redirect('/admin/practitioner_payment_info/' . $practitioner->id . '/create');
-            }
-        } else {
-            return redirect('/admin/practitioner_payment_info/' . $practitioner->id . '/create');
-        }*/
 
-        return view('renewals.create')
-        ->with([
+        return view('renewals.create')->with([
             'practitioner'=>$practitioner,
         ]);
 

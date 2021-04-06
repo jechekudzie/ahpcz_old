@@ -748,7 +748,7 @@
                                 <a href="/admin/practitioners/registration/{{$practitioner->id}}/registration"
                                    class="btn btn-success">REGISTER</a>
 
-                                <a href="/admin/practitioner_renewals/{{$practitioner->id}}/create"
+                                <a href="/check_restoration_penalties/{{$practitioner->id}}"
                                    class="btn btn-success"> RENEW
                                 </a>
                             @endcan

@@ -225,8 +225,9 @@ Route::post('/admin/practitioners/renewals/{practitioner}/store', 'RenewalContro
 Route::get('/admin/practitioners/renewals/{renewal}/show', 'RenewalController@show');
 
 
-//renewals
-
+//renewals and restoration
+Route::get('/check_restoration_penalties/{practitioner}', 'RenewalController@check_restoration_penalties');
+Route::post('/manual_restoration_penalties/{practitioner}', 'RenewalController@manual_restoration_penalties');
 
 
 Route::get('/admin/practitioners/{practitioner}/cdpoints', 'RenewalController@cdpoints');

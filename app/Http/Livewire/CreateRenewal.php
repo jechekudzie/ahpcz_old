@@ -16,6 +16,7 @@ use App\Vat;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Livewire\Component;
 use Carbon\CarbonInterval;
 use Livewire\WithFileUploads;
@@ -63,9 +64,10 @@ class CreateRenewal extends Component
     public $payments;
     public $cpd_points;
     public $rate;
-    public $currency = 0;
+    public $currency = 1;
     public $add_renewal;
     public $add_renewal_payment;
+    public $restoration_penalty_fee;
 
     //save payment
     public function make_payment()
@@ -76,7 +78,6 @@ class CreateRenewal extends Component
             'receipt_number' => ['required', 'digits_between:4,8', 'numeric', 'unique:payments'],
             'payment_date' => 'required',
             'payment_channel_id' => 'required',
-            'currency' => 'required',
             'pop' => 'nullable',
 
             'points' => 'required',
@@ -313,15 +314,10 @@ class CreateRenewal extends Component
         if ($this->renewal_criteria) {
             $this->renewal_criteria_percentage = $this->renewal_criteria->percentage / 100;
         }
-        if ($this->practitioner->payments) {
-            if ($this->practitioner->payments->count()) {
-                $this->balance = $this->practitioner->payments->sum('balance');
-            }
-        }
 
     }
 
-    public function calculate_renewal_fee()
+   /* public function calculate_renewal_fee()
     {
         $this->renewal_fee = $this->profession_tire_fee * $this->renewal_criteria_percentage;
         if($this->currency == 0){
@@ -330,6 +326,21 @@ class CreateRenewal extends Component
         if($this->currency == 1){
             $this->amount_invoiced = $this->renewal_fee + $this->balance;
             $this->amount_invoiced = round($this->amount_invoiced / $this->rate,3);
+        }
+
+    }*/
+    public function calculate_renewal_fee()
+    {
+        $this->renewal_fee = $this->profession_tire_fee * $this->renewal_criteria_percentage;
+        $this->restoration_penalty_fee = Session::get('restoration')['restoration_penalty_fee'];
+        $this->balance = Session::get('restoration')['balance'];
+        if ($this->currency == 1) {
+            $this->amount_invoiced = $this->restoration_penalty_fee + $this->balance + ($this->renewal_fee * 1.145);
+            $this->amount_invoiced = ceil($this->amount_invoiced);
+        }
+        if ($this->currency == 0) {
+            $this->amount_invoiced = ($this->restoration_penalty_fee + $this->balance) * $this->rate + ($this->renewal_fee * 1.145 * $this->rate);
+            $this->amount_invoiced = round($this->amount_invoiced, 3);
         }
 
     }
@@ -357,6 +368,7 @@ class CreateRenewal extends Component
     {
         $this->dob = $this->dob;
         $this->age = date('Y') - date('Y', strtotime($this->dob));
+
         $this->get_renewal_category();
         $this->get_renewal_criteria();
         $this->get_cpd_criteria();
@@ -366,7 +378,6 @@ class CreateRenewal extends Component
 
     public function render()
     {
-
         return view('livewire.create-renewal', [
             'employment_statuses' => EmploymentStatus::all(),
             'employment_locations' => EmploymentLocation::all(),

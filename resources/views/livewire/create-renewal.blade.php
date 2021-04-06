@@ -13,8 +13,9 @@
 
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-2 col-lg-2"></div>
-                <div class="col-sm-12 col-md-8 col-lg-8">
+
+                <div class="col-sm-12 col-md-1 col-lg-1"></div>
+                <div class="col-sm-12 col-md-10 col-lg-10">
                     <form wire:submit.prevent="make_payment()" enctype="multipart/form-data" method="post"
                           class="m-t-40"
                           novalidate>
@@ -184,26 +185,29 @@
                                         CPD book, if you are foreign you may submit your current registration
                                         from
                                         your country of residents.</p>
-                                    <div>
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">CPD Points </span>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">CPD Points </span>
+                                                </div>
+                                                <input wire:model="points" type="text" class="form-control"
+                                                       aria-label="CPD Points">
                                             </div>
-                                            <input wire:model="points" type="text" class="form-control"
-                                                   aria-label="CPD Points">
+                                            @if ($errors->any())<span
+                                                style="color: red;">@error('points'){{$message}}@enderror</span>@endif
                                         </div>
-                                        @if ($errors->any())<span
-                                            style="color: red;">@error('points'){{$message}}@enderror</span>@endif
-                                        <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text"><i class="fa fa-book-open"></i> CPD Book </span>
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="fa fa-book-open"></i> CPD Book </span>
+                                                </div>
+                                                <input wire:model="path" type="file" required class="form-control"
+                                                       aria-label="CPD Points">
                                             </div>
-                                            <input wire:model="path" type="file" required class="form-control"
-                                                   aria-label="CPD Points">
+                                            @if ($errors->any())<span
+                                                style="color: red;">@error('file'){{$message}}@enderror</span>@endif
                                         </div>
-                                        @if ($errors->any())<span
-                                            style="color: red;">@error('file'){{$message}}@enderror</span>@endif
-
                                     </div>
                                 </div>
                             </div>
@@ -215,7 +219,7 @@
 
                             <div class="card ">
                                 <div class="card-header card-primary">
-                                    Renewal Payment {{$rate}}
+                                    Renewal Payment (Exchange-Rate {{$rate}})
                                 </div>
                                 <div class="card-body">
 
@@ -228,111 +232,124 @@
                                                     aria-hidden="true">&times;</span></button>
                                         </div>
                                     @else
-                                        <p class="card-text" style="color: yellowgreen">Please note that, you are required
+                                        <p class="card-text" style="color: yellowgreen">Please note that, you are
+                                            required
                                             make full payment in order to get your certificate processed.</p>
                                     @endif
 
                                     <div>
-                                        <div class="col-sm-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label for="wlocation2"> Period : <span
-                                                        class="danger">*</span>
-                                                </label>
-                                                <select wire:model="period" class="custom-select form-control " required
-                                                        name="period">
-                                                    <option value="">Choose period</option>
-                                                    @for($x =date('Y')+10;$x >= 2008;$x--)
-                                                        <option value="{{$x}}">{{$x}}</option>
-                                                    @endfor
-                                                </select>
-                                            </div>
-                                            @if ($errors->any()) <span
-                                                style="color: red;"> @error('period'){{$message}}@enderror </span>
-                                            @endif
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="wlocation2"> Period : <span
+                                                            class="danger">*</span>
+                                                    </label>
+                                                    <select wire:model="period" class="custom-select form-control "
+                                                            required
+                                                            name="period">
+                                                        <option value="">Choose period</option>
+                                                        @for($x =date('Y')+10;$x >= 2008;$x--)
+                                                            <option value="{{$x}}">{{$x}}</option>
+                                                        @endfor
+                                                    </select>
+                                                </div>
+                                                @if ($errors->any()) <span
+                                                    style="color: red;"> @error('period'){{$message}}@enderror </span>
+                                                @endif
 
-                                        </div>
-
-                                        <div class="col-sm-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label for="wlocation2"> Payment Channel : <span
-                                                        class="danger">*</span>
-                                                </label>
-                                                <select wire:model="payment_channel_id"
-                                                        class="custom-select form-control"
-                                                        onchange="myPaymentChannels()" required
-                                                        id="payment_channel_id" name="payment_channel_id">
-                                                    <option value="">Payment Channel</option>
-                                                    @foreach($payment_channels as $payment_channels)
-                                                        <option
-                                                            value="{{$payment_channels->id}}" @if($payment_channels->id==old('payment_channels')){{'selected'}}@endif>{{$payment_channels->name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            @if ($errors->any()) <span
-                                                style="color: red;"> @error('payment_channel_id'){{$message}}@enderror </span>@endif
-
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label for="wlocation2"> Choose Payment Currency : <span
-                                                        class="danger">*</span>
-                                                </label>
-                                                <select wire:model="currency"
-                                                        class="custom-select form-control" required
-                                                        id="currency" name="currency">
-                                                    <option value="">Choose Payment Currency</option>
-                                                    <option value="0">$ZWD (RTGS)</option>
-                                                    <option value="1">$USD</option>
-
-                                                </select>
-                                            </div>
-                                            @if ($errors->any()) <span
-                                                style="color: red;"> @error('currency'){{$message}}@enderror </span>@endif
-
-                                        </div>
-
-                                        <div class="col-sm-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label>Amount Invoiced</label>
-                                                <input wire:model="amount_invoiced" type="number" step="any" disabled
-                                                       name="amount_invoiced" class="form-control">
-                                            </div>
-                                            @if ($errors->any()) <span
-                                                style="color: red;"> @error('amount_invoiced'){{$message}}@enderror </span>@endif
-
-                                        </div>
-
-                                        <div class="col-sm-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label>Amount Paid</label>
-                                                <input wire:model="amount_paid" type="number" step="any"
-                                                       name="amount_paid"
-                                                       value="" class="form-control"
-                                                       id="">
-                                            </div>
-                                            @if ($errors->any()) <span
-                                                style="color: red;"> @error('amount_paid'){{$message}}@enderror </span>@endif
-
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label>Payment Date</label>
-                                                <input wire:model="payment_date" type="text" name="payment_date"
-                                                       value="" class="form-control" id="payment_date"
-                                                       onclick="myPaymentDate()"
-                                                       onclick="myDatePicker()"
-                                                       data-provide="payment_date" data-date-autoclose="true"
-                                                       data-date-format="yyyy-mm-dd"
-                                                       data-date-today-highlight="true"
-                                                       onchange="this.dispatchEvent(new InputEvent('input'))"
-                                                >
                                             </div>
 
-                                            @if ($errors->any()) <span
-                                                style="color: red;"> @error('payment_date'){{$message}}@enderror </span>@endif
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="wlocation2"> Payment Channel : <span
+                                                            class="danger">*</span>
+                                                    </label>
+                                                    <select wire:model="payment_channel_id"
+                                                            class="custom-select form-control"
+                                                            onchange="myPaymentChannels()" required
+                                                            id="payment_channel_id" name="payment_channel_id">
+                                                        <option value="">Payment Channel</option>
+                                                        @foreach($payment_channels as $payment_channels)
+                                                            <option
+                                                                value="{{$payment_channels->id}}" @if($payment_channels->id==old('payment_channels')){{'selected'}}@endif>{{$payment_channels->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                @if ($errors->any()) <span
+                                                    style="color: red;"> @error('payment_channel_id'){{$message}}@enderror </span>@endif
+
+                                            </div>
 
                                         </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-12">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Amount Invoiced</label>
+                                                    <input wire:model="amount_invoiced" type="number" step="any"
+                                                           disabled
+                                                           name="amount_invoiced" class="form-control">
+                                                </div>
+                                                @if ($errors->any()) <span
+                                                    style="color: red;"> @error('amount_invoiced'){{$message}}@enderror </span>@endif
+
+                                            </div>
+
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Amount Paid</label>
+                                                    <input wire:model="amount_paid" type="number" step="any"
+                                                           name="amount_paid"
+                                                           value="" class="form-control"
+                                                           id="">
+                                                </div>
+                                                @if ($errors->any()) <span
+                                                    style="color: red;"> @error('amount_paid'){{$message}}@enderror </span>@endif
+
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="wlocation2"> Choose Payment Currency : <span
+                                                            class="danger">*</span>
+                                                    </label>
+                                                    <select wire:model="currency"
+                                                            class="custom-select form-control" required
+                                                            id="currency" name="currency">
+                                                        <option value="">Choose Payment Currency</option>
+                                                        <option value="0">$ZWD (RTGS)</option>
+                                                        <option value="1">$USD</option>
+
+                                                    </select>
+                                                </div>
+                                                @if ($errors->any()) <span
+                                                    style="color: red;"> @error('currency'){{$message}}@enderror </span>@endif
+
+                                            </div>
+
+
+                                            <div class="col-sm-12 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label>Payment Date</label>
+                                                    <input wire:model="payment_date" type="text" name="payment_date"
+                                                           value="" class="form-control" id="payment_date"
+                                                           onclick="myPaymentDate()"
+                                                           onclick="myDatePicker()"
+                                                           data-provide="payment_date" data-date-autoclose="true"
+                                                           data-date-format="yyyy-mm-dd"
+                                                           data-date-today-highlight="true"
+                                                           onchange="this.dispatchEvent(new InputEvent('input'))"
+                                                    >
+                                                </div>
+
+                                                @if ($errors->any()) <span
+                                                    style="color: red;"> @error('payment_date'){{$message}}@enderror </span>@endif
+
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-12 col-md-6 col-lg-6">
                                             <div class="form-group">
                                                 <label>Receipt Number</label>
                                                 <input wire:model="receipt_number" type="number" step="any"

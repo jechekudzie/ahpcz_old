@@ -489,7 +489,6 @@ class PortalApiController extends Controller
 
             $add_renewal_payment = $add_renewal->addPayments($payments);
 
-
             //update previous balances to 0
             if ($renewal_balance > 0) {
                 if (count($practitioner->payments)) {
@@ -512,13 +511,11 @@ class PortalApiController extends Controller
                         }
                     }
                 }
-
             }
 
             return response()->json([
-                'message' => 'Your Payment  was successful',
+                'message' => 'Payment bho',
             ]);
-
 
         }
     }
