@@ -85,6 +85,7 @@
                                                         <th>Current Balances</th>
                                                         <th>Payment Chanel</th>
                                                         <th>Receipt</th>
+                                                        <th>CPDs</th>
                                                         <th>Payment Date</th>
                                                     </tr>
                                                     </thead>
@@ -99,6 +100,7 @@
                                                         <th>Current Balances</th>
                                                         <th>Payment Chanel</th>
                                                         <th>Receipt</th>
+                                                        <th>CPDS</th>
                                                         <th>Payment Date</th>
                                                     </tr>
                                                     </tfoot>
@@ -122,6 +124,11 @@
                                                                 <td>{{$payment->balance}}</td>
                                                                 <td>{{$payment->paymentChannel->name}}</td>
                                                                 <td>{{$payment->receipt_number}}</td>
+                                                                <td>
+                                                                    <a href="{{asset($payment->pop)}}"
+                                                                       target="_blank">CPDs</a>
+                                                                </td>
+</td>
                                                                 <td>{{date("d M Y", strtotime( $payment->payment_date))}}</td>
                                                             </tr>
                                                         @endforeach

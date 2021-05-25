@@ -57,7 +57,7 @@
                         <div class="row">
                             <div class="col-2"></div>
                             <div class="col-8">
-                                @if($id == 0)
+                                @if($id == 1)
                                     <form action="/admin/practitioners/verify" method="post" class="m-t-40" novalidate>
                                         {{csrf_field()}}
                                         <h5><span class="text-danger">Activate {{$practitioner->first_name.' '.$practitioner->last_name}} ?</span>
@@ -80,7 +80,7 @@
                                 @endif
 
 
-                                    @if($id == 1)
+                                    @if($id == 2)
                                         <form action="{{url('/admin/practitioners/verify')}}" method="post" class="m-t-40" novalidate>
                                             {{csrf_field()}}
                                             <h5><span class="text-danger">De-Activate {{$practitioner->first_name.' '.$practitioner->last_name}} ?</span>

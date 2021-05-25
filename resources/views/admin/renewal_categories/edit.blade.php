@@ -13,7 +13,7 @@
         <div class="col-md-5 align-self-center">
             <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
 
-            <a href="/admin/renewal_categories" class="btn btn-success"></i> All Renewal Categories</a>
+            <a href="/admin/renewal_categories" class="btn btn-success"> All Renewal Categories</a>
 
 
         </div>

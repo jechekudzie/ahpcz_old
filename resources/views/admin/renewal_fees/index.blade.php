@@ -76,7 +76,7 @@
                                         <td> {{$tire->name}}</td>
                                         <td>{{$tire->fee}}</td>
                                         <td>{{$tire->fee * $rate->rate }}</td>
-                                        <td>{{($tire->fee * $rate->rate) * 1.145 }}</td>
+                                        <td>{{ceil($tire->fee * 1.145) *  $rate->rate }}</td>
                                         <td>{{$fee =  ceil(($tire->fee * 1.145)) }}</td>
                                         <td><a href="/admin/tires/{{$tire->id}}"><i class="fa fa-user-check"></i>
                                                 Professions @if($tire->profession_tires)

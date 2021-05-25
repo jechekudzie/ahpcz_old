@@ -50,31 +50,6 @@ class PractitionersController extends Controller
      }
 
 
-    public function testme()
-    {
-
-
-        $client = new Client();
-        $url = "http://localhost:8000/api/pay";
-        $headers = [
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json'
-        ];
-        $response = $client->request('POST', $url,
-            [
-                'headers' => $headers,
-                'json' => ['amount' => 100]
-            ]
-        );
-
-        //$data = json_decode($response->getBody());
-
-
-        //return redirect($data->payment_link);
-
-
-    }
-
     public function index(Request $request)
     {
         return view('admin.practitioners.index');
@@ -119,10 +94,10 @@ class PractitionersController extends Controller
     {
         //first check if id/passport number and profession is available
         request()->validate([
-            'id_number' => 'required',
+            'id_number' => 'nullable',
             'profession_id' => 'required',
-            'employment_status_id' => 'required',
-            'employment_location_id' => 'required',
+            'employment_status_id' => 'nullable',
+            'employment_location_id' => 'nullable',
         ]);
         $check_id_number = request('id_number');
         $check_profession_id = request('profession_id');
@@ -137,25 +112,26 @@ class PractitionersController extends Controller
 
         } else {
             $personal_details = request()->validate([
-                'title_id' => ['required'],
+                'title_id' => ['nullable'],
                 'gender_id' => ['required'],
-                'first_name' => ['required'],
-                'last_name' => ['required'],
+                'first_name' => ['nullable'],
+                'last_name' => ['nullable'],
                 'previous_name' => ['nullable'],
-                'id_number' => ['alpha_num', 'regex:/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/'],
+/*                'id_number' => 'nullable|alpha_num', 'regex:/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/',*/
+                'id_number' => 'nullable',
                 'profession_id' => ['required'],
-                'qualification_category_id' => ['required'],
+                'qualification_category_id' => ['nullable'],
                 'professional_qualification_id' => ['nullable'],
-                'commencement_date' => ['required'],
-                'completion_date' => ['required'],
+                'commencement_date' => ['nullable'],
+                'completion_date' => ['nullable'],
                 'registration_number' => 'nullable|numeric',
                 'registration_date' => 'nullable',
 
-            ],
-                [
+            ]
+                /*[
                     'id_number.regex' => 'ID number should contain at least one character and one number',
 
-                ]
+                ]*/
             );
 
             //create registration data with Year and Month
@@ -191,8 +167,8 @@ class PractitionersController extends Controller
 
             if (request('qualification_category_id') == 2) {
                 request()->validate([
-                    'professional_qualification_name' => ['required'],
-                    'institution' => ['required'],
+                    'professional_qualification_name' => ['nullable'],
+                    'institution' => ['nullable'],
                 ]);
 
                 $professional_details['professional_qualification_name'] = request('professional_qualification_name');

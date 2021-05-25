@@ -17,7 +17,8 @@ class Practitioner extends Model
             ->where('renewal_period_id', $year)
             ->where('renewal_status_id', 1)
             ->where('placement', 1)
-            ->where('cdpoints', 1);
+            ->where('cdpoints', 1)
+            ->where('certificate', 2);
     }
 
     //register, renewal, payment method categories

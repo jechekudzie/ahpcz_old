@@ -2,7 +2,7 @@ APP_NAME="Allied Health Practitioner's Council"
 APP_ENV=local
 APP_KEY=base64:1JdKtcoWshnQZBXOxpMrBUmhuQLpp52DZ87gIyMW+XY=
 APP_DEBUG=true
-APP_URL=http://localhost:8000
+APP_URL=http://database.ahpcz.co.zw
 
 LOG_CHANNEL=stack
 

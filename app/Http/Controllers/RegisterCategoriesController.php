@@ -46,7 +46,7 @@ class RegisterCategoriesController extends Controller
 
         RegisterCategory::create(request()->validate([
             'name' => ['required'],
-            'description' => ['required', 'min:10']
+            'description' => ['required']
         ]));
 
         $message = "Register Category added successfully.";
@@ -97,7 +97,7 @@ class RegisterCategoriesController extends Controller
         //update the record with the ID provided
         $registerCategory->update(request()->validate([
             'name' => ['required'],
-            'description' => ['required','min:10']
+            'description' => ['required']
         ]));
 
         return redirect('/admin/register_categories')->with('message','Register Category updated successfully.');

@@ -29,11 +29,11 @@ class PaynowController extends Controller
         (
             '5865',
             '23962222-9610-4f7c-bbd5-7e12f19cdfc6',
-            'http://localhost:8000/paynow/' . $id . '/checkPayment',
-            'http://localhost:8000/paynow/' . $id . '/checkPayment'
+            'http://database.ahpcz.co.zw/paynow/' . $id . '/checkPayment',
+            'http://database.ahpcz.co.zw/paynow/' . $id . '/checkPayment'
         );
         //create a payment and add items required
-        $payment = $paynow->createPayment($id, 'nigel@leadingdigital.africa');
+        $payment = $paynow->createPayment($id, 'accounts@ahpcz.co.zw');
         $payment->add('Bananas', $amount);
         //initiate payment
         $response = $paynow->send($payment);
@@ -58,8 +58,8 @@ class PaynowController extends Controller
         $paynow = new Paynow(
             '5865',
             '23962222-9610-4f7c-bbd5-7e12f19cdfc6',
-            'http://localhost:8000/paynow/' . $id . '/checkPayment',
-            'http://localhost:8000/paynow/' . $id . '/checkPayment'
+            'http://database.ahpcz.co.zw/paynow/' . $id . '/checkPayment',
+            'http://database.ahpcz.co.zw/paynow/' . $id . '/checkPayment'
         );
         $payment = Payment::where('transaction_id', $id)->first();
         $pollUrl = $payment->poll_url;

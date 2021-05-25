@@ -98,7 +98,7 @@
                         </li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#renewal"
                                                 role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span>
-                                <span class="hidden-xs-down">Payments</span></a></li>
+                                <span class="hidden-xs-down">Renewals</span></a></li>
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#approval"
                                                 role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span>
                                 <span class="hidden-xs-down">Approval</span></a></li>
@@ -827,6 +827,8 @@
                                                         <th>CPD Points</th>
                                                         <th>Placement</th>
                                                         <th>Renewal Date</th>
+                                                        <th>Preview</th>
+                                                        <th>Verify</th>
                                                         <th>view</th>
 
                                                     </tr>
@@ -839,6 +841,8 @@
                                                         <th>CPD Points</th>
                                                         <th>Placement</th>
                                                         <th>Renewal Date</th>
+                                                        <th>Preview</th>
+                                                        <th>Verify</th>
                                                         <th>view</th>
 
                                                     </tr>
@@ -869,8 +873,19 @@
                                                                 </td>
                                                                 <td>@if($renewal->created_at !=null){{$renewal->created_at->format('d F Y')}}@endif</td>
                                                                 <td>
+                                                                    <a href="/certificate/{{$renewal->id}}" target="_blank">Preview </a>
+                                                                </td>
+                                                                <td>
+                                                                    @if($renewal->certificate == 2)
+                                                                        {{'Signed'}}
+                                                                    @elseif($renewal->certificate == 1)
+                                                                        <a href="/admin/practitioner_renewals/{{$renewal->id}}/initiate_renewal_sign_off">Sign_off </a>
+                                                                    @else
+                                                                        <a href="/admin/practitioner_renewals/{{$renewal->id}}/initiate_renewal_verification">Verify </a>
+                                                                    @endif
+                                                                </td>
+                                                                <td>
                                                                     <a href="/admin/practitioner_renewals/{{$renewal->id}}/index">Payments </a>
-
                                                                 </td>
 
                                                             </tr>
@@ -931,11 +946,11 @@
 
                             <div class="col-md-9 col-xs-12">
                                 <h1>Portal Account Permissions</h1>
-                                <a href="{{url('admin/practitioners/'.$practitioner->id.'/'.$portal_activate.'/verify_create')}}"
+                                <a href="{{url('admin/practitioners/'.$practitioner->id.'/1/verify_create')}}"
                                    class="btn btn-success btn-xs"><i class="fa fa-check"></i> Activate
                                 </a>
 
-                                <a href="/admin/practitioners/{{$practitioner->id}}/{{$portal_de_activate}}/verify_create"
+                                <a href="/admin/practitioners/{{$practitioner->id}}/2/verify_create"
                                    class="btn btn-success btn-xs"><i class="fa fa-window-close"></i> De-activate
                                 </a>
                             </div>
@@ -1048,5 +1063,6 @@
 
 
     </script>
+
 @endsection
 

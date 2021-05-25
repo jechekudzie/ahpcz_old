@@ -1,5 +1,6 @@
 <?php
 
+use App\PractitionerQualification;
 use Illuminate\Http\Request;
 
 /*
@@ -27,8 +28,23 @@ Route::get('/update_information/create', 'PortalApiController@update_information
 Route::post('/update_information/store', 'PortalApiController@update_information_store');
 Route::get('/renewal_criteria/{renewal_category_id}/{employment_status_id}/{employment_location_id}/{certificate_request}', 'PortalApiController@renewal_criteria');
 Route::get('/create_renewal', 'PortalApiController@create_renewal');
+
 Route::post('/make_payment', 'PortalApiController@make_payment');
 Route::post('/make_online_payment', 'PortalApiController@make_online_payment');
+
+Route::post('/make_restoration_payment', 'PortalApiController@make_restoration_payment');
+Route::post('/make_online_restoration_payment', 'PortalApiController@make_online_restoration_payment');
+
+Route::post('/testfile', 'PortalApiController@testfile');
+
+
+Route::get('/get_qualification_data/{practitioner}', 'PortalApiController@get_qualification_data');
+Route::get('/get_qualification/{id}', 'PortalApiController@get_qualification');
+Route::post('/add_practitioner_qualification/{practitioner}', 'PortalApiController@add_practitioner_qualification');
+Route::post('/edit_practitioner_qualification/{practitionerQualification}', 'PortalApiController@edit_practitioner_qualification');
+
+Route::get('/verify_certificate/{practitioner}', 'PortalApiController@verify_certificate');
+
 
 
 

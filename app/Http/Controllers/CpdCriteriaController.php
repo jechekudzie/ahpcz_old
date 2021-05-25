@@ -18,7 +18,7 @@ class CpdCriteriaController extends Controller
     {
         //
         $professions = Profession::all()->sortBy('name');
-        return view('admin.cpd_criterias.index', compact( 'professions'));
+        return view('admin.cpd_criterias.index', compact('professions'));
 
     }
 
@@ -30,10 +30,10 @@ class CpdCriteriaController extends Controller
     public function create(Profession $profession)
     {
         //
-        $check = CpdCriteria::where('profession_id',$profession->id)->first();
+        $check = CpdCriteria::where('profession_id', $profession->id)->first();
 
         $employment_statuses = EmploymentStatus::all();
-        return view('admin.cpd_criterias.create', compact('employment_statuses', 'profession','check'));
+        return view('admin.cpd_criterias.create', compact('employment_statuses', 'profession', 'check'));
     }
 
     /**
@@ -49,7 +49,7 @@ class CpdCriteriaController extends Controller
         $profession = request('profession');
         $profession_id = request('profession_id');
 
-       // dd($employment_statuses);
+        // dd($employment_statuses);
         foreach ($employment_statuses as $employment_status) {
             $cpd_criteria['profession_id'] = $employment_status['profession_id'];
             $cpd_criteria['employment_status_id'] = $employment_status['employment_status_id'];
@@ -57,7 +57,7 @@ class CpdCriteriaController extends Controller
             CpdCriteria::create($cpd_criteria);
         }
 
-        return redirect('admin/cpd_criterias/index')->with('message',$profession.' CPD Criteria added successfully');
+        return redirect('admin/cpd_criterias/index')->with('message', $profession . ' CPD Criteria added successfully');
     }
 
     /**
@@ -77,8 +77,15 @@ class CpdCriteriaController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(CpdCriteria $cpdCriteria)
     {
+        $profesison = $cpdCriteria->profession->id;
+        $cpd_criterias = CpdCriteria::where('profession_id', $profesison)->get();
+
+        $employment_statuses = EmploymentStatus::all();
+        return view('admin.cpd_criterias.edit',
+            compact('employment_statuses', 'cpdCriteria', 'cpd_criterias'));
+
         //
     }
 
@@ -89,9 +96,30 @@ class CpdCriteriaController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update()
     {
         //
+        $employment_statuses = request('item');
+        $profession = request('profession');
+        $profession_id = request('profession_id');
+        $standard = request('standard');
+
+        // dd($employment_statuses);
+        foreach ($employment_statuses as $employment_status) {
+            $cpd_criteria['profession_id'] = $employment_status['profession_id'];
+            $cpd_criteria['employment_status_id'] = $employment_status['employment_status_id'];
+            $cpd_criteria['points'] = $employment_status['points'];
+            $cpd_criteria['standard'] = $standard;
+
+            //now first get profession
+            $criteria = CpdCriteria::where('profession_id', $employment_status['profession_id'])
+                ->where('employment_status_id', $employment_status['employment_status_id'])
+                ->first()->update($cpd_criteria);
+        }
+
+       return redirect('/admin/renewal_categories')
+           ->with('message','CPD Criteria has been updated successfully.');
+
     }
 
     /**

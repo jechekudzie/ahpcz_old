@@ -48,7 +48,7 @@
                                                     <select class="custom-select form-control " required
                                                             name="period">
                                                         <option value="">Choose period</option>
-                                                        @for($x =date('Y')+10;$x >= 2008;$x--)
+                                                        @for($x =date('Y')-1;$x >= 2008;$x--)
                                                             <option value="{{$x}}">{{$x}}</option>
                                                         @endfor
                                                     </select>

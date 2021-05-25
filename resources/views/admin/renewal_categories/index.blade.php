@@ -163,6 +163,7 @@
                                 <thead>
                                 <tr>
                                     <th>Profession</th>
+                                    <th>Standard</th>
                                     <th>Employment Status</th>
                                     <th>Points</th>
                                     <th>Edit</th>
@@ -172,6 +173,7 @@
                                 <tfoot>
                                 <tr>
                                     <th>Renewal category</th>
+                                    <th>Standard</th>
                                     <th>Employment Status</th>
                                     <th>Points</th>
                                     <th>Edit</th>
@@ -182,9 +184,10 @@
                                 @foreach($cpd_criterias as $cpd_criteria)
                                     <tr>
                                         <td>{{$cpd_criteria->profession->name}}</td>
+                                        <td>{{$cpd_criteria->standard}}</td>
                                         <td>{{$cpd_criteria->employment_status->name}}</td>
                                         <td>{{$cpd_criteria->points}}</td>
-                                        <td><a href="/admin/cpd_criterias/{{$cpd_criteria->id}}/Edit"><i
+                                        <td><a href="/admin/cpd_criterias/{{$cpd_criteria->id}}/edit"><i
                                                     class="fa fa-pencil"></i> Edit</a></td>
 
                                         <td><a href="/admin/cpd_criterias/{{$cpd_criteria->id}}/delete"><i

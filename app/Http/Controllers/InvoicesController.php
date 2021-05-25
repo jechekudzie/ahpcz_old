@@ -22,7 +22,6 @@ class InvoicesController extends Controller
         $pdf = new \App\Invoice;
         $output = $pdf->generate();
         Storage::put('invoice.pdf', $output);
-
     }
 
     public function downloadInvoice()

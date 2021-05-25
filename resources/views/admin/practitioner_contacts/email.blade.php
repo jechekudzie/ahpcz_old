@@ -34,6 +34,8 @@
                                 <thead>
                                 <tr>
                                     <th>Full Name</th>
+                                    <th>Registration number</th>
+                                    <th>Profession</th>
                                     <th>Email</th>
                                     <th>Phone</th>
                                     <th>View</th>
@@ -41,12 +43,16 @@
                                 </thead>
                                 <tbody>
                                 <th>Full Name</th>
+                                <th>Registration number</th>
+                                <th>Profession</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>View</th>
                                 @foreach($practitioner_contacts as $practitioner)
                                     <tr>
                                         <td>{{$practitioner->last_name.' '.$practitioner->first_name}}</td>
+                                        <td>{{$practitioner->prefix.' '.$practitioner->registration_number}}</td>
+                                        <td>{{$practitioner->profession->name}}</td>
                                         <td>@if($practitioner->contact){{$practitioner->contact->email}}@endif</td>
                                         <td>@if($practitioner->contact){{$practitioner->contact->primary_phone}}@endif</td>
                                         <td><a href="/admin/practitioners/".{{$practitioner->id}}</a>View</td>

@@ -86,8 +86,8 @@
                                     <td class="text-center"></td>
                                     <td>{{"Renewal fee"}}</td>
                                     <td class="text-right">1</td>
-                                    <td class="text-right"> {{number_format($renewal_fee->fee,2)}}</td>
-                                    <td class="text-right"> {{number_format($renewal_fee->fee,2)}}</td>
+                                    <td class="text-right"> {{number_format($renewal_fee,2)}}</td>
+                                    <td class="text-right"> {{number_format($renewal_fee,2)}}</td>
                                 </tr>
 
                                 </tbody>
@@ -96,8 +96,8 @@
                     </div>
                     <div class="col-md-12">
                         <div class="pull-right m-t-30 text-right">
-                            <p>Sub - Total amount: {{number_format($renewal_fee->fee,2)}}</p>
-                            <p>vat {{$vat->percentage}}(%) : {{number_format($renewal_fee->fee*$vat->vat,2)}} </p>
+                            <p>Sub - Total amount: {{number_format($renewal_fee,2)}}</p>
+                            <p>vat {{$vat->percentage}}(%) : {{number_format($renewal_fee*$vat->vat,2)}} </p>
                             <hr>
                             <h3><b>Total :</b> {{$fee}}</h3>
                         </div>
@@ -105,10 +105,10 @@
                         <hr>
                         <div class="text-right">
                             <a href="/admin/practitioners/renewals/{{$practitioner->id}}/create" class="btn btn-success"> Proceed to payment</a>
-                            {{--<a href="/admin/invoices/{{$practitioner->id}}" class="btn btn-warning "><span><i
+                            <a href="/admin/invoices/{{$practitioner->id}}" class="btn btn-warning "><span><i
                                         class="fa fa-print"></i> Print</span></a>
                             <button id="print" class="btn btn-default btn-outline" type="button"> <span><i class="fa fa-print"></i> Print</span> </button>
---}}
+
                         </div>
                     </div>
                 </div>

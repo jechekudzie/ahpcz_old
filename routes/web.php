@@ -18,6 +18,13 @@ Route::get('/', function () {
 
 })->middleware('auth')->middleware('guest');
 
+Route::get('/upload', function () {
+
+    return view('upload');
+
+});
+
+
 Route::get('/admin/emails','PractitionerContactsController@contacts');
 
 
@@ -72,8 +79,16 @@ Route::post('/admin/profession_tires', 'ProfessionTireController@store');
 Route::resource('/admin/renewal_criterias', 'RenewalCriteriaController');
 
 Route::get('/admin/cpd_criterias/index', 'CpdCriteriaController@index');
+Route::get('/admin/cpd_criterias/{cpd_criteria}/edit', 'CpdCriteriaController@edit');
 Route::get('/admin/cpd_criterias/{profession}/create', 'CpdCriteriaController@create');
 Route::post('/admin/cpd_criterias/store', 'CpdCriteriaController@store');
+Route::patch('/admin/cpd_criterias/update', 'CpdCriteriaController@update');
+
+
+//paynow
+Route::post('/make_online_payment', 'PortalApiController@make_online_payment');
+Route::get('/check_payment/{practitioner_id}', 'RenewalController@check_payment');
+Route::get('/sessions/', 'RenewalController@sessions');
 
 
 //student registration fees
@@ -197,6 +212,12 @@ Route::get('/admin/practitioner_renewals/{practitioner}/create', 'RenewalControl
 //display all the renewal payments for a specific period
 Route::get('/admin/practitioner_renewals/{renewal}/index', 'RenewalController@index');
 
+//
+Route::get('/admin/practitioner_renewals/{renewal}/initiate_renewal_verification', 'RenewalController@initiate_renewal_verification');
+Route::get('/admin/practitioner_renewals/{renewal}/initiate_renewal_sign_off', 'RenewalController@initiate_renewal_sign_off');
+Route::post('/admin/practitioner_renewals/{renewal}/verify_renewal', 'RenewalController@verify_renewal');
+Route::post('/admin/practitioner_renewals/{renewal}/sign_off', 'RenewalController@sign_off');
+
 Route::get('/admin/practitioners/renewals/{renewal}/create_payment', 'RenewalController@createPayment');
 Route::post('/admin/practitioners/renewals/{renewal}/make_payment', 'RenewalController@makePayment');
 Route::get('/admin/practitioners/renewals/{practitioner}/practitionerBalances', 'RenewalController@practitionerBalances');
@@ -228,6 +249,7 @@ Route::get('/admin/practitioners/renewals/{renewal}/show', 'RenewalController@sh
 //renewals and restoration
 Route::get('/check_restoration_penalties/{practitioner}', 'RenewalController@check_restoration_penalties');
 Route::post('/manual_restoration_penalties/{practitioner}', 'RenewalController@manual_restoration_penalties');
+Route::post('/make_restoration_payment', 'RenewalController@make_restoration_payment');
 
 
 Route::get('/admin/practitioners/{practitioner}/cdpoints', 'RenewalController@cdpoints');
@@ -292,6 +314,8 @@ Route::get('/admin/notification/compose', 'MessagesController@compose');
 Route::post('/admin/notification/send', 'MessagesController@send');
 
 //practitioner certificates
+Route::get('/certificate/{renewal}', 'CertificateController@certificate');
+
 Route::get('/admin/practitioners/certificate/index', 'PractitionerCertificateController@index');
 Route::get('/admin/practitioners/certificate/pending', 'PractitionerCertificateController@pending');
 Route::get('/admin/practitioners/certificate/collection/{renewal}', 'PractitionerCertificateController@collection');

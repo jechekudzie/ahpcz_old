@@ -32,12 +32,12 @@ class APIController extends Controller
 
             '5865',
             '23962222-9610-4f7c-bbd5-7e12f19cdfc6',
-            'http://localhost:8001/check_payment/' . $practitioner_id,
-            'http://localhost:8001/check_payment/' . $practitioner_id
+            'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id,
+            'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id
         );
 
         //create a payment and add items required
-        $payment = $paynow->createPayment($id, 'nigel@leadingdigital.africa');
+        $payment = $paynow->createPayment($id, 'accounts@ahpcz.co.zw');
         $payment->add('Sub', $amount);
         //initiate payment
         $response = $paynow->send($payment);
