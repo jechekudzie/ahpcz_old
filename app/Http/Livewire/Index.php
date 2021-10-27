@@ -21,6 +21,7 @@ class Index extends Component
 
     public function render()
     {
+        //dd($practitioner->practitioner_payment_information);
         return view('livewire.index', [
             'practitioners' => Practitioner::search($this->search)
                 ->CheckCompliance($this->compliance)

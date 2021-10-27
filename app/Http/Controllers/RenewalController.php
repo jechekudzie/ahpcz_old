@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\CertificateNumber;
 use App\CpdCriteria;
+use App\Exports\PractExport;
 use App\Mail\RenewalPayment;
 use App\Mail\SignOff;
 use App\Notifications\FullPayment;
@@ -14,10 +15,12 @@ use App\PaymentItem;
 use App\PaymentItemCategory;
 use App\PaymentMethod;
 use App\PaymentType;
+use App\Pract;
 use App\Practitioner;
 use App\PractitionerCpdpoint;
 use App\PractitionerPlacement;
 use App\Rate;
+use App\RegisterCategory;
 use App\Registration;
 use App\RegistrationFee;
 use App\Renewal;
@@ -32,6 +35,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Paynow\Payments\Paynow;
 use File;
 
@@ -44,13 +48,9 @@ class RenewalController extends Controller
     }*/
     public function sessions()
     {
-        $renewals = Renewal::all();
-        foreach ($renewals as $renewal){
-            $renewal->update([
-                'balance' => 0
-            ]);
-        }
-        dd(Session::get('payment'));
+        $renewal = Practitioner::where('id', 28)->first();
+
+        dd($renewal);
     }
 
     //Paynow response from paynow
@@ -173,8 +173,8 @@ class RenewalController extends Controller
             //usd account
                 '11778',
                 '02f69090-68e9-427b-9838-966385aa0541',
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id,
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id
+                'http://localhost:8000/check_payment/' . $practitioner_id,
+                'http://localhost:8000/check_payment/' . $practitioner_id
 
             );
         }
@@ -185,8 +185,8 @@ class RenewalController extends Controller
             //local account
                 '11777',
                 '739d23ae-f8c5-45e0-ac0a-a481f615c813',
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id,
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id
+                'http://localhost:8000/check_payment/' . $practitioner_id,
+                'http://localhost:8000/check_payment/' . $practitioner_id
             );
         }
 
@@ -236,6 +236,7 @@ class RenewalController extends Controller
         }
 
         if (count($practitioner->renewals)) {
+
             $renewals = $practitioner->renewals;
             $size = sizeof($renewals);
             $last_renewal_period = $renewals[$size - 1]->renewal_period_id;
@@ -254,8 +255,10 @@ class RenewalController extends Controller
 
             //check restoration or penalty
             $result = $current_period - $last_renewal_period;
+
             if ($result == 1 && $current_month > 06) {
                 $restoration_penalty_name = 'Restoration current year';
+
                 if ($tire->id == 1) {
                     $renewal_fee = ceil($tire->fee * 1.145);
                     $restoration_penalty_fee = ceil($renewal_fee * 1.397);
@@ -272,7 +275,12 @@ class RenewalController extends Controller
                     $renewal_fee = ceil($tire->fee * 1.145);
                     $restoration_penalty_fee = ceil($renewal_fee * 1.2);
                     $restoration_penalty_charge = 1.2;
+
                 }
+                $this->store_restoration($restoration_penalty_name, $restoration_penalty_fee, $balance, $cpd_points, $rate, $restoration_penalty_charge);
+                return view('confirm_restoration',
+                    compact('practitioner', 'restoration_penalty_name', 'restoration_penalty_fee',
+                        'cpd_points', 'balance', 'rate'));
 
             } elseif ($result == 2) {
                 $restoration_penalty_name = 'Restoration level 1';
@@ -329,6 +337,7 @@ class RenewalController extends Controller
                     compact('practitioner', 'restoration_penalty_name', 'restoration_penalty_fee',
                         'cpd_points', 'balance', 'rate'));
             } elseif ($result == 1) {
+
                 if ($current_month == 04) {
                     $restoration_penalty_name = 'Penalty level 1 = 5%';
                     $renewal_fee = ceil($tire->fee * 1.145);
@@ -368,6 +377,7 @@ class RenewalController extends Controller
                     ]);
 
                 }
+
 
             } else {
                 $restoration_penalty_name = 'No restoration no penalty';
@@ -547,7 +557,27 @@ class RenewalController extends Controller
                 return view('renewals.create')->with([
                     'practitioner' => $practitioner,
                 ]);
+            }
+            if ($current_month == 07) {
+                if ($tire->id == 1) {
+                    $restoration_penalty_name = 'Current Restoration = 39.7%';
+                    $renewal_fee = ceil($tire->fee * 1.145);
+                    $restoration_penalty_fee = ceil($renewal_fee * 1.397);
+                    $restoration_penalty_charge = 1.397;
+                }
 
+                if ($tire->id == 2) {
+                    $restoration_penalty_name = 'Current Restoration = 65.7%';
+                    $renewal_fee = ceil($tire->fee * 1.145);
+                    $restoration_penalty_fee = ceil($renewal_fee * 1.657);
+                    $restoration_penalty_charge = 1.657;
+                }
+
+                $this->store_restoration($restoration_penalty_name, $restoration_penalty_fee, $balance, $cpd_points, $rate, $restoration_penalty_charge);
+                //return redirect('/create_renewal');
+                return view('renewals.create')->with([
+                    'practitioner' => $practitioner,
+                ]);
             }
 
         } else {
@@ -711,7 +741,6 @@ class RenewalController extends Controller
         }
     }
 
-
     public function store_restoration(
         $restoration_penalty_name, $restoration_penalty_fee,
         $balance, $cpd_points, $rate, $restoration_penalty_charge)
@@ -762,7 +791,7 @@ class RenewalController extends Controller
             'renewal_period_id' => 'required',
             'payment_channel_id' => 'required',
             'amount_paid' => 'required',
-            'receipt_number' => ['required', 'digits_between:4,8', 'numeric', 'unique:payments'],
+            'receipt_number' => ['nullable', 'digits_between:4,8', 'numeric', 'unique:payments'],
             'pop' => 'nullable',
         ]);
 
@@ -836,7 +865,6 @@ class RenewalController extends Controller
                     }
                 }
             } else {
-
                 if (count($practitioner->payments)) {
                     foreach ($practitioner->payments as $existing_payment) {
                         if ($existing_payment->id != $new_renewal_payment->id) {
@@ -893,7 +921,6 @@ class RenewalController extends Controller
         return view('admin.practitioner_payments.renewal_payments',
             compact('renewal', 'payment_items', 'payment_channels', 'payment_item_categories')
         );
-
     }
 
     //make and store renewals payments (store data)
@@ -1011,12 +1038,10 @@ class RenewalController extends Controller
         $renewal->update([
             'certificate' => 2,
         ]);
-
-        /* if ($practitioner->contact) {
+        /*if ($practitioner->contact) {
              $email = $practitioner->contact->email;
              Mail::to($email)->send(new SignOff($renewal));
          }*/
-
         return redirect('/admin/practitioners/' . $renewal->practitioner->id)
             ->with('message', 'Renewal for ' . $renewal->renewal_period_id . ' has been ceritified and practitioner will have right to print certificate. ');
     }
@@ -1176,5 +1201,65 @@ class RenewalController extends Controller
             compact('practitioner', 'renewal_fee', 'vat', 'fee'));
 
     }
+
+    //auto renew
+    public function auto_renew(Practitioner $practitioner)
+    {
+        return view('admin.practitioner_payments.auto_renew', compact('practitioner'));
+    }
+
+    public function auto_renew_store(Practitioner $practitioner)
+    {
+
+            if ($practitioner != null) {
+
+                    //first update practitioner contents
+                    $practitioner->update([
+                        'registration_officer' => 1,
+                        'member' => 1,
+                        'accountant' => 2,
+                        'registrar' => 1,
+                    ]);
+
+                    if(Renewal::where('practitioner_id',$practitioner->id)->where('renewal_period_id',date('Y'))
+                        ->first()){
+                        return back()->with('message','This practitioner has already been renewed for this period.');
+                    }else{
+                        $renewal = $practitioner->addRenewal([
+                            'renewal_period_id' => date('Y'),
+                            'practitioner_id' => $practitioner->id,
+                            'payment_method_id' => 1,
+                            'renewal_category_id' => 1,
+                            'renewal_status_id' => 1,
+                            'placement' => 1,
+                            'cdpoints' => 1,
+                            'certificate' => 2,
+                            'balance' => 0,
+                            'certificate_request' => 1,
+                            'currency' => 0,
+                            'payment_type_id' => 1,
+
+                        ]);
+                        $renewal->addPayments([
+                            'renewal_period_id' => 2021,
+                            'practitioner_id' => $practitioner->id,
+                            'payment_date' => now(),
+                            'month' => date('m'),
+                            'day' => date('d'),
+                            'payment_channel_id' => 1,
+                            'amount_invoiced' => 0,
+                            'amount_paid' => 0,
+                            'payment_item_id' => 33,
+                            'payment_item_category_id' => 1,
+                            'balance' => 0,
+                        ]);
+                        return back()->with('message','Practitioner has been successfully renewed');
+                    }
+
+                }
+
+
+    }
+
 
 }

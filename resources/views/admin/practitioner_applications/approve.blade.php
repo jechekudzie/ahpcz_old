@@ -14,8 +14,7 @@
                 @can('admin')
                     <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                 @endcan
-                <a href="/admin/practitioners/{{$practitioner->id}}" class="btn btn-success"></i> Dashboard</a>
-
+                <a href="/admin/practitioners/{{$practitioner->id}}" class="btn btn-success"> Dashboard</a>
 
             </div>
             <div class="col-md-7 align-self-center text-right">
@@ -65,6 +64,15 @@
                                     <form action="/admin/practitioners/approval/{{$practitioner->id}}/officer"
                                           method="post" class="m-t-40" novalidate>
                                         {{csrf_field()}}
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="ec_member"
+                                                   id="flexCheckDefault">
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                EC member (If Educational committee member is required to verify this
+                                                application, please check this box and proceed.
+                                            </label>
+                                        </div>
+
                                         <div class="form-group">
                                             <h5>Comments <span class="text-danger">*</span></h5>
                                             <div class="controls">
@@ -85,84 +93,116 @@
 
                                     </form>
                                 @endif
+
                                 @if(auth()->user()->role_id == 5)
-                                    <h3>Accountant Approval</h3>
-                                    <form action="/admin/practitioners/approval/{{$practitioner->id}}/accountant"
-                                          method="post" class="m-t-40" novalidate>
-                                        {{csrf_field()}}
-                                        <div class="form-group">
-                                            <h5>Comments <span class="text-danger">*</span></h5>
-                                            <div class="controls">
+                                    @if($practitioner->registration_officer == 2 && $practitioner->accountant == 0
+                                        && $practitioner->member == 1 && $practitioner->registrar == 1
+                                        )
+
+                                        <h3>Accountant Approval - Final Payment</h3>
+                                        <form action="/admin/practitioners/approval/{{$practitioner->id}}/final_payment"
+                                              method="post"
+                                              class="m-t-40" novalidate>
+                                            {{csrf_field()}}
+                                            <div class="form-group">
+                                                <h5>Comments <span class="text-danger">*</span></h5>
+                                                <div class="controls">
                                             <textarea name="comment" class="form-control" required
                                                       data-validation-required-message="This field is required">{{old('comment')}}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="controls">
-                                                <input type="submit" name="add_profession"
-                                                       class="btn btn-rounded btn btn-block btn-success"
-                                                       value="Approve Application">
+                                                </div>
                                             </div>
 
-                                        </div>
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    <input type="submit" name="add_profession"
+                                                           class="btn btn-rounded btn btn-block btn-success"
+                                                           value="Approve Application">
+                                                </div>
+
+                                            </div>
 
 
-                                    </form>
-                                @endif
-
-                                @if(auth()->user()->role_id == 6)
-                                    <h3>Committee Member Approval</h3>
-                                    <form action="/admin/practitioners/approval/{{$practitioner->id}}/member"
-                                          method="post"
-                                          class="m-t-40" novalidate>
-                                        {{csrf_field()}}
-                                        <div class="form-group">
-                                            <h5>Comments <span class="text-danger">*</span></h5>
-                                            <div class="controls">
+                                        </form>
+                                    @else
+                                        <h3>Accountant Approval</h3>
+                                        <form action="/admin/practitioners/approval/{{$practitioner->id}}/accountant"
+                                              method="post"
+                                              class="m-t-40" novalidate>
+                                            {{csrf_field()}}
+                                            <div class="form-group">
+                                                <h5>Comments <span class="text-danger">*</span></h5>
+                                                <div class="controls">
                                             <textarea name="comment" class="form-control" required
                                                       data-validation-required-message="This field is required">{{old('comment')}}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="controls">
-                                                <input type="submit" name="add_profession"
-                                                       class="btn btn-rounded btn btn-block btn-success"
-                                                       value="Approve Application">
+                                                </div>
                                             </div>
 
-                                        </div>
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    <input type="submit" name="add_profession"
+                                                           class="btn btn-rounded btn btn-block btn-success"
+                                                           value="Approve Application">
+                                                </div>
+
+                                            </div>
 
 
-                                    </form>
-                                @endif
+                                        </form>
+                                    @endif
+                                    @endif
 
-                                @if(auth()->user()->role_id == 7)
-                                    <h3>Registrar Approval</h3>
-                                    <form action="/admin/practitioners/approval/{{$practitioner->id}}/registrar"
-                                          method="post" class="m-t-40" novalidate>
-                                        {{csrf_field()}}
-                                        <div class="form-group">
-                                            <h5>Comments <span class="text-danger">*</span></h5>
-                                            <div class="controls">
+                                    @if(auth()->user()->role_id == 6)
+                                        <h3>Educational Committee Member Approval</h3>
+                                        <form action="/admin/practitioners/approval/{{$practitioner->id}}/member"
+                                              method="post"
+                                              class="m-t-40" novalidate>
+                                            {{csrf_field()}}
+                                            <div class="form-group">
+                                                <h5>Comments <span class="text-danger">*</span></h5>
+                                                <div class="controls">
                                             <textarea name="comment" class="form-control" required
                                                       data-validation-required-message="This field is required">{{old('comment')}}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="controls">
-                                                <input type="submit" name="add_profession"
-                                                       class="btn btn-rounded btn btn-block btn-success"
-                                                       value="Approve Application">
+                                                </div>
                                             </div>
 
-                                        </div>
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    <input type="submit" name="add_profession"
+                                                           class="btn btn-rounded btn btn-block btn-success"
+                                                           value="Approve Application">
+                                                </div>
+
+                                            </div>
 
 
-                                    </form>
-                                @endif
+                                        </form>
+                                    @endif
+
+                                    @if(auth()->user()->role_id == 7)
+                                        <h3>Registrar Approval</h3>
+                                        <form action="/admin/practitioners/approval/{{$practitioner->id}}/registrar"
+                                              method="post" class="m-t-40" novalidate>
+                                            {{csrf_field()}}
+                                            <div class="form-group">
+                                                <h5>Comments <span class="text-danger">*</span></h5>
+                                                <div class="controls">
+                                            <textarea name="comment" class="form-control" required
+                                                      data-validation-required-message="This field is required">{{old('comment')}}</textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="controls">
+                                                    <input type="submit" name="add_profession"
+                                                           class="btn btn-rounded btn btn-block btn-success"
+                                                           value="Approve Application">
+                                                </div>
+
+                                            </div>
+
+
+                                        </form>
+                                    @endif
                             </div>
 
                         </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\PaymentItem;
 use App\PaymentItemCategory;
 use App\PaymentItemFee;
+use App\Rate;
 use Illuminate\Http\Request;
 
 class PaymentItemsController extends Controller
@@ -15,19 +16,23 @@ class PaymentItemsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /*public function __construct()
+
+    public function __construct()
     {
-        $this->middleware('verified');
-    }*/
+        $this->middleware('auth');
+    }
 
     public function index()
     {
         //
 
+        $rate = Rate::find(1)->rate;
         $payment_items = PaymentItem::all()->sortBy('name');
         $payment_item_categories = PaymentItemCategory::all()->sortBy('name');
 
-        return view('admin.payment_items.index',compact('payment_items','payment_item_categories'));
+        return view('admin.payment_items.index',
+            compact('payment_items','payment_item_categories',
+            'rate'));
 
     }
 

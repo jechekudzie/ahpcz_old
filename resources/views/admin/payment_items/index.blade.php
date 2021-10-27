@@ -71,9 +71,8 @@
                                                     <th>Payment Item</th>
                                                     <th>Payment Category</th>
                                                     <th>Payment Item Fee (RTGS)</th>
-                                                    <th>VAT 15% (RTGS)</th>
                                                     <th>Total(RTGS) <i style="color: red;">VAT inclusive</i></th>
-                                                    <th>Created</th>
+                                                    <th>Requirements</th>
                                                     <th>Edit</th>
 
                                                 </tr>
@@ -84,9 +83,8 @@
                                                     <th>Payment Item</th>
                                                     <th>Payment Category</th>
                                                     <th>Payment Item Fee (RTGS)</th>
-                                                    <th>VAT 15% (RTGS)</th>
                                                     <th>Total(RTGS) <i style="color: red;">VAT inclusive</i></th>
-                                                    <th>Created</th>
+                                                    <th>Requirements</th>
                                                     <th>Edit</th>
 
                                                 </tr>
@@ -96,11 +94,12 @@
                                                     <tr>
                                                         <td>{{$payment_item->name}}</td>
                                                         <td>{{$payment_item->paymentItemCategory->name}}</td>
-                                                        <td>{{$payment_item->fee}}</td>
-                                                        <td>{{number_format($vat = $payment_item->fee * 0.15,2)}}</td>
-                                                        <td>{{number_format($total = $payment_item->fee + $vat,2)}}</td>
+                                                        <td>{{$payment_item->fee * $rate}}</td>
+                                                        <td>{{number_format($payment_item->fee)}}</td>
+                                                        <td>
+                                                            <a href="/admin/payment_item_requirements/{{$payment_item->id}}">
+                                                                <i class="fa fa-pencil"></i> Requirements</a></td>
 
-                                                        <td>{{$payment_item->updated_at}}</td>
                                                         <td><a href="/admin/payment_items/{{$payment_item->id}}/edit"><i
                                                                         class="fa fa-pencil"></i> Edit</a></td>
                                                     </tr>

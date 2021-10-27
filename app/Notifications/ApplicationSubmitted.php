@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -32,8 +33,8 @@ class ApplicationSubmitted extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
-        //return ['database','mail'];
+        //return ['database'];
+        return ['database','mail'];
     }
 
     /**
@@ -45,11 +46,12 @@ class ApplicationSubmitted extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->replyTo(auth()->user()->email)
-            ->from(auth()->user()->email)
-            ->subject('New Application - ' . $this->practitioner->first_name.' '.$this->practitioner->last_name)
-            ->line('New application has been submitted, awaiting review and payment:')
-            ->line('Applicant Profession: '. $this->practitioner->profession->name. ' and Professional Qualification: ' .$this->practitioner->professionalQualification->name)
+            ->replyTo($this->practitioner->contact->email)
+            ->from($this->practitioner->contact->email)
+            ->subject('Registration Application - ' . $this->practitioner->first_name.' '
+                .$this->practitioner->last_name)
+            ->line('New application has been submitted by '. $this->practitioner->first_name.' '
+                .$this->practitioner->last_name. ', awaiting review:')
             ->line('You can view application details on the link below.')
             ->action('View Application Details', url('/admin/practitioners/' . $this->practitioner->id));
 
@@ -65,10 +67,9 @@ class ApplicationSubmitted extends Notification
     {
         return [
             'id'=>$this->practitioner->id,
-            'comment'=>"New application has been submitted",
-            'title' =>'New Practitioner Application',
-            'sender' => auth()->user()
-
+            'comment'=>"A new registration application has been submitted. Please go through and verify.",
+            'title' =>'Practitioner Registration Application',
+            'sender' => User::where('role_id',3)->first()
         ];
     }
 }

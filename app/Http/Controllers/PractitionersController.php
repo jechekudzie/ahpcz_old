@@ -13,6 +13,7 @@ use App\Http\Resources\PractitionerResourceCollection;
 use App\MaritalStatus;
 use App\Nationality;
 use App\Notifications\ApplicationSubmitted;
+use App\Notifications\RegistrationPayment;
 use App\PaymentMethod;
 use App\Practitioner;
 use App\PractitionerContact;
@@ -44,16 +45,15 @@ class PractitionersController extends Controller
      */
 
     public function __construct()
-     {
-         $this->middleware('auth');
+    {
+        $this->middleware('auth');
 
-     }
+    }
 
 
     public function index(Request $request)
     {
         return view('admin.practitioners.index');
-
 
     }
 
@@ -63,11 +63,6 @@ class PractitionersController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
@@ -82,7 +77,7 @@ class PractitionersController extends Controller
         return view('admin.practitioners.create',
             compact('titles', 'genders',
                 'professions', 'qualification_categories', 'employment_statuses',
-                'employment_locations','register_categories'
+                'employment_locations', 'register_categories'
             ));
 
     }
@@ -112,26 +107,20 @@ class PractitionersController extends Controller
 
         } else {
             $personal_details = request()->validate([
-                'title_id' => ['nullable'],
-                'gender_id' => ['required'],
-                'first_name' => ['nullable'],
-                'last_name' => ['nullable'],
-                'previous_name' => ['nullable'],
-/*                'id_number' => 'nullable|alpha_num', 'regex:/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/',*/
-                'id_number' => 'nullable',
-                'profession_id' => ['required'],
-                'qualification_category_id' => ['nullable'],
-                'professional_qualification_id' => ['nullable'],
-                'commencement_date' => ['nullable'],
-                'completion_date' => ['nullable'],
-                'registration_number' => 'nullable|numeric',
-                'registration_date' => 'nullable',
+                    'title_id' => ['nullable'],
+                    'gender_id' => ['required'],
+                    'first_name' => ['nullable'],
+                    'last_name' => ['nullable'],
+                    'id_number' => 'nullable|alpha_num', 'regex:/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/',
+                    'profession_id' => ['required'],
+                    'qualification_category_id' => ['nullable'],
+                    'professional_qualification_id' => ['nullable'],
+                    'commencement_date' => ['nullable'],
+                    'completion_date' => ['nullable'],
+                    'registration_number' => 'nullable|numeric',
+                    'registration_date' => 'nullable',
 
-            ]
-                /*[
-                    'id_number.regex' => 'ID number should contain at least one character and one number',
-
-                ]*/
+                ]
             );
 
             //create registration data with Year and Month
@@ -151,10 +140,10 @@ class PractitionersController extends Controller
             //Now create practitioner object
             $practitioner = Practitioner::create($personal_details);
 
-
             /*Get professional qualification details*/
             //check for qualification category, local = 1 and foreign = 2
             $professional_details['profession_id'] = $profession_id;
+
             $professional_details['qualification_category_id'] = request('qualification_category_id');
             if (request('qualification_category_id') == 1) {
                 request()->validate([
@@ -181,15 +170,14 @@ class PractitionersController extends Controller
             //save professional qualification
             $practitioner->addPractitionerQualification($professional_details);
 
-
             //Save contact and save email
-            $practitioner->addContact(request([
-                'email',
-            ]));
+            $practitioner->addContact
+            (
+                request(['email','primary_phone','physical_address'])
+            );
 
             $practitioner_payment_information['register_category_id'] = request('register_category_id');
             $practitioner->addPractitionerPaymentInformation($practitioner_payment_information);
-
 
             /** get all requirements to create shortfalls */
             if ($practitioner->qualification_category_id == 1) {
@@ -199,113 +187,24 @@ class PractitionersController extends Controller
             }
 
             foreach ($requirements as $requirement) {
-
                 $requirements_arr = array(
                     "requirement_id" => $requirement->id,
                     "practitioner_id" => $practitioner->id
                 );
-
                 $practitioner->addPractitionerRequirements($requirements_arr);
-
             }
 
-            /*$user = User::whereRole_id(4)->first();
-
-            $user->notify(
+            /** at this stage, the application is sent to registrations*/
+            $registration_officer = User::where('role_id', 4)->first();
+            $registration_officer->notify(
                 new ApplicationSubmitted($practitioner)
-            );*/
-
-            return redirect('/admin/practitioners/' . $practitioner->id);
-        }
-    }
-
-    //For renewal
-    public function createForRenew()
-    {
-        //
-        $titles = Title::all()->sortBy('name');
-        $genders = Gender::all()->sortBy('name');
-        $professions = Profession::whereNotIn('id', [19])->get()->sortBy('name');
-        $qualification_categories = QualificationCategory::all()->sortBy('name');
-
-
-        return view('admin.practitioners.renew',
-            compact('titles', 'genders',
-                'professions', 'qualification_categories'
-            ));
-
-    }
-
-    public function practitionerRenewStore(Request $request)
-    {
-        $check_id_number = request('id_number');
-        $check_profession_id = request('profession_id');
-
-        $check_existensce = Practitioner::whereId_numberAndProfession_id($check_id_number, $check_profession_id)->first();
-        if ($check_existensce != null) {
-
-            return back()->with('message', 'Practitioner already exists.');
-
-        } else {
-            $personal_details = request()->validate([
-                'title_id' => ['required'],
-                'gender_id' => ['required'],
-                'first_name' => ['required'],
-                'last_name' => ['required'],
-                'previous_name' => ['nullable'],
-                'id_number' => ['alpha_num', 'regex:/^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$/'],
-                'profession_id' => ['required'],
-                'registration_number' => 'nullable|numeric',
-                'registration_date' => 'nullable',
-            ],
-                [
-                    'id_number.regex' => 'ID number should contain at least one character and one number',
-
-                ]
             );
-            $personal_details['registration_period'] = date('Y');
-            $personal_details['registration_month'] = date('m');
 
-            //get profession_id
-            $profession_id = request('profession_id');
-            $prefix = Prefix::whereProfession_id($profession_id)->first();
-            //assign registration prefix
-            $personal_details['prefix'] = $prefix->name;
-
-            $practitioner = Practitioner::create($personal_details);
-
-            //also add and update the email field
-            $practitioner->addContact(request([
-                'email',
-                'primary_phone',
-            ]));
-
-            /** get all requirements to create shortfalls */
-            $requirements = Requirement::all();
-            foreach ($requirements as $requirement) {
-                $requirements_arr = array(
-                    "requirement_id" => $requirement->id,
-                    "practitioner_id" => $practitioner->id
-                );
-                $practitioner->addPractitionerRequirements($requirements_arr);
-            }
-
-
-            $practitioner->update([
-                'approval_status' => 1,
-                'registration_officer' => 2,
-                'accountant' => 1,
-                'member' => 1,
-                'registrar' => 1
-            ]);
-
-            /* $user = User::whereRole_id(4)->first();
-
-             $user->notify(
-                 new ApplicationSubmitted($practitioner)
-             );*/
-
-
+            /** at this stage, the application is sent to accountant*/
+            $accountant = User::where('role_id', 5)->first();
+            $accountant->notify(
+                new RegistrationPayment($practitioner)
+            );
             return redirect('/admin/practitioners/' . $practitioner->id);
         }
     }
@@ -367,14 +266,22 @@ class PractitionersController extends Controller
             $current_status = 'Pending Registration Payment';
         }
 
+        if ($practitioner->applications) {
+            $applications = $practitioner->applications;
+        }
+
+        /*foreach ($applications as $application){
+           dd( $application->payment_item->name);
+        }*/
+
         return view('admin.practitioners.show', compact(
             'practitioner', 'educations', 'identifications', 'professionals',
-            'internship', 'registration_fee', 'registration_fee', 'current_status','portal_activate','portal_de_activate'));
+            'internship', 'registration_fee', 'registration_fee',
+            'current_status', 'portal_activate', 'portal_de_activate', 'applications'));
     }
 
     public function edit(Practitioner $practitioner)
     {
-
         $titles = Title::all()->sortBy('name');
         $genders = Gender::all()->sortBy('name');
         $register_categories = RegisterCategory::all()->sortBy('name');
@@ -412,13 +319,13 @@ class PractitionersController extends Controller
         ]);
 
         //get profession_id
-        if($practitioner->profession_id != $personal_details['profession_id']){
+        if ($practitioner->profession_id != $personal_details['profession_id']) {
             $profession_id = $personal_details['profession_id'];
             $prefix = Prefix::whereProfession_id($profession_id)->first();
             //assign registration prefix
             $personal_details['prefix'] = $prefix->name;
             $practitioner->update(['registration_number' => null]);
-        }else{
+        } else {
             $personal_details['registration_number'] = request('registration_number');
         }
 
@@ -454,10 +361,10 @@ class PractitionersController extends Controller
     {
         //
         $practitioner->contact()->delete();
-        $practitioner->practitionerQualification()->delete();
+        $practitioner->practitionerQualifications()->delete();
         $practitioner->documents()->delete();
         $practitioner->employer()->delete();
-        $practitioner->practitionerExperience()->delete();
+        $practitioner->practitioner_payment_information()->delete();
         $practitioner->renewals()->delete();
         $practitioner->cdPoints()->delete();
         $practitioner->payments()->delete();

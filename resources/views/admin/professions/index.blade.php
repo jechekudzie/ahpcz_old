@@ -70,7 +70,7 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Profession</th>
-                                                    {{--<th>Description</th>--}}
+                                                    <th>Plural</th>
                                                     <th>Created</th>
                                                     <th>Edit</th>
                                                     <th>Delete</th>
@@ -79,7 +79,7 @@
                                                 <tfoot>
                                                 <tr>
                                                     <th>Profession</th>
-                                                    {{--<th>Description</th>--}}
+                                                    <th>Plural</th>
                                                     <th>Created</th>
                                                     <th>Edit</th>
                                                     <th>Delete</th>
@@ -89,6 +89,7 @@
                                                 @foreach($professions as $profession)
                                                     <tr>
                                                         <td>{{$profession->name}}</td>
+                                                        <td>{{$profession->plural}}</td>
                                                         {{--<td>{{$profession->description}}</td>--}}
                                                         <td>{{$profession->updated_at}}</td>
                                                         <td><a href="/admin/professions/{{$profession->id}}/edit"><i

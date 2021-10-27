@@ -33,8 +33,10 @@ function getDiff($created_at, $now)
                                 <ul class="list-group list-group-full">
 
                                     <li class="list-group-item">
-                                        <a href="{{url('admin/notification/inbox')}}"> <i class="mdi mdi-star"></i> All messages </a>
-                                        <span class="badge badge-success ">{{count(auth()->user()->unreadNotifications)}}</span>
+                                        <a href="{{url('admin/notification/inbox')}}"> <i class="mdi mdi-star"></i> All
+                                            messages </a>
+                                        <span
+                                            class="badge badge-success ">{{count(auth()->user()->unreadNotifications)}}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -51,8 +53,10 @@ function getDiff($created_at, $now)
                                     </div>
                                 @endif
                                 @if (session('message'))
-                                    <div class="alert alert-success alert-rounded"><i class="fa fa-check-circle"></i>  {{ session('message') }}
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                                    <div class="alert alert-success alert-rounded"><i
+                                            class="fa fa-check-circle"></i> {{ session('message') }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
                                     </div>
                                 @endif
                                 <div class="card b-all shadow-none">
@@ -65,12 +69,16 @@ function getDiff($created_at, $now)
                                     <div class="card-body">
                                         <div class="d-flex m-b-40">
                                             <div class="p-l-10">
-                                                <h4 class="m-b-0">From: {{$userNotification->data['sender']['name']}}</h4>
+                                                <h4 class="m-b-0">
+                                                    From: @if($userNotification->data['sender'])
+                                                        {{$userNotification->data['sender']['name']}}@endif</h4>
                                                 <small
-                                                    class="text-muted"> {{$userNotification->data['sender']['email']}}
+                                                    class="text-muted"> @if($userNotification->data['sender'])
+                                                        {{$userNotification->data['sender']['email']}}@endif
                                                 </small><br/>
                                                 <small
-                                                    class="fa fa-clock-o"> {{getDiff($userNotification->created_at,now())}} ago
+                                                    class="fa fa-clock-o"> {{getDiff($userNotification->created_at,now())}}
+                                                    ago
                                                 </small>
                                             </div>
                                         </div>
@@ -87,45 +95,51 @@ function getDiff($created_at, $now)
                                     </div>
                                     <div class="card-body">
 
-                                        <form action="/admin/notification/reply" method="post" class="m-t-40"
-                                              novalidate>
-                                            {{csrf_field()}}
-                                            <div class="form-group">
-                                                <h5> Message <span class="text-danger">*</span></h5>
-                                                <div class="controls">
-                                                    <textarea name="comment" class="form-control"></textarea>
+                                        @if($userNotification->type == 'App\Notifications\ApplicationSubmitted')
+                                            <a href="{{url('/reply/practitioner/'.$userNotification->data['id'])}}">Send email</a>
+                                        @else
+                                            <form action="/admin/notification/reply" method="post" class="m-t-40"
+                                                  novalidate>
+                                                {{csrf_field()}}
+                                                <div class="form-group">
+                                                    <h5> Message <span class="text-danger">*</span></h5>
+                                                    <div class="controls">
+                                                        <textarea name="comment" class="form-control"></textarea>
+                                                    </div>
+
+                                                    <div class="controls">
+                                                        <input type="hidden" name="user"
+                                                               value="@if($userNotification->data['sender'])
+                                                               {{$userNotification->data['sender']['id']}}
+                                                                   @endif"
+                                                               class="form-control">
+                                                    </div>
+                                                    <div class="controls">
+                                                        <input type="hidden" name="title"
+                                                               value="{{$userNotification->data['title']}}"
+                                                               class="form-control">
+                                                    </div>
+
+                                                    <div class="controls">
+                                                        <input type="hidden" name="data_id"
+                                                               value="{{$userNotification->data['id']}}"
+                                                               class="form-control">
+                                                    </div>
+                                                    <div class="form-control-feedback">
+                                                    </div>
                                                 </div>
 
-                                                <div class="controls">
-                                                    <input type="hidden" name="user"
-                                                           value="{{$userNotification->data['sender']['id']}}"
-                                                           class="form-control">
-                                                </div>
-                                                <div class="controls">
-                                                    <input type="hidden" name="title"
-                                                           value="{{$userNotification->data['title']}}"
-                                                           class="form-control">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <input type="submit"
+                                                               class="btn btn-rounded btn btn-block btn-success"
+                                                               value="Reply">
+                                                    </div>
+
                                                 </div>
 
-                                                <div class="controls">
-                                                    <input type="hidden" name="data_id"
-                                                           value="{{$userNotification->data['id']}}"
-                                                           class="form-control">
-                                                </div>
-                                                <div class="form-control-feedback">
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <div class="controls">
-                                                    <input type="submit"
-                                                           class="btn btn-rounded btn btn-block btn-success"
-                                                           value="Reply">
-                                                </div>
-
-                                            </div>
-
-                                        </form>
+                                            </form>
+                                        @endif
 
 
                                     </div>

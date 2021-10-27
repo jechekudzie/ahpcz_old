@@ -72,6 +72,20 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <h5>Plural <span class="text-danger">*</span></h5>
+                                    <div class="controls">
+                                        <input type="text" name="plural" value="{{$profession->plural}}"
+                                               class="form-control"
+                                               required
+                                               data-validation-required-message="This field is required">
+                                    </div>
+                                    <div class="form-control-feedback">
+                                        <small>Profession plural is <code>mandatory</code>.
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
                                     <h5>Description <span class="text-danger">*</span></h5>
                                     <div class="controls">
                                             <textarea name="description" class="form-control" required

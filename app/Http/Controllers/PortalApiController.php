@@ -163,7 +163,10 @@ class PortalApiController extends Controller
     {
         if ($practitioner->profession) {
             $practitioner->profession;
-            $practitioner->profession->profession_tire->tire;
+            if( $practitioner->profession->profession_tire){
+                $practitioner->profession->profession_tire->tire;
+            }
+
         }
         if ($practitioner->title) {
             $practitioner->title;
@@ -440,7 +443,6 @@ class PortalApiController extends Controller
 
         //first step check to see if the amount invoice was full paid or there is a balance
         $renewal_balance = $data['amount_invoiced'] - $data['amount_paid'];
-
         $renewals['renewal_period_id'] = $data['period'];
         $renewals['practitioner_id'] = $practitioner->id;
         $renewals['payment_method_id'] = 1;
@@ -514,10 +516,7 @@ class PortalApiController extends Controller
             $payments['payment_date'] = $data['payment_date'];
             $payments['payment_item_id'] = 33;
             $payments['pop'] = $path;
-
             $add_renewal_payment = $add_renewal->addPayments($payments);
-
-
             //update previous balances to 0
             if ($renewal_balance > 0) {
                 if (count($practitioner->payments)) {
@@ -721,8 +720,8 @@ class PortalApiController extends Controller
                 '02f69090-68e9-427b-9838-966385aa0541',*/
                 '5865',
                 '23962222-9610-4f7c-bbd5-7e12f19cdfc6',
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id,
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id
+                'http://localhost:8000/check_payment/' . $practitioner_id,
+                'http://localhost:8000/check_payment/' . $practitioner_id
 
             );
         }
@@ -735,8 +734,8 @@ class PortalApiController extends Controller
                 '739d23ae-f8c5-45e0-ac0a-a481f615c813',
                 /*'5865',
                 '23962222-9610-4f7c-bbd5-7e12f19cdfc6',*/
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id,
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id
+                'http://localhost:8000/check_payment/' . $practitioner_id,
+                'http://localhost:8000/check_payment/' . $practitioner_id
 
             );
         }
@@ -794,8 +793,8 @@ class PortalApiController extends Controller
             //usd account
                 '11778',
                 '02f69090-68e9-427b-9838-966385aa0541',
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id,
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id
+                'http://localhost:8000/check_payment/' . $practitioner_id,
+                'http://localhost:8000/check_payment/' . $practitioner_id
 
             );
         }
@@ -806,8 +805,8 @@ class PortalApiController extends Controller
             //local account
                 '11777',
                 '739d23ae-f8c5-45e0-ac0a-a481f615c813',
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id,
-                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id
+                'http://localhost:8000/check_payment/' . $practitioner_id,
+                'http://localhost:8000/check_payment/' . $practitioner_id
 
             );
         }
@@ -840,6 +839,94 @@ class PortalApiController extends Controller
 
             ]);
         }
+
+    }
+
+    //clear balance for a particular year
+    public function clear_balance(Renewal $renewal){
+        $balance = $renewal->payments->sum('balance');
+        $rate = Rate::find(1);
+        return response()->json([
+            'renewal' => $renewal,
+            'balance' => $balance,
+            'rate' => $rate->rate,
+        ]);
+    }
+
+    public function clear_balance_payment()
+    {
+
+        $data = request()->validate([
+            'renewal_id' => 'required',
+            'amount_invoiced' => 'required',
+            'amount_paid' => 'required',
+            'balance' => 'required',
+            'currency' => 'required',
+            'rate' => 'required',
+        ]);
+
+
+        $rate = Rate::find(1)->rate;
+        $renewal_balance = 0;
+
+        //first step check to see if the amount invoice was full paid or there is a balance
+        if ($data['currency'] == 0) {
+            $renewal_balance = $data['amount_invoiced'] - $data['amount_paid'];
+            $renewal_balance = $renewal_balance / $rate;
+        }
+
+        if ($data['currency'] == 1) {
+            $renewal_balance = $data['amount_invoiced'] - $data['amount_paid'];
+        }
+
+        $renewal = Renewal::where('id', $data['renewal_id'])->first();
+
+        if ($renewal_balance > 0) {
+            $renewals['renewal_status_id'] = 3;
+        } else {
+            $renewals['renewal_status_id'] = 1;
+        }
+        $payments['renewal_period_id'] = $renewal->renewal_period_id;
+        $payments['month'] = date('m');
+        $payments['day'] = date('d');
+        $payments['practitioner_id'] = $renewal->practitioner->id;
+        $payments['balance'] = $renewal_balance;
+        $payments['amount_invoiced'] = $data['amount_invoiced'];
+        $payments['amount_paid'] = $data['amount_paid'];
+        $payments['payment_channel_id'] = 5;
+        $payments['rate'] = $data['rate'];
+        $payments['currency'] = $data['currency'];
+        $payments['payment_item_category_id'] = 1;
+        $payments['payment_date'] = now();
+        $payments['payment_item_id'] = 33;
+        $add_renewal_payment = $renewal->addPayments($payments);
+
+        //update previous balances to 0
+        if ($renewal_balance > 0) {
+            if (count($renewal->payments)) {
+                foreach ($renewal->payments as $existing_payment) {
+                    if ($existing_payment->id != $add_renewal_payment->id) {
+                        $existing_payment->update(['balance' => 0]);
+                        $existing_payment->renewal->update(['balance' => 0]);
+                        $existing_payment->renewal->update(['renewal_status_id' => 1]);
+                    }
+                }
+            }
+        } else {
+            if (count($renewal->payments)) {
+                foreach ($renewal->payments as $existing_payment) {
+                    if ($existing_payment->id != $add_renewal_payment->id) {
+                        $existing_payment->update(['balance' => 0]);
+                        $existing_payment->renewal->update(['balance' => 0]);
+                        $existing_payment->renewal->update(['renewal_status_id' => 1]);
+                    }
+                }
+            }
+        }
+
+        return response()->json([
+            'message' => 'Renewal Payment Was successful.',
+        ]);
 
     }
 

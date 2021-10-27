@@ -80,7 +80,7 @@
                                                         <th>Currency</th>
                                                         <th>Payment Chanel</th>
                                                         <th>Receipt</th>
-                                                        <th>Payment Date</th>
+                                                        <th>Payment Dates</th>
                                                     </tr>
                                                     </thead>
                                                     <tfoot>

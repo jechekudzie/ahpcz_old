@@ -18,6 +18,50 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/practitioners/{practitioner}', 'Api\PractitionersController@show');
+
+//dashboard
+Route::get('/renewals/{practitioner}', 'Api\PaymentsController@renewals');//get all practitioner renewals
+Route::get('/renewals/initiate_step_1/{practitioner}', 'Api\PaymentsController@initiate_step_1');//renewal criteria
+Route::post('/renewals/step_1/{practitioner}', 'Api\PaymentsController@step_1');//get bill
+Route::post('/renewals/step_3', 'Api\PaymentsController@step_3');//make payment
+Route::post('/renewals/step_4', 'Api\PaymentsController@step_4');//submit cpd points
+Route::post('/renewals/make_balance_payment', 'Api\PaymentsController@make_balance_payment');//submit cpd points
+Route::get('/renewals/payments/{renewal}', 'Api\PaymentsController@renewal_payments');//submit cpd points
+
+//applications and payments
+Route::get('/applications/payment_item_categories', 'Api\ApplicationsController@payment_item_categories');//get all payment
+Route::get('/applications/payment_items/{paymentItemCategory}', 'Api\ApplicationsController@payment_items');//get
+Route::get('/applications/payment_item/{paymentItem}', 'Api\ApplicationsController@payment_item');//get
+//make payment
+Route::post('/applications/make_application_payment/', 'Api\ApplicationsController@make_application_payment');//get
+Route::post('/applications/submit_documents/', 'Api\ApplicationsController@submit_documents');//get
+
+
+
+//Website Registrations
+//get all professions for front display
+Route::get('/registrations/professions/', 'Api\RegistrationsController@professions');//get
+Route::get('/registrations/requirements/', 'Api\RegistrationsController@requirements');//get
+//professional qualification
+Route::get('/admin/get_pq/{profession_id}', 'DynamicDataController@professionalQualifications');
+Route::get('/admin/get_ai/{professional_qualification_id}', 'DynamicDataController@accreditedInstitutions');
+
+//start registration process
+Route::get('/registrations/application/', 'Api\RegistrationsController@application');//get
+Route::post('/registrations/step_1', 'Api\RegistrationsController@step_1');//get
+Route::post('/registrations/step_2', 'Api\RegistrationsController@step_2');//get
+Route::post('/registrations/step_4', 'Api\RegistrationsController@step_4');//get
+Route::get('/registrations/my_application/{practitioner}', 'Api\RegistrationsController@my_application');//get
+Route::post('/registrations/find_my_application/', 'Api\RegistrationsController@find_my_application');//get
+Route::get('/registrations/my_application/payment', 'Api\RegistrationsController@step_4');//get
+Route::post('/registrations/registration_fee', 'Api\RegistrationsController@registration_fee');//get
+
+//search
+Route::post('/search', 'Api\SearchController@search');//get
+
+
+
 //Custom APIs
 //this route loads all the data required to get practitioner started
 Route::get('/get_professions', 'PortalApiController@get_professions');
@@ -34,6 +78,12 @@ Route::post('/make_online_payment', 'PortalApiController@make_online_payment');
 
 Route::post('/make_restoration_payment', 'PortalApiController@make_restoration_payment');
 Route::post('/make_online_restoration_payment', 'PortalApiController@make_online_restoration_payment');
+
+//clear balance
+Route::get('/renewal_payments/{renewal}/clear_balance', 'PortalApiController@clear_balance');
+Route::post('/renewal_payments/{renewal}/clear_balance_payment', 'PortalApiController@clear_balance_payment');
+
+
 
 Route::post('/testfile', 'PortalApiController@testfile');
 

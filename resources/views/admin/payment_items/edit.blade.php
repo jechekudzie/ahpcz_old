@@ -103,7 +103,7 @@
                                         <div class="controls">
                                             <input type="submit" name="add_profession"
                                                    class="btn btn-rounded btn btn-block btn-success"
-                                                   value="Add Payment Item">
+                                                   value="Update Payment Item">
                                         </div>
 
                                     </div>

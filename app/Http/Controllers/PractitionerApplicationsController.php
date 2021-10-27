@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Practitioner;
 
+use App\ProfessionApprover;
 use Illuminate\Http\Request;
 
 class PractitionerApplicationsController extends Controller
@@ -17,25 +18,27 @@ class PractitionerApplicationsController extends Controller
     public function index()
     {
         $user_role = auth()->user()->role_id;
+        $user = auth()->user();
         $count = 0;
         $practitioners = new Practitioner();
 
         if ($user_role == 4) {
-            $practitioners = Practitioner::whereRegistration_officerOrRegistration_officerAndAccountantAndMember(0, 1, 1, 1)->get();
+            $practitioners = Practitioner::where('registration_officer',0)->get();
+            //whereRegistration_officerOrRegistration_officerAndAccountantAndMember(0, 1, 1, 1)->get();
         }
 
         if ($user_role == 5) {
-            $practitioners = Practitioner::whereRegistration_officerAndAccountant(1, 0)->get();
-
+            $practitioners = Practitioner::where('accountant',0)->get();
+            //whereRegistration_officerOrRegistration_officerAndAccountantAndMember(0, 1, 1, 1)->get();
         }
-
         if ($user_role == 6) {
-            $practitioners = Practitioner::whereRegistration_officerAndAccountantAndMember(1, 1, 0)->get();
-
-        }
-
-        if ($user_role == 7) {
-            $practitioners = Practitioner::whereRegistration_officerAndAccountantAndMemberAndRegistrar(2, 1, 1, 0)->get();
+            $profession_approvers = ProfessionApprover::where('user_id',$user->id)->get();
+            foreach ($profession_approvers as $profession_approver){
+                $practitioners = Practitioner::where('registration_officer',1)
+                    ->where('member',0)
+                    ->where('profession_id',$profession_approver->profession_id)
+                    ->get();
+            }
         }
 
         if ($user_role == 3) {

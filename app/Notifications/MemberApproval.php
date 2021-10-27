@@ -34,8 +34,8 @@ class MemberApproval extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
-        //return ['database','mail'];
+        //return ['database'];
+        return ['database','mail'];
     }
 
     /**
@@ -49,9 +49,10 @@ class MemberApproval extends Notification
         return (new MailMessage)
             ->replyTo(auth()->user()->email)
             ->from(auth()->user()->email)
-            ->subject('New Application - ' . $this->practitioner->first_name.' '.$this->practitioner->last_name)
-            ->line('New application has been approved by Committee member, awaiting your review and approval:')
-            ->line('Applicant Profession: '. $this->practitioner->profession->name. ' and Professional Qualification: ' .$this->practitioner->professionalQualification->name)
+            ->subject('Registration Application - ' . $this->practitioner->first_name.' '
+                .$this->practitioner->last_name)
+            ->line('Registration application has been approved by Educational Committee member.')
+            ->line('Applicant Profession: '. $this->practitioner->profession->name)
             ->line('You can view application details on the link below.')
             ->action('View Application Details', url('/admin/practitioners/' . $this->practitioner->id));
 

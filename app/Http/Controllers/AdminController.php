@@ -26,10 +26,10 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    /*public function __construct()
+    public function __construct()
     {
-        $this->middleware('verified');
-    }*/
+        $this->middleware('auth');
+    }
 
     public function index()
     {
@@ -74,7 +74,7 @@ class AdminController extends Controller
         //
         $practitioner_id = request('practitioner_id');
         $id = request('id');
-        $response = Http::post('http://portal.ahpcz.co.zw/api/practitioners/verify', [
+        $response = Http::post('http://localhost:8000/api/practitioners/verify', [
             'practitioner_id' => $practitioner_id,
             'id' => $id,
         ]);

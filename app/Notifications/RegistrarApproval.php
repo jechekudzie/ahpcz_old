@@ -32,8 +32,8 @@ class RegistrarApproval extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
-        //return ['database','mail'];
+        //return ['database'];
+        return ['database','mail'];
     }
 
     /**
@@ -47,14 +47,11 @@ class RegistrarApproval extends Notification
         return (new MailMessage)
             ->replyTo(auth()->user()->email)
             ->from(auth()->user()->email)
-            ->subject('New Application Approved - ' . $this->practitioner->first_name.' '.$this->practitioner->last_name)
+            ->subject('Application Approved - ' . $this->practitioner->first_name.' '.$this->practitioner->last_name)
             ->line('This application has been approved by Registrar, certificate can be processed:')
-            ->line('Applicant Profession: '. $this->practitioner->profession->name. ' and Professional Qualification: ' .$this->practitioner->professionalQualification->name)
+            ->line('Applicant Profession: '. $this->practitioner->profession->name)
             ->line('You can view application details on the link below.')
             ->action('View Application Details', url('/admin/practitioners/' . $this->practitioner->id));
-
-
-
 
     }
 

@@ -71,7 +71,7 @@
             <th class="px-4 py-2">Full Name</th>
             <th class="px-4 py-2">Registration Number</th>
             <th class="px-4 py-2">Profession</th>
-            <th class="px-4 py-2">Professional Qualification</th>
+            <th class="px-4 py-2">Register</th>
             <th class="px-4 py-2">Renewal Status</th>
             <th class="px-4 py-2">Actions</th>
             @can('updatePractitioner')
@@ -83,7 +83,10 @@
         <tbody>
         @foreach($practitioners as $practitioner)
             <tr>
-                <td class="border px-4 py-2">{{ $practitioner->title->name }}</td>
+                <td class="border px-4 py-2">
+                    @if($practitioner->title){{ $practitioner->title->name
+                }}@else{{'No Title'}}@endif
+                </td>
                 <td class="border px-4 py-2">{{ $practitioner->last_name.' '. $practitioner->first_name}}</td>
                 <td class="border px-4 py-2">
                     @if($practitioner->registration_number == null)
@@ -92,10 +95,16 @@
                         {{$practitioner->prefix.str_pad($practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}
                     @endif
                 </td>
-                <td class="border px-4 py-2">{{ $practitioner->profession->name }}</td>
                 <td class="border px-4 py-2">
-                    @if($practitioner->professionalQualification)
-                        {{$practitioner->professionalQualification->name}}
+                    @if( $practitioner->profession)
+                        {{ $practitioner->profession->name }}
+                    @endif
+                </td>
+                <td class="border px-4 py-2">
+                    @if($practitioner->practitioner_payment_information)
+                        @if($practitioner->practitioner_payment_information->register_category)
+                            {{$practitioner->practitioner_payment_information->register_category->name}}
+                        @endif
                     @endif
                 </td>
                 <td class="border px-4 py-2">
@@ -112,9 +121,11 @@
                     @endif
                 </td>
                 <td class="border px-4 py-2">
-                    <a href="/admin/practitioners/{{$practitioner->id}}">View</a> |
-                    <a href="/admin/practitioners/renewals/{{$practitioner->id}}/checkPaymentStatusRenewal">
-                        Renew</a>
+                    <a href="/admin/practitioners/{{$practitioner->id}}">View</a>
+
+                    |
+                    <a href="/admin/auto_renew/{{$practitioner->id}}">
+                        Auto Renew</a>
                 </td>
                 @can('updatePractitioner')
                     <td class="border px-4 py-2"><a href="/admin/practitioners/{{$practitioner->id}}/delete">

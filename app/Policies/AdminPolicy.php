@@ -30,6 +30,13 @@ class AdminPolicy
     }
 
 
+    public function requirementChecklist(User $user)
+    {
+        return $user->role_id == 6 || $user->role_id == 4 ||$user->role_id == 1;
+
+    }
+
+
     public function updatePractitionerShortFalls(User $user)
     {
 
@@ -41,7 +48,7 @@ class AdminPolicy
 
     public function updatePractitionerPayment(User $user)
     {
-        if ($user->role_id == 5 ||$user->role_id == 1) {
+        if ($user->role_id == 5) {
             return true;
         }
     }
@@ -82,7 +89,7 @@ class AdminPolicy
     public function registrarApproval(User $user)
     {
 
-        if ($user->role_id == 7 || $user->role_id == 1) {
+        if ($user->role_id == 7 || $user->role_id == 8) {
             return true;
         }
     }

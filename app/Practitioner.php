@@ -102,6 +102,11 @@ class Practitioner extends Model
 
     }
 
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
+
     public function cdPoints()
     {
         return $this->hasMany(PractitionerCpdpoint::class);
@@ -124,6 +129,10 @@ class Practitioner extends Model
         return $this->hasMany(PractitionerRequirement::class);
     }
 
+    public function practitioner_student_approval(){
+        return $this->hasOne(PractitionerStudentApproval::class);
+    }
+
     //application comments
     public function applicationComments()
     {
@@ -142,11 +151,14 @@ class Practitioner extends Model
     /*Adding contact*/
     public function addContact($contact)
     {
-        $this->contact()->create($contact);
+        return $this->contact()->create($contact);
     }
 
-    //add employer
-
+    //add approvals
+    public function addStudentApprovals($approval)
+    {
+        return $this->practitioner_student_approval()->create($approval);
+    }
 
     //add cpd points
     public function addCdPoints($cdpoints)
@@ -165,7 +177,7 @@ class Practitioner extends Model
     public function addPractitionerQualification($qualification)
     {
 
-        $this->practitionerQualifications()->create($qualification);
+        return $this->practitionerQualifications()->create($qualification);
 
     }
 
@@ -219,7 +231,7 @@ class Practitioner extends Model
     public function addPractitionerRequirements($requirements)
     {
 
-        $this->practitionerRequirements()->create($requirements);
+        return $this->practitionerRequirements()->create($requirements);
     }
 
     //add application comments
@@ -271,6 +283,36 @@ class Practitioner extends Model
         return $query;
 
     }
+
+    /** Live wire functions for students */
+    public static function student($search)
+    {
+        return empty($search) ? static::query()
+            : static::query()
+                ->where('id', 'like', '%' . $search . '%')
+                ->orWhere('first_name', 'like', '%' . $search . '%')
+                ->orWhere('last_name', 'like', '%' . $search . '%')
+                ->orWhere('registration_number', 'like', '%' . $search . '%')
+                ->orWhereDoesntHave('profession')->orWhereHas('profession', function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%');
+                })
+                ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", "%{$search}%")
+                ->orWhereRaw("CONCAT(prefix, '', registration_number) LIKE ?", "%{$search}%");
+    }
+
+    public function scopeRegister($query, $register_category)
+    {
+        if ($register_category == 1) {
+            return $query->whereHas('practitioner_payment_information', function ($query) use ($register_category) {
+                $query
+                    ->where('register_category_id', '=', 1);
+            });
+        }
+        return $query;
+
+    }
+
+
     /** Live wire functions */
 
 }

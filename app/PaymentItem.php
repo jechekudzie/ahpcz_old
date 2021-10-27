@@ -25,4 +25,16 @@ class PaymentItem extends Model
         return $this->hasMany(OtherApplication::class);
     }
 
+    public function payment_item_requirements(){
+        return $this->hasMany(PaymentItemRequirement::class);
+    }
+
+    public function applications(){
+        return $this->hasMany(Application::class);
+    }
+
+    public function add_payment_item_requirements($requirement){
+        return $this->payment_item_requirements()->create($requirement);
+    }
+
 }

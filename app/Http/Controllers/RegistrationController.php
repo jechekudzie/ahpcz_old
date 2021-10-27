@@ -6,9 +6,12 @@ use App\Notifications\ApplicationSubmitted;
 use App\Notifications\FullPayment;
 use App\Notifications\PartPayment;
 use App\PaymentChannel;
+use App\PaymentItem;
+use App\PaymentItemCategory;
 use App\PaymentMethod;
 use App\PaymentType;
 use App\Practitioner;
+use App\Rate;
 use App\RegisterCategory;
 use App\RegistrationFee;
 use App\Renewal;
@@ -39,7 +42,7 @@ class RegistrationController extends Controller
 
         if (count($practitioner->renewals)) {
             return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/checkPaymentStatusRegistration');
-        }else{
+        } else {
             return redirect('/admin/practitioners/registration/' . $practitioner->id . '/registration');
         }
 
@@ -59,36 +62,25 @@ class RegistrationController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function paymentItemFee($payment_item_id)
+    {
+        $fee = PaymentItem::Where('id', $payment_item_id)->first();
+        $response = "";
+        $amount_invoiced = $fee->fee;
+        $response .= $amount_invoiced;
+        echo $response;
+    }
+
     public function create(Practitioner $practitioner)
     {
-        //it will only redirect if practitioner already have something in renewals table
-        $count = count($practitioner->renewals);
-        if ($count > 0) {
-            return redirect('/admin/practitioners/renewals/' . $practitioner->id . '/checkPaymentStatusRegistration');
-        }
-
-        //if above condition is not met, it will fetch the create file
-        $qualification_category_id = $practitioner->qualificationCategory->id;
-        $registration_fee = RegistrationFee::where('qualification_category_id', $qualification_category_id)->first();
-        $vat = Vat::where('id', 1)->first();
-        $payment_types = PaymentType::all()->sortBy('name');
-        $payment_channels = PaymentChannel::all();
-        $renewal_periods = RenewalPeriod::all()->sortByDesc('period');
-
-        //get items for practitioner payment requirement update
-        $payment_methods = PaymentMethod::all()->sortBy('name');
-        $renewal_categories = RenewalCategory::all()->sortBy('name');
-        $register_categories = RegisterCategory::all()->sortBy('name');
-        return view('admin.practitioner_payments.registration', compact(
-            'practitioner', 'payment_channels', 'payment_types',
-            'renewal_periods', 'registration_fee', 'payment_methods',
-            'renewal_categories', 'register_categories', 'vat'));
-
+        $rate = Rate::find(1);
+        //$payment_items = PaymentItem::all()->sortBy('name');
+        $payment_channels = PaymentChannel::all()->sortBy('name');
+        $payment_item_categories = PaymentItemCategory::where('id', [2])->get()->sortBy('name');
+        return view('admin.practitioner_payments.registration_payments',
+            compact('practitioner', 'payment_channels',
+                'rate', 'payment_item_categories')
+        );
     }
 
     /**
@@ -99,78 +91,92 @@ class RegistrationController extends Controller
      */
     public function store(Practitioner $practitioner)
     {
-
         $payment = request()->validate([
             'payment_date' => 'required',
-            'renewal_period_id' => 'required',
+            'payment_item_category_id' => 'required',
+            'payment_item_id' => 'required',
             'payment_channel_id' => 'required',
+            'amount_invoiced' => 'required',
             'amount_paid' => 'required',
-            'receipt_number' => ['required','digits_between:4,8','numeric','unique:payments'],
+            'currency' => 'required',
+            /* 'receipt_number' => ['required','digits_between:4,8','numeric','unique:payments'],*/
             'pop' => 'nullable',
         ]);
-
-        /** @var  $registration_fee */
-        //set values
-        //registration fees
-        $registration_fee = RegistrationFee::where('qualification_category_id', $practitioner->qualificationCategory->id)->first();
-        /** @var  $renewal_period_id */
-        $renewal_period_id = request('renewal_period_id');
-        /** calculate @var  $renewal_balance */
-        /*$renewal_balance = $registration_fee->fee - request('amount_paid');*/
-        $renewal_balance = request('amount_invoiced') - request('amount_paid');
-        /** add attributes to renewal */
-        $renewals['renewal_period_id'] = request('renewal_period_id');
-        $renewals['payment_method_id'] = $practitioner->payment_method_id;
-        $renewals['renewal_category_id'] = $practitioner->renewal_category_id;
-        $renewals['payment_type_id'] = 2;//registration type
-        $renewals['balance'] = $renewal_balance;
-        $renewals['cdpoints'] = 1;
-        $renewals['placement'] = 1;
-
-        /** check renewal balance to update status either paid or owing @var $renewal_balance */
-        if ($renewal_balance > 0) {
-
-            $renewals['renewal_status_id'] = 3;
-
-        } else {
-            $renewals['renewal_status_id'] = 1;
+        $rate = Rate::find(1)->rate;
+        $renewal_balance = 0;
+        //zwl
+        if($payment['currency'] == 0){
+            $amount_invoiced = request('amount_invoiced') * $rate;
+            $renewal_balance = $amount_invoiced - request('amount_paid') / $rate;
         }
-
-        /**check if a profession for this practitioner has cd points, if not update with one
-         * else update later when they provide cpd points */
-
-        $cdpoints = $practitioner->profession->cdpoint;
-
-
-
-
+        //usd
+        if($payment['currency'] == 1){
+            $amount_invoiced = $payment['amount_invoiced'];
+            $renewal_balance = $amount_invoiced - request('amount_paid');
+        }
+        $payment['renewal_period_id'] = date('Y');
         /**check if renewal with the same renewal period/year already exist with the same practitioner*/
-        $check_renewal = Renewal::whereRenewal_period_idAndPractitioner_id($renewal_period_id, $practitioner->id)->first();
-        /**/
+        $check_renewal = Renewal::where('renewal_period_id', date('Y'))
+            ->where('practitioner_id', $practitioner->id)->first();
         if ($check_renewal == null) {
+            $renewal = $practitioner->addRenewal([
+                'payment_method_id' => 1,
+                'renewal_category_id' => 1,
+                'renewal_period_id' => date('Y'),
+                'balance' => 0,
+                'renewal_status_id' => 1,
+                'payment_type_id' => 1,
+                'cdpoints' => 1,
+                'placement' => 1,
+                'certificate_request' => 1,
+                'certificate' => 0,
+                'currency' => $payment['currency'],
+                'renewal_criteria_id' => 1,
+            ]);
             /*$registration = $practitioner->addRegistration($renewals);*/
-            $renewal = $practitioner->addRenewal($renewals);
             $month = date('m');
             $day = date('d');
-
-
-
             $payment['month'] = $month;
             $payment['day'] = $day;
-            /*$payment['amount_invoiced'] = $registration_fee->fee;*/
-            $payment['amount_invoiced'] = request('amount_invoiced');
+            $payment['amount_invoiced'] = $amount_invoiced;
+            $payment['amount_paid'] = request('amount_paid');
             $payment['balance'] = $renewal_balance;
             $payment['practitioner_id'] = $practitioner->id;
-            $payment['payment_item_category_id'] = 2;
-            $payment['payment_item_id'] = 34;
-            $renewal->addPayments($payment);
+            $payment['payment_item_category_id'] = request('payment_item_category_id');
+            $payment['payment_item_id'] = request('payment_item_id');
+            $payment['payment_channel_id'] = request('payment_channel_id');
+            $payment['rate'] =$rate;
+            $new_renewal_payment = $renewal->addPayments($payment);
 
-            return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Payment completed successfully.');
+            if(request('payment_item_id') == 33 || request('payment_item_id') == 34){
+                if ($renewal_balance > 0) {
+                    if (count($practitioner->payments)) {
+                        foreach ($practitioner->payments as $existing_payment) {
+                            if ($existing_payment->id != $new_renewal_payment->id) {
+                                $existing_payment->update(['balance' => 0]);
+                                $existing_payment->renewal->update(['balance' => 0]);
+                                $existing_payment->renewal->update(['renewal_status_id' => 1]);
+                            }
+                        }
+                    }
+                } else {
+                    if (count($practitioner->payments)) {
+                        foreach ($practitioner->payments as $existing_payment) {
+                            if ($existing_payment->id != $new_renewal_payment->id) {
+                                $existing_payment->update(['balance' => 0]);
+                                $existing_payment->renewal->update(['balance' => 0]);
+                                $existing_payment->renewal->update(['renewal_status_id' => 1]);
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            return redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'Registration Payment completed successfully.');
 
         } else {
-
-            return back()->with('message', 'A renewal subscription for the selected period is already active, not that if this a regular payment click the payment link to proceed');
-
+            return back()->with('message', 'A renewal subscription for the selected period is already active, note that if this a regular payment click the payments link to proceed');
         }
 
     }

@@ -10,14 +10,19 @@
                 @can('admin')
                     <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                 @endcan
-                <a href="/admin/practitioners" class="btn btn-success"></i> All Practitioners</a>
+                <a href="/admin/practitioners" class="btn btn-success"> All Practitioners</a>
             </div>
 
             <div class="col-md-7 align-self-center text-right">
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">{{$practitioner->title->name.' '.ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}} </li>
+                        <li class="breadcrumb-item active">
+                            >@if($practitioner->title){{$practitioner->title->name}}@endif {{ucwords
+                            ($practitioner->first_name).' '
+                        .ucwords
+                            ($practitioner->last_name)}}
+                        </li>
                     </ol>
                 </div>
             </div>
@@ -35,7 +40,10 @@
                         </div>
                     @endif
                     <div class="card-body p-b-0">
-                        <h4 class="card-title">{{$practitioner->title->name.' '.ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}}</h4>
+                        <h4 class="card-title">@if($practitioner->title){{$practitioner->title->name}}@endif {{ucwords
+                            ($practitioner->first_name).' '
+                        .ucwords
+                            ($practitioner->last_name)}}</h4>
                         <h4>Registration Number :
                             @if($practitioner->registration_number == null)
                                 {{$practitioner->prefix.' (No Registration Number)'}} <a

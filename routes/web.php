@@ -125,6 +125,18 @@ Route::resource('/admin/payment_items/categories', 'PaymentItemsCategoryControll
 
 Route::resource('/admin/payment_items/fees', 'PaymentItemsCategoryController');
 
+//PaymentItemRequirements
+Route::get('/admin/payment_item_requirements/{paymentItem}', 'PaymentItemRequirementsController@index');
+Route::get('/admin/payment_item_requirements/{paymentItem}/create', 'PaymentItemRequirementsController@create');
+Route::get('/admin/payment_item_requirements/{paymentItemRequirement}/edit', 'PaymentItemRequirementsController@edit');
+Route::post('/admin/payment_item_requirements/{paymentItem}/store', 'PaymentItemRequirementsController@store');
+Route::get('/admin/payment_item_requirements/{paymentItemRequirement}/edit', 'PaymentItemRequirementsController@edit');
+Route::post('/admin/payment_item_requirements/{paymentItemRequirement}/update', 'PaymentItemRequirementsController@update');
+
+//applications new
+Route::get('/admin/applications/{application}/index', 'ApplicationsController@index');
+
+
 //check submitted officer status
 Route::get('/admin/submit_requirements/{practitionerRequirement}', 'SubmittedRequirementsController@store');
 Route::delete('/admin/submit_requirements/{practitionerRequirement}', 'SubmittedRequirementsController@destroy');
@@ -222,6 +234,10 @@ Route::get('/admin/practitioners/renewals/{renewal}/create_payment', 'RenewalCon
 Route::post('/admin/practitioners/renewals/{renewal}/make_payment', 'RenewalController@makePayment');
 Route::get('/admin/practitioners/renewals/{practitioner}/practitionerBalances', 'RenewalController@practitionerBalances');
 
+//auto renewal
+Route::get('/admin/auto_renew/{practitioner}/', 'RenewalController@auto_renew');
+Route::post('/admin/auto_renew/{practitioner}/store', 'RenewalController@auto_renew_store');
+
 
 //update payment method, renewal category
 Route::get('/admin/practitioner_payment_info/{practitioner}/create', 'PractitionerPaymentInfoController@create');
@@ -251,6 +267,10 @@ Route::get('/check_restoration_penalties/{practitioner}', 'RenewalController@che
 Route::post('/manual_restoration_penalties/{practitioner}', 'RenewalController@manual_restoration_penalties');
 Route::post('/make_restoration_payment', 'RenewalController@make_restoration_payment');
 
+//renewal current
+Route::get('/renewals/new/initiate_step_1/{practitioner}', 'RenewalCurrentController@initiate_step_1');
+Route::post('/renewals/new/step_1/{practitioner}', 'RenewalCurrentController@step_1');
+
 
 Route::get('/admin/practitioners/{practitioner}/cdpoints', 'RenewalController@cdpoints');
 Route::post('/admin/practitioners/{practitioner}/storeCdpoints', 'RenewalController@storeCdpoints');
@@ -260,7 +280,9 @@ Route::post('/admin/practitioners/{practitioner}/storePlacement', 'RenewalContro
 
 //practitioner registration
 Route::get('/admin/practitioners/registration/{practitioner}/registration', 'RegistrationController@create');
-Route::post('/admin/practitioners/registration/{practitioner}/store', 'RegistrationController@store');
+//Route::post('/admin/practitioners/registration/{practitioner}/store', 'RegistrationController@store');
+Route::get('/registration/payment_items/{payment_item_id}', 'RegistrationController@paymentItemFee');
+Route::post('/registration/make_registration_payment/{practitioner}', 'RegistrationController@store');
 
 
 /* get data controler */
@@ -278,6 +300,18 @@ Route::get('/admin/get_pq/{profession_id}/{pq_id}', 'DynamicDataController@profe
 Route::get('/admin/get_ai/{professional_qualification_id}', 'DynamicDataController@accreditedInstitutions');
 Route::get('/admin/get_ai/{professional_qualification_id}/{accreInst_id}', 'DynamicDataController@accreditedInstitutionsEdit');
 
+
+//StudentRegistration
+Route::get('/admin/students/', 'StudentRegistrationController@index');
+Route::get('/admin/students/create', 'StudentRegistrationController@create');
+Route::post('/admin/students/store', 'StudentRegistrationController@store');
+Route::get('/admin/students/{practitioner}', 'StudentRegistrationController@show');
+Route::get('/admin/students/{practitioner}/edit', 'StudentRegistrationController@edit');
+Route::get('/admin/students/{practitioner}/edit', 'StudentRegistrationController@edit');
+Route::get('/admin/students/{practitioner}/delete', 'StudentRegistrationController@delete');
+Route::delete('/admin/students/{practitioner}/destroy', 'StudentRegistrationController@destroy');
+
+
 //Dynamic data
 Route::get('/admin/discredited_institutions/search/{text}', 'DynamicDataController@search');
 Route::get('/dynamic/onload/{province_id}/{my_id}', 'DynamicDataController@districtEdit');
@@ -286,7 +320,7 @@ Route::get('/renewal/payment_item_category_id/{payment_item_category_id}', 'Dyna
 Route::get('/renewal/payment_items/{payment_item_id}/{renewal}', 'DynamicDataController@paymentItemFee');
 //get professional qualification where profession is passed
 
-//Application approvals
+//Practitioner Application approvals
 Route::get('/admin/practitioners/approval/{practitioner}/approve', 'PractitionerUpdateController@approve');
 Route::get('/admin/practitioners/approval/{practitioner}/disapprove', 'PractitionerUpdateController@disapprove');
 
@@ -295,6 +329,7 @@ Route::post('/admin/practitioners/approval/{practitioner}/officer', 'Practitione
 Route::post('/admin/practitioners/approval/{practitioner}/accountant', 'PractitionerUpdateController@accountantApproval');
 Route::post('/admin/practitioners/approval/{practitioner}/member', 'PractitionerUpdateController@memberApproval');
 Route::post('/admin/practitioners/approval/{practitioner}/registrar', 'PractitionerUpdateController@registrarApproval');
+Route::post('/admin/practitioners/approval/{practitioner}/final_payment', 'PractitionerUpdateController@final_payment');
 
 //post disapproval
 Route::post('/admin/practitioners/disapproval/{practitioner}/officer', 'PractitionerUpdateController@registrationOfficerDisApproval');
@@ -302,8 +337,29 @@ Route::post('/admin/practitioners/disapproval/{practitioner}/accountant', 'Pract
 Route::post('/admin/practitioners/disapproval/{practitioner}/member', 'PractitionerUpdateController@memberDisApproval');
 Route::post('/admin/practitioners/disapproval/{practitioner}/registrar', 'PractitionerUpdateController@registrarDisApproval');
 
+
+//Student Application approvals
+Route::get('/admin/students/approval/{practitioner}/approve', 'StudentUpdateController@approve');
+Route::get('/admin/students/approval/{practitioner}/disapprove', 'StudentUpdateController@disapprove');
+Route::get('/admin/students/upgrade/{practitioner}', 'StudentUpdateController@upgrade');
+
+//post approval
+Route::post('/admin/students/approval/{practitioner}/officer', 'StudentUpdateController@registrationOfficerApproval');
+Route::post('/admin/students/approval/{practitioner}/accountant', 'StudentUpdateController@accountantApproval');
+Route::post('/admin/students/approval/{practitioner}/member', 'StudentUpdateController@memberApproval');
+Route::post('/admin/students/approval/{practitioner}/registrar', 'StudentUpdateController@registrarApproval');
+Route::post('/admin/students/approval/{practitioner}/final_payment', 'StudentUpdateController@final_payment');
+
+//post disapproval
+Route::post('/admin/students/disapproval/{practitioner}/officer', 'StudentUpdateController@registrationOfficerDisApproval');
+Route::post('/admin/students/disapproval/{practitioner}/accountant', 'StudentUpdateController@accountantDisApproval');
+Route::post('/admin/students/disapproval/{practitioner}/member', 'StudentUpdateController@memberDisApproval');
+Route::post('/admin/students/disapproval/{practitioner}/registrar', 'StudentUpdateController@registrarDisApproval');
+
+
 //read notifications mark as read
 Route::get('/admin/practitioners/read/{practitioner}/{notification_id}', 'PractitionerUpdateController@viewNotification');
+Route::get('/admin/sessions', 'PractitionerUpdateController@sessions');
 
 //get the notifications and open in as a message page, put a link there to go app if possible
 Route::get('/admin/notification/inbox', 'MessagesController@inbox');
@@ -315,6 +371,13 @@ Route::post('/admin/notification/send', 'MessagesController@send');
 
 //practitioner certificates
 Route::get('/certificate/{renewal}', 'CertificateController@certificate');
+Route::get('/id_card/{renewal}', 'CertificateController@id_card');
+Route::get('/student_confirmation/{practitioner}', 'CertificateController@student_confirmation');
+Route::get('/registration_certificate/{practitioner}', 'CertificateController@registration_certificate');
+
+//manual
+Route::get('/certificate/manual/{renewal}', 'CertificateController@manual_certificate');
+
 
 Route::get('/admin/practitioners/certificate/index', 'PractitionerCertificateController@index');
 Route::get('/admin/practitioners/certificate/pending', 'PractitionerCertificateController@pending');
@@ -375,3 +438,10 @@ Route::get('/update_qualification', 'APIController@update_qualification');
 Route::get('/update_practitioner_payment_info', 'APIController@update_practitioner_payment_info');
 
 
+//import and export excel
+Route::get('export', 'ExcelController@export')->name('export');
+Route::get('importExportView', 'ExcelController@importExportView');
+Route::post('import', 'ExcelController@import')->name('import');
+Route::get('update_practitioners', 'ExcelController@update_practitioners')->name('update_practitioners');
+Route::get('update_practitioner_renewal', 'ExcelController@update_practitioner_renewal')->name('update_practitioner_renewal');
+Route::get('update_practitioner_registration', 'ExcelController@update_practitioner_registration')->name('update_practitioner_registration');

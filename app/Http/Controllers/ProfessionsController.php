@@ -47,7 +47,8 @@ class ProfessionsController extends Controller
     {
         Profession::create(request()->validate([
             'name' => ['required'],
-            'description' => ['required', 'min:10']
+            'description' => ['required'],
+            'plural' => ['required']
         ]));
 
         $message = "Profession added successfully.";
@@ -81,7 +82,7 @@ class ProfessionsController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     *x
      * @param \Illuminate\Http\Request $request
      * @param int $id
      * @return \Illuminate\Http\Response
@@ -91,7 +92,8 @@ class ProfessionsController extends Controller
         //update the profession
         $profession->update(request()->validate([
             'name' => ['required'],
-            'description' => ['required','min:10']
+            'description' => ['required'],
+            'plural' => ['required']
         ]));
 
 

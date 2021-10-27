@@ -1,6 +1,7 @@
 <?php
 
 use App\Practitioner;
+use App\ProfessionApprover;
 use App\Renewal;
 use Carbon\CarbonInterval;
 
@@ -16,24 +17,29 @@ function getDifference($created_at, $now)
 
 function countTasks()
 {
+    if(\Illuminate\Support\Facades\Auth::check()){
     $user_role = auth()->user()->role_id;
+    $user = auth()->user();
     $count = 0;
     if ($user_role == 4) {
-        $count = Practitioner::whereRegistration_officerOrRegistration_officerAndAccountantAndMember(0, 1, 1, 1)->count();
-    }
-
-    if ($user_role == 5) {
-        $count = Practitioner::whereRegistration_officerAndAccountant(1, 0)->count();
-
+        $count = Practitioner::where('registration_officer',0)->count();
     }
 
     if ($user_role == 6) {
-        $count = Practitioner::whereRegistration_officerAndAccountantAndMember(1, 1, 0)->count();
-
+        $profession_approvers = ProfessionApprover::where('user_id',$user->id)->get();
+        foreach ($profession_approvers as $profession_approver){
+            $count = Practitioner::where('registration_officer',1)
+                ->where('member',0)
+                ->where('profession_id',$profession_approver->profession_id)
+                ->count();
+        }
     }
 
     if ($user_role == 7) {
-        $count = Practitioner::whereRegistration_officerAndAccountantAndMemberAndRegistrar(2, 1, 1, 0)->count();
+        $count = Practitioner::where('registration_officer',1)
+            ->where('member',1)
+            ->where('registrar',0)
+            ->count();
 
     }
 
@@ -51,6 +57,7 @@ function countTasks()
     }
 
     echo $count;
+    }
 }
 
 function countCertificates()
@@ -210,7 +217,9 @@ function countPendingItems()
                                                                 class="fa fa-link"></i>
                                                         </div>
                                                         <div class="mail-contnet">
-                                                            <h5>{{$notification->data['sender']['name']}}</h5> <span
+                                                            <h5> @if($notification->data['sender'])
+                                                                    {{$notification->data['sender']['name']}}
+                                                            @endif</h5> <span
                                                                 class="mail-desc">
                                                          @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
                                                      </span>
@@ -296,7 +305,7 @@ function countPendingItems()
                          </ul>--}}
                     </li>
 
-                    <li><a class=" waves-effect waves-dark two-column" href="javascript:void(0)"
+                    <li><a class=" waves-effect waves-dark two-column" href="{{url('admin/students')}}"
                            aria-expanded="false"><i class="fa fa-graduation-cap"></i><span
                                 class="hide-menu">Students </span></a>
                     </li>
@@ -315,7 +324,7 @@ function countPendingItems()
                     <li><a class="waves-effect waves-dark" href="/admin/practitioner_applications"
                            aria-expanded="false"><i
                                 class="fa fa-tasks"></i><span
-                                class="hide-menu">My Tasks {{--({{countTasks()}})--}}</span></a>
+                                class="hide-menu">My Tasks ({{countTasks()}})</span></a>
                     </li>
 
                     <li><a class="waves-effect waves-dark" href="/admin/practitioners/certificate/index"

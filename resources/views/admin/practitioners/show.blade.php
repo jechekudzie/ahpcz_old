@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('title','AHPCZ - Add Application')
-@section('plugins-css')
+@section('plugins-css')@stop
 @section('content')
 
     <div class="container-fluid">
@@ -17,7 +17,7 @@
                 <div class="d-flex justify-content-end align-items-center">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">{{$practitioner->title->name.' '.ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}} </li>
+                        <li class="breadcrumb-item active">@if($practitioner->title){{$practitioner->title->name}}@endif{{ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}} </li>
                     </ol>
                 </div>
             </div>
@@ -27,7 +27,11 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body p-b-0">
-                        <h4 class="card-title">{{$practitioner->title->name.' '.ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}}</h4>
+                        <h4 class="card-title">@if($practitioner->title){{$practitioner->title->name}}@endif
+                            {{ucwords($practitioner->first_name)
+                        .' '
+                        .ucwords
+                            ($practitioner->last_name)}}</h4>
                         <h4>Registration Number :
                             @if($practitioner->registration_number == null)
                                 {{$practitioner->profession->prefix->name.' (No Registration Number)'}} <a
@@ -39,11 +43,7 @@
                         <h6 style="font-size: 20px;" class="card-subtitle">Current Status:
                             <code>
                                 @if($practitioner->currentRenewal)
-                                    @if (($practitioner->currentRenewal->renewal_status_id == 1) && ($practitioner->currentRenewal->cdpoints == 1) && ($practitioner->currentRenewal->placement == 1))
-                                        {{'Compliant'}}
-                                    @else
-                                        {{'Not Compliant'}}
-                                    @endif
+                                    {{'Compliant'}}
                                 @else
                                     {{'Not Compliant'}}
                                 @endif
@@ -85,23 +85,29 @@
                                                 role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span>
                                 <span class="hidden-xs-down">Employment</span></a>
                         </li>
+                        @can('requirementChecklist')
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#shortfalls"
+                                                    role="tab"><span class="hidden-sm-up"><i
+                                            class="ti-email"></i></span>
+                                    <span class="hidden-xs-down">Requirements Checklist</span></a>
+                            </li>
+                        @endcan
+                        @can('updatePractitioner')
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#apps" role="tab"><span
+                                        class="hidden-sm-up"><i class="ti-email"></i></span> <span
+                                        class="hidden-xs-down">Applications</span></a>
 
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#shortfalls"
-                                                role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span>
-                                <span class="hidden-xs-down">Shortfalls</span></a>
-                        </li>
-
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#apps" role="tab"><span
-                                    class="hidden-sm-up"><i class="ti-email"></i></span> <span
-                                    class="hidden-xs-down">Applications</span></a>
-
-                        </li>
+                            </li>
+                        @endcan
                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#renewal"
                                                 role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span>
-                                <span class="hidden-xs-down">Renewals</span></a></li>
-                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#approval"
-                                                role="tab"><span class="hidden-sm-up"><i class="ti-email"></i></span>
-                                <span class="hidden-xs-down">Approval</span></a></li>
+                                <span class="hidden-xs-down">Payments</span></a></li>
+                        @can('registrarApproval')
+                            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#approval"
+                                                    role="tab"><span class="hidden-sm-up"><i
+                                            class="ti-email"></i></span>
+                                    <span class="hidden-xs-down">Approval and Sign Off</span></a></li>
+                        @endcan
 
                     </ul>
                     <!-- Tab panes -->
@@ -140,6 +146,9 @@
                                             </tr>
                                             </tbody>
                                         </table>
+                                        <a class="btn btn-success"
+                                           href="/registration_certificate/{{$practitioner->id}}"
+                                           target="_blank">Registration Certificate</a>
                                     </div>
                                     <!-- /.box-content bordered -->
 
@@ -485,7 +494,7 @@
                                             <h4 class="card-title">Internship Placement</h4>
                                             <table id="placements"
                                                    class="display nowrap table table-hover table-striped table-bordered"
-                                                   cellspacing="0" width="100%">
+                                                   width="100%">
                                                 <thead>
                                                 <tr>
                                                     <th>Period</th>
@@ -537,8 +546,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </div>
                         <!-- Start Of employment  tab -->
                         <div class="tab-pane p-20" id="employment_history" role="tabpanel">
@@ -560,26 +567,25 @@
                                     <h4 class="box-title"><i class="fa fa-bookmark-o"></i> Current Employer </h4>
                                     <div class="card-content">
                                         <ul class="dot-list">
-                                            <div class="row">
-                                                <div class="col-md-3 col-xs-6 b-r"><strong>Employer Name</strong>
-                                                    <br>
-                                                    <p class="text-muted">@if($practitioner->employer){{ucwords($practitioner->employer->name)}}@endif</p>
-                                                </div>
-                                                <div class="col-md-3 col-xs-6 b-r"><strong>Business Address</strong>
-                                                    <br>
-                                                    <p class="text-muted">@if($practitioner->employer){{$practitioner->employer->business_address}}@endif</p>
-                                                </div>
-                                                <div class="col-md-3 col-xs-6 b-r"><strong>Job Title</strong>
-                                                    <br>
-                                                    <p class="text-muted">@if($practitioner->employer){{$practitioner->employer->job_title}}@endif</p>
-                                                </div>
 
-                                                <div class="col-md-3 col-xs-6 b-r"><strong>Commencement date</strong>
-                                                    <br>
-                                                    <p class="text-muted">@if($practitioner->employer){{ date("d M Y", strtotime($practitioner->employer->commencement_date)) }}@endif</p>
-                                                </div>
-
+                                            <div class="col-md-3 col-xs-6 b-r"><strong>Employer Name</strong>
+                                                <br>
+                                                <p class="text-muted">@if($practitioner->employer){{ucwords($practitioner->employer->name)}}@endif</p>
                                             </div>
+                                            <div class="col-md-3 col-xs-6 b-r"><strong>Business Address</strong>
+                                                <br>
+                                                <p class="text-muted">@if($practitioner->employer){{$practitioner->employer->business_address}}@endif</p>
+                                            </div>
+                                            <div class="col-md-3 col-xs-6 b-r"><strong>Job Title</strong>
+                                                <br>
+                                                <p class="text-muted">@if($practitioner->employer){{$practitioner->employer->job_title}}@endif</p>
+                                            </div>
+
+                                            <div class="col-md-3 col-xs-6 b-r"><strong>Commencement date</strong>
+                                                <br>
+                                                <p class="text-muted">@if($practitioner->employer){{ date("d M Y", strtotime($practitioner->employer->commencement_date)) }}@endif</p>
+                                            </div>
+
                                             <hr/>
 
                                             <div class="row">
@@ -629,25 +635,65 @@
                         <!-- Start Of shortfalls  tab -->
                         <div class="tab-pane p-20" id="shortfalls" role="tabpanel">
                             <div class="table-responsive">
-
                                 <br/>
-                                <h4 class="card-title">Requirements and Shortfalls</h4>
+                                <h4 class="card-title">Requirements</h4>
+                                @if($practitioner->approval_status == 0)
+                                    <div class="box-content card">
+                                        <h4 class="box-title"><i class="fa fa-bookmark-o"></i> Application Comments
+                                        </h4>
+                                        <div class="card-content">
+                                            <ul class="dot-list">
+                                                @if(auth()->check())
+                                                    @if(auth()->user()->notifications->count())
+                                                        @foreach (auth()->user()->notifications as $notification)
+                                                            @if ($practitioner->id == $notification->data['id'])
+                                                                <li>
+                                                                    {{--<a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
+                                                                        As Read</a>--}}
+                                                                    <span class="date">
+                                                                            @if($notification->data['comment'] != null)
+                                                                            {{$notification->data['comment']}}
+                                                                        @else{{'No comment on this notification'}}
+                                                                        @endif
+                                                                        </span>
+                                                                </li>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </div>
+                                @endif
+<br/>
+<br/>
+                                @if($practitioner->renewals->count() > 0)
+                                    <a class="btn btn-success"
+                                       href="/certificate/{{$practitioner->renewals->first()->id}}"
+                                       target="_blank">Preview Certificate</a> |
+                                    <a class="btn btn-success"
+                                       href="/id_card/{{$practitioner->renewals->first()->id}}"
+                                       target="_blank">ID Card</a>
+                                @endif
+
                                 <table id="practitioner_requirements"
                                        class="display table table-hover table-striped table-bordered"
-                                       cellspacing="0" width="100%">
+                                       width="100%">
                                     <thead>
                                     <tr>
                                         <th>Requirements</th>
+                                        <th>Document</th>
                                         <th>Registration Officer Approval (<span id="officer"></span>)</th>
-                                        <th>Member Approval (<span id="member"></span>)</th>
+                                        {{--<th>Member Approval (<span id="member"></span>)</th>--}}
 
                                     </tr>
                                     </thead>
                                     <tfoot>
                                     <tr>
                                         <th>Requirements</th>
+                                        <th>Document</th>
                                         <th>Registration Officer Approval</th>
-                                        <th>Member Approval</th>
+                                        {{--<th>Member Approval</th>--}}
 
                                     </tr>
                                     </tfoot>
@@ -656,22 +702,28 @@
                                         @foreach($practitioner->practitionerRequirements as $shortfall)
                                             <tr>
                                                 <td>{{$shortfall->requirement->name}}</td>
+                                                <td>
+                                                    @if($shortfall->file !=null)
+                                                        <a href="{{asset($shortfall->file)}}"
+                                                           target="_blank">View Document</a>
+                                                    @else
+                                                        {{'No Document'}}
+                                                    @endif
+                                                </td>
 
                                                 <td>
-
 
                                                     <input type="checkbox" name="status"
                                                            {{$shortfall->status ?'checked':'' }} value="{{$shortfall->id}}"
                                                            class="officer">
 
-
                                                 </td>
-                                                <td>
-                                                    <input type="checkbox" name="member_status"
-                                                           {{$shortfall->member_status?'checked':'' }} value="{{$shortfall->id}}"
-                                                           class="member">
+                                                {{-- <td>
+                                                     <input type="checkbox" name="member_status"
+                                                            {{$shortfall->member_status?'checked':'' }} value="{{$shortfall->id}}"
+                                                            class="member">
 
-                                                </td>
+                                                 </td>--}}
 
                                             </tr>
                                         @endforeach
@@ -679,6 +731,50 @@
 
                                     </tbody>
                                 </table>
+                                <br/>
+                                <div class="col-md-9 col-xs-12">
+                                    @if($practitioner->approval_status == 0)
+                                        <a href="/admin/practitioners/approval/{{$practitioner->id}}/approve"
+                                           class="btn btn-success btn-xs"><i class="fa fa-check"></i> Approve
+                                            Application
+                                        </a>
+
+                                        <a href="/admin/practitioners/approval/{{$practitioner->id}}/disapprove"
+                                           class="btn btn-success btn-xs"><i class="fa fa-crosshairs"></i> Disapprove
+                                            Application
+                                        </a>
+                                    @else
+                                        {{'Application approved'}}
+                                    @endif
+                                    <br/>
+                                    <br/>
+                                    <div class="box-content card">
+                                        <h4 class="box-title"><i class="fa fa-bookmark-o"></i> Application Comments
+                                        </h4>
+                                        <div class="card-content">
+                                            <ul class="dot-list">
+                                                @if(auth()->check())
+                                                    @if(auth()->user()->notifications->count())
+                                                        @foreach (auth()->user()->notifications as $notification)
+                                                            @if ($practitioner->id == $notification->data['id'])
+                                                                <li>
+                                                                    {{--<a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
+                                                                        As Read</a>--}}
+                                                                    <span class="date">
+                                                                            @if($notification->data['comment'] != null)
+                                                                            {{$notification->data['comment']}}
+                                                                        @else{{'No comment on this notification'}}
+                                                                        @endif
+                                                                        </span>
+                                                                </li>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- Start Of applications  tab -->
@@ -689,47 +785,64 @@
                             </a>
 
                             <div class="table-responsive">
-                                <h4 class="card-title">Other application Documents</h4>
+                                <h4 class="card-title">Applications</h4>
                                 <table id="others_apps"
                                        class="display nowrap table table-hover table-striped table-bordered"
-                                       cellspacing="0" width="100%">
+                                       width="100%">
                                     <thead>
                                     <tr>
-                                        <th>Application form</th>
-                                        <th>Application Date</th>
-                                        <th>Edit</th>
-                                        <th>Add Documents</th>
+                                        <th>Application</th>
+                                        <th>Application date</th>
+                                        <th>Application Status</th>
+                                        <th>Payment Status</th>
+                                        <th>Verify</th>
                                         <th>View</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
                                     <tr>
-                                        <th>Application form</th>
-                                        <th>Application Date</th>
-                                        <th>Edit</th>
-                                        <th>Add Documents</th>
+                                        <th>Application</th>
+                                        <th>Application date</th>
+                                        <th>Application Status</th>
+                                        <th>Payment Status</th>
+                                        <th>Verify</th>
                                         <th>View</th>
                                     </tr>
                                     </tfoot>
                                     <tbody>
-                                    @if($practitioner->otherApplications)
-                                        @foreach($practitioner->otherApplications as $others_apps)
+                                    @if($applications)
+                                        @foreach($applications as $application)
                                             <tr>
-                                                <td>{{$others_apps->paymentItem->name}}</td>
+                                                <td>{{$application->payment_item->name}}</td>
                                                 <td>
-                                                    {{date("d F Y",strtotime($others_apps->application_date))}}
+                                                    {{date("d F Y",strtotime($application->created_at))}}
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/practitioners/apps/{{$others_apps->practitioner->id}}/edit">Edit
-                                                        application</a>
+                                                    @if($application->status == 0)
+                                                        {{'Pending Approval'}}
+                                                    @elseif($application == 1)
+                                                        {{'Pending Sign Off'}}
+                                                    @else
+                                                        {{'Approved'}}
+                                                    @endif
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/practitioners/docs/{{$others_apps->id}}/create">Add
-                                                        Documents
+                                                    @if($application->payment_status == 1)
+                                                        {{'Paid'}}
+                                                    @elseif($application == 2)
+                                                        {{'Pending Payment'}}
+                                                    @else
+                                                        {{'Owing'}}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a
+                                                        href="/admin/practitioners/apps/{{$application->practitioner->id}}/edit">Verify
+                                                        application
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/practitioners/apps/{{$others_apps->id}}/show">View
+                                                    <a href="/admin/practitioners/apps/{{$application->id}}/show">View
                                                         Application
                                                     </a>
                                                 </td>
@@ -742,208 +855,237 @@
                             </div>
 
                         </div>
-                        <!-- Start Of Renewals  tab -->
+                        <!-- Start Of renewal  tab -->
                         <div class="tab-pane p-20" id="renewal" role="tabpanel">
-                            @can('updatePractitionerPayment')
-                                <a href="/admin/practitioners/registration/{{$practitioner->id}}/registration"
-                                   class="btn btn-success">REGISTER</a>
-
-                                <a href="/check_restoration_penalties/{{$practitioner->id}}"
-                                   class="btn btn-success"> RENEW
-                                </a>
-                            @endcan
-                            <div class="row small-spacing">
-                                <div class="col-md-4 col-xs-6 b-r"><strong>Renewal Category</strong>
-                                    @if($practitioner->practitioner_payment_information)
-                                        <br>
-                                        <p class="text-muted">@if($practitioner->practitioner_payment_information->renewal_category){{$practitioner->practitioner_payment_information->renewal_category->name}}@endif</p>
-                                    @endif
-                                </div>
-
-                                <div class="col-md-4 col-xs-6 b-r"><strong>Payment Method</strong>
-                                    @if($practitioner->practitioner_payment_information)
-                                        <br>
-                                        <p class="text-muted">@if($practitioner->practitioner_payment_information->payment_method){{$practitioner->practitioner_payment_information->payment_method->name}}@endif</p>
-                                    @endif
-                                </div>
-                            </div>
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card-group">
+
                                         <div class="card">
                                             <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-cyan" role="progressbar"
-                                                                 style="width: 100%; height: 6px;"
-                                                                 aria-valuenow="100"
-                                                                 aria-valuemin="0" aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
+                                                <div class="table-responsive m-t-40">
+                                                    <h4 class="card-title">Renewals and Payments</h4>
+                                                    <table id="renewals"
+                                                           class="display nowrap table table-hover table-striped table-bordered"
+                                                           width="100%">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>Period</th>
+                                                            <th>Current Balance</th>
+                                                            <th>Status</th>
+                                                            <th>CPD Points</th>
+                                                            <th>Renewal Date</th>
+                                                            <th>Preview</th>
+                                                            <th>Verify</th>
+                                                            <th>Record Payment</th>
+                                                            <th>All</th>
+
+                                                        </tr>
+                                                        </thead>
+                                                        <tfoot>
+                                                        <tr>
+                                                            <th>Period</th>
+                                                            <th>Current Balance</th>
+                                                            <th>Status</th>
+                                                            <th>CPD Points</th>
+                                                            <th>Renewal Date</th>
+                                                            <th>Preview</th>
+                                                            <th>Verify</th>
+                                                            <th>Record Payment</th>
+                                                            <th>All</th>
+
+                                                        </tr>
+                                                        </tfoot>
+                                                        <tbody>
+                                                        @if(count($practitioner->renewals))
+                                                            @foreach($practitioner->renewals as $renewal)
+                                                                <tr>
+                                                                    <td>{{$renewal->renewal_period_id}}</td>
+                                                                    <td>{{number_format($renewal->payments->sum('balance'),2)}}</td>
+                                                                    <td>
+
+                                                                        {{$renewal->renewalStatus->name}}
+                                                                    </td>
+                                                                    <td>
+                                                                        @if($renewal->cdpoints == 0)
+                                                                            {{'Pending Cd Points'}}
+                                                                        @else
+                                                                            {{'Up to date'}}
+                                                                        @endif
+                                                                    </td>
+
+                                                                    <td>@if($renewal->created_at !=null){{$renewal->created_at->format('d F Y')}}@endif</td>
+                                                                    <td>
+                                                                        <a href="/certificate/{{$renewal->id}}"
+                                                                           target="_blank">Certificate </a> |
+                                                                        <a href="/id_card/{{$renewal->id}}"
+                                                                           target="_blank">ID Card </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        @if($renewal->certificate == 2)
+                                                                            {{'Signed'}}
+                                                                        @elseif($renewal->certificate == 1)
+                                                                            @can('registrarApproval')
+                                                                                <a href="/admin/practitioner_renewals/{{$renewal->id}}/initiate_renewal_sign_off">Sign_off </a>
+                                                                            @endcan
+                                                                        @else
+                                                                            @can('updatePractitionerPayment')
+                                                                                <a href="/admin/practitioner_renewals/{{$renewal->id}}/initiate_renewal_verification">Verify </a>
+                                                                            @else
+                                                                                {{'No rights'}}
+                                                                            @endcan
+                                                                        @endif
+                                                                    </td>
+                                                                    <td>
+                                                                        <a
+                                                                            href="/admin/practitioners/renewals/{{$renewal->id}}/create_payment">Record
+                                                                            Payment </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="/admin/practitioner_renewals/{{$renewal->id}}/index">Payments </a>
+                                                                    </td>
+
+                                                                </tr>
+                                                            @endforeach
+                                                        @endif
+
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Column -->
-                                        <!-- Column -->
-                                        <div class="card">
-                                            <a href="/admin/practitioners/renewals/{{$practitioner->id}}/practitionerBalances">
-                                                <div class="card-body">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
+                                    </div>
+                                    <br/>
+                                    @can('updatePractitionerPayment')
 
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="progress">
-                                                                <div class="progress-bar bg-purple" role="progressbar"
-                                                                     style="width: 100%; height: 6px;"
-                                                                     aria-valuenow="100"
-                                                                     aria-valuemin="0" aria-valuemax="100">
+                                        <div class="col-md-9 col-xs-12">
+                                            @if($practitioner->approval_status == 0)
 
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                @if($practitioner->accountant == 0 )
+                                                    <a href="/admin/practitioners/approval/{{$practitioner->id}}/approve"
+                                                       class="btn btn-success btn-xs"><i class="fa fa-check"></i>
+                                                        Approve Application Payment
+                                                    </a>
+
+                                                @elseif($practitioner->accountant == 1 || $practitioner->accountant == 3)
+                                                    <a href="/admin/practitioners/approval/{{$practitioner->id}}/approve"
+                                                       class="btn btn-success btn-xs"><i class="fa fa-check"></i>
+                                                        Approve Registration Payment
+                                                    </a>
+                                                @endif
+                                                <a href="/admin/practitioners/approval/{{$practitioner->id}}/disapprove"
+                                                   class="btn btn-success btn-xs"><i class="fa fa-crosshairs"></i>
+                                                    Disapprove Payment
+                                                </a>
+
+                                                <div class="box-content card">
+                                                    <h4 class="box-title"><i class="fa fa-bookmark-o"></i>
+                                                        Application Comments
+                                                    </h4>
+                                                    <div class="card-content">
+                                                        <ul class="dot-list">
+                                                            @if(auth()->check())
+                                                                @if(auth()->user()->notifications->count())
+                                                                    @foreach (auth()->user()->notifications as $notification)
+                                                                        @if ($practitioner->id == $notification->data['id'])
+                                                                            <li>
+                                                                                {{--<a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
+                                                                                    As Read</a>--}}
+                                                                                <span class="date">
+                                                                            @if($notification->data['comment'] != null)
+                                                                                        {{$notification->data['comment']}}
+                                                                                    @else{{'No comment on this notification'}}
+                                                                                    @endif
+                                                                        </span>
+                                                                            </li>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @endif
+                                                            @endif
+                                                        </ul>
                                                     </div>
                                                 </div>
-                                            </a>
+                                            @endif
                                         </div>
-                                    </div>
+
+                                        <a href="/admin/practitioners/registration/{{$practitioner->id}}/registration"
+                                           class="btn btn-success"> Registration Payment
+                                        </a>
+
+                                        <a href="/check_restoration_penalties/{{$practitioner->id}}"
+                                           class="btn btn-success"> Renewal Payment
+                                        </a>
 
 
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="table-responsive m-t-40">
-                                                <h4 class="card-title">Renewals and Payments</h4>
-                                                <table id="renewals"
-                                                       class="display nowrap table table-hover table-striped table-bordered"
-                                                       cellspacing="0" width="100%">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Period</th>
-                                                        <th>Current Balance</th>
-                                                        <th>Status</th>
-                                                        <th>CPD Points</th>
-                                                        <th>Placement</th>
-                                                        <th>Renewal Date</th>
-                                                        <th>Preview</th>
-                                                        <th>Verify</th>
-                                                        <th>view</th>
-
-                                                    </tr>
-                                                    </thead>
-                                                    <tfoot>
-                                                    <tr>
-                                                        <th>Period</th>
-                                                        <th>Current Balance</th>
-                                                        <th>Status</th>
-                                                        <th>CPD Points</th>
-                                                        <th>Placement</th>
-                                                        <th>Renewal Date</th>
-                                                        <th>Preview</th>
-                                                        <th>Verify</th>
-                                                        <th>view</th>
-
-                                                    </tr>
-                                                    </tfoot>
-                                                    <tbody>
-                                                    @if(count($practitioner->renewals))
-                                                        @foreach($practitioner->renewals as $renewal)
-                                                            <tr>
-                                                                <td>{{$renewal->renewal_period_id}}</td>
-                                                                <td>{{number_format($renewal->payments->sum('balance'),2)}}</td>
-                                                                <td>
-
-                                                                    {{$renewal->renewalStatus->name}}
-                                                                </td>
-                                                                <td>
-                                                                    @if($renewal->cdpoints == 0)
-                                                                        {{'Pending Cd Points'}}
-                                                                    @else
-                                                                        {{'Up to date'}}
-                                                                    @endif
-                                                                </td>
-                                                                <td>
-                                                                    @if($renewal->placement == 0)
-                                                                        {{'Pending Placement'}}
-                                                                    @else
-                                                                        {{'Up to date'}}
-                                                                    @endif
-                                                                </td>
-                                                                <td>@if($renewal->created_at !=null){{$renewal->created_at->format('d F Y')}}@endif</td>
-                                                                <td>
-                                                                    <a href="/certificate/{{$renewal->id}}" target="_blank">Preview </a>
-                                                                </td>
-                                                                <td>
-                                                                    @if($renewal->certificate == 2)
-                                                                        {{'Signed'}}
-                                                                    @elseif($renewal->certificate == 1)
-                                                                        <a href="/admin/practitioner_renewals/{{$renewal->id}}/initiate_renewal_sign_off">Sign_off </a>
-                                                                    @else
-                                                                        <a href="/admin/practitioner_renewals/{{$renewal->id}}/initiate_renewal_verification">Verify </a>
-                                                                    @endif
-                                                                </td>
-                                                                <td>
-                                                                    <a href="/admin/practitioner_renewals/{{$renewal->id}}/index">Payments </a>
-                                                                </td>
-
-                                                            </tr>
-                                                        @endforeach
-                                                    @endif
-
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                        <br/>
+                                        <br/>
+                                    @endcan
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                         <!-- Start Of Approvals  tab -->
                         <div class="tab-pane p-20" id="approval" role="tabpanel">
+                            @if($practitioner->renewals->count() > 0)
+                                <a class="btn btn-success"
+                                   href="/certificate/{{$practitioner->renewals->first()->id}}"
+                                   target="_blank">Preview Certificate</a> |
+                                <a class="btn btn-success"
+                                   href="/id_card/{{$practitioner->renewals->first()->id}}"
+                                   target="_blank">ID Card</a>
 
-                            <div class="col-md-9 col-xs-12">
-                                @if($practitioner->approval_status == 0)
-                                    <a href="/admin/practitioners/approval/{{$practitioner->id}}/approve"
-                                       class="btn btn-success btn-xs"><i class="fa fa-check"></i> Approve Application
-                                    </a>
+                            @endif
+                            <br/>
+                            <br/>
+                            @if(auth()->user()->role_id == 7)
+                                <div class="col-md-9 col-xs-12">
+                                    @if($practitioner->approval_status == 0)
+                                        <a href="/admin/practitioners/approval/{{$practitioner->id}}/approve"
+                                           class="btn btn-success btn-xs"><i class="fa fa-check"></i> Approve
+                                            Application
+                                        </a>
 
-                                    <a href="/admin/practitioners/approval/{{$practitioner->id}}/disapprove"
-                                       class="btn btn-success btn-xs"><i class="fa fa-crosshairs"></i> Disapprove
-                                        Application
-                                    </a>
-                                @else
-                                    {{'Application approved'}}
-                                @endif
-                                <br/>
-                                <br/>
-                                <div class="box-content card">
-                                    <h4 class="box-title"><i class="fa fa-bookmark-o"></i> Application Comments </h4>
-                                    <div class="card-content">
-                                        <ul class="dot-list">
-                                            @if(auth()->check())
-                                                @if(auth()->user()->unreadNotifications->count())
-                                                    @foreach (auth()->user()->unreadNotifications as $notification)
-                                                        @if ($practitioner->id == $notification->data['id'])
-                                                            <li>
-                                                                {{--<a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
-                                                                    As Read</a>--}}
-                                                                <span
-                                                                    class="date">@if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif</span>
-                                                            </li>
-                                                            </li>
+                                        <a href="/admin/practitioners/approval/{{$practitioner->id}}/disapprove"
+                                           class="btn btn-success btn-xs"><i class="fa fa-crosshairs"></i> Disapprove
+                                            Application
+                                        </a>
+                                    @else
+                                        {{'Application approved'}}
+                                    @endif
+                                    <br/>
+                                    <br/>
+                                    @if($practitioner->approval_status == 0)
+                                        <div class="box-content card">
+                                            <h4 class="box-title"><i class="fa fa-bookmark-o"></i> Application Comments
+                                            </h4>
+                                            <div class="card-content">
+                                                <ul class="dot-list">
+                                                    @if(auth()->check())
+                                                        @if(auth()->user()->notifications->count())
+                                                            @foreach (auth()->user()->notifications as $notification)
+                                                                @if ($practitioner->id == $notification->data['id'])
+                                                                    <li>
+                                                                        {{--<a href="/admin/practitioners/read/{{$practitioner->id}}/{{$notification->id}}">Mark
+                                                                            As Read</a>--}}
+                                                                        <span class="date">
+                                                                            @if($notification->data['comment'] != null)
+                                                                                {{$notification->data['comment']}}
+                                                                            @else{{'No comment on this notification'}}
+                                                                            @endif
+                                                                        </span>
+                                                                    </li>
+                                                                @endif
+                                                            @endforeach
                                                         @endif
-                                                    @endforeach
-                                                @endif
-                                            @endif
-                                        </ul>
-                                    </div>
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    @endif
                                 </div>
-                            </div>
-
+                                <br/>
+                            @endif
+                            <br/>
                             <div class="col-md-9 col-xs-12">
                                 <h1>Portal Account Permissions</h1>
                                 <a href="{{url('admin/practitioners/'.$practitioner->id.'/1/verify_create')}}"
@@ -954,115 +1096,117 @@
                                    class="btn btn-success btn-xs"><i class="fa fa-window-close"></i> De-activate
                                 </a>
                             </div>
+                            <br/>
+
                         </div>
+
                     </div>
                 </div>
             </div>
+            @stop
         </div>
-        @stop
-    </div>
 
 
-@section('plugins-js')
+    @section('plugins-js')
 
-    <!-- This is data table -->
-    <script src="{{asset('assets/node_modules/datatables/jquery.dataTables.min.js')}}"></script>
-    <!-- start - This is for export functionality only -->
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
-    <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-    <!-- end - This is for export functionality only -->
-    <script>
-        $('#renewals').DataTable({
-            order: [],
-            dom: 'Bfrtip',
+        <!-- This is data table -->
+            <script src="{{asset('assets/node_modules/datatables/jquery.dataTables.min.js')}}"></script>
+            <!-- start - This is for export functionality only -->
+            <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+            <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+            <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+            <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+            <!-- end - This is for export functionality only -->
+            <script>
+                $('#renewals').DataTable({
+                    order: [],
+                    dom: 'Bfrtip',
 
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-
-        $('#placements').DataTable({
-            order: [],
-            dom: 'Bfrtip',
-
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-
-        $('#profession_practitioners').DataTable({
-            order: [],
-            dom: 'Bfrtip',
-
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-
-        $('#practitioner_requirements').DataTable({
-            order: [],
-            dom: 'Bfrtip',
-
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ],
-            pageLength: 25
-        });
-
-        $('#others_apps').DataTable({
-            order: [],
-            dom: 'Bfrtip',
-
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-
-
-        //shortfalls
-        $(document).ready(function () {
-            $(".officer").click(function () {
-                var practitionerRequirement = $(this).val();
-
-                $.ajax
-                ({
-                    type: "get",
-                    url: "/admin/submit_requirements/" + practitionerRequirement,
-                    data: practitionerRequirement,
-                    cache: false,
-                    success: function (data) {
-                        $("#officer").html(data);
-                    }
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
                 });
-            });
 
-        });
+                $('#placements').DataTable({
+                    order: [],
+                    dom: 'Bfrtip',
 
-        $(document).ready(function () {
-            $(".member").click(function () {
-                var practitionerRequirement = $(this).val();
-
-                $.ajax
-                ({
-                    type: "get",
-                    url: "/admin/submit_requirements/" + practitionerRequirement + "/member",
-                    data: practitionerRequirement,
-                    cache: false,
-                    success: function (data) {
-                        $("#member").html(data);
-                    }
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
                 });
-            });
 
-        });
+                $('#profession_practitioners').DataTable({
+                    order: [],
+                    dom: 'Bfrtip',
+
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
+                });
+
+                $('#practitioner_requirements').DataTable({
+                    order: [],
+                    dom: 'Bfrtip',
+
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ],
+                    pageLength: 25
+                });
+
+                $('#others_apps').DataTable({
+                    order: [],
+                    dom: 'Bfrtip',
+
+                    buttons: [
+                        'copy', 'csv', 'excel', 'pdf', 'print'
+                    ]
+                });
 
 
-    </script>
+                //shortfalls
+                $(document).ready(function () {
+                    $(".officer").click(function () {
+                        var practitionerRequirement = $(this).val();
+
+                        $.ajax
+                        ({
+                            type: "get",
+                            url: "/admin/submit_requirements/" + practitionerRequirement,
+                            data: practitionerRequirement,
+                            cache: false,
+                            success: function (data) {
+                                $("#officer").html(data);
+                            }
+                        });
+                    });
+
+                });
+
+                $(document).ready(function () {
+                    $(".member").click(function () {
+                        var practitionerRequirement = $(this).val();
+
+                        $.ajax
+                        ({
+                            type: "get",
+                            url: "/admin/submit_requirements/" + practitionerRequirement + "/member",
+                            data: practitionerRequirement,
+                            cache: false,
+                            success: function (data) {
+                                $("#member").html(data);
+                            }
+                        });
+                    });
+
+                });
+
+
+            </script>
 
 @endsection
 

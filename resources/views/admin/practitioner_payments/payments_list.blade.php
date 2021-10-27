@@ -1,8 +1,9 @@
 @extends('layouts.admin')
 @section('title','AHPCZ - Create Institution')
 @section('plugins-css')
-    <link href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
-          rel="stylesheet">
+    <link
+        href="{{asset('../assets/node_modules/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}"
+        rel="stylesheet">
     <link href="{{asset('../assets/node_modules/wizard/steps.css')}}" rel="stylesheet">
 @endsection
 
@@ -47,10 +48,10 @@
                                 @endif
                                 @if (session('message'))
                                     <div class="alert alert-success alert-rounded col-md-12"><i
-                                                class="fa fa-check-circle"></i> {{ session('message') }}
+                                            class="fa fa-check-circle"></i> {{ session('message') }}
                                         <button type="button" class="close" data-dismiss="alert"
                                                 aria-label="Close"><span
-                                                    aria-hidden="true">&times;</span></button>
+                                                aria-hidden="true">&times;</span></button>
                                     </div>
                                 @endif
                             </div>
@@ -85,6 +86,7 @@
                                                         <th>Current Balances</th>
                                                         <th>Payment Chanel</th>
                                                         <th>Receipt</th>
+                                                        <th>POP</th>
                                                         <th>CPDs</th>
                                                         <th>Payment Date</th>
                                                     </tr>
@@ -100,6 +102,7 @@
                                                         <th>Current Balances</th>
                                                         <th>Payment Chanel</th>
                                                         <th>Receipt</th>
+                                                        <th>POP</th>
                                                         <th>CPDS</th>
                                                         <th>Payment Date</th>
                                                     </tr>
@@ -125,10 +128,18 @@
                                                                 <td>{{$payment->paymentChannel->name}}</td>
                                                                 <td>{{$payment->receipt_number}}</td>
                                                                 <td>
+                                                                    @if($payment->payment_channel_id == 5)
+                                                                        {{'reference: '.$payment->proof}}
+                                                                    @else
+                                                                        <a href="{{asset($payment->proof)}}"
+                                                                           target="_blank">POP</a>
+                                                                    @endif
+                                                                </td>
+                                                                <td>
                                                                     <a href="{{asset($payment->pop)}}"
                                                                        target="_blank">CPDs</a>
                                                                 </td>
-</td>
+                                                                </td>
                                                                 <td>{{date("d M Y", strtotime( $payment->payment_date))}}</td>
                                                             </tr>
                                                         @endforeach
