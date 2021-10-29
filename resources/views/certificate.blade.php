@@ -55,7 +55,7 @@
         <p style="text-align: center; text-decoration: underline;margin-bottom: 40px;">{{'31 December ' .$renewal->renewal_period_id}}</p>
 
         <div style="display: flex;padding: 20px;">
-           <p style="margin-top: 35px">Date: {{date('d F Y')}}</p>
+           <p style="margin-top: 35px">Date: {{date('d F Y',strtotime($renewal->updated_at))}}</p>
             <p style="position: absolute; right: 78px;">{!! $html !!}</p>
         </div>
     </div>

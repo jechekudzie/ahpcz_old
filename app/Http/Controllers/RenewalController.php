@@ -1257,8 +1257,17 @@ class RenewalController extends Controller
                     }
 
                 }
+    }
 
+    public function edit_certificate(Renewal $renewal){
+        return view('admin.practitioner_payments.edit_certificate',compact('renewal'));
+    }
+    public function update_certificate(Renewal $renewal){
+        $renewal->update([
+            'certificate_number'=>request('certificate_number')
+        ]);
 
+        return redirect('/admin/practitioners/'.$renewal->practitioner->id)->with('message','Certificate number updated');
     }
 
 

@@ -17,7 +17,7 @@
 <div style="width: 100%; border: 5px solid green; padding: 10px;">
     <div style="background-image:url('logo/back.png');background-size: contain;background-position: center;
         background-repeat:
-    no-repeat; border: 2px dashed green; padding: 0 2% 6.12442rem">
+        no-repeat; border: 2px dashed green; padding: 0 2% 6.12442rem">
         <h6 style="text-align: right;"><span style="color: red">AHPCZ</span>{{$practitioner->prefix.''
         .$practitioner->registration_number}}</h6>
         <div style="text-align: center;">
@@ -37,19 +37,17 @@
         <p style="text-align: center;">This is to Certify that</p>
         <p style="text-align: center;font-size: 20px;text-transform: uppercase;">{{ucwords($practitioner->first_name.' '
         .$practitioner->last_name)}}</p>
-        <p style="text-align: center;">is registered on the register of </p>
-        <p style="text-align: center;font-size: 20px;text-transform: uppercase;">{{$register_prefix.' '
-        .$practitioner->profession->plural}}</p>
+        <p style="text-align: center;">is registered on the register of</p>
+        <p style="text-align: center;font-size: 20px;text-transform: uppercase;">{{$register_prefix.' '.$practitioner->profession->plural}}</p>
         <p style="text-align: center;">kept by the Allied Health Practitioners Council of Zimbabwe <br/>
             In Accordance with the provisions of the <br/>
             Health Professions Act (Chapter 27:19)
         </p>
         <p style="text-align: center;"></p>
         <p style="text-align: center;font-weight: bold;">Registration Number</p>
-        <p style="text-align: center;">{{$practitioner->prefix.''
-        .$practitioner->registration_number}}</p>
+        <p style="text-align: center;">{{$practitioner->prefix.''.$practitioner->registration_number}}</p>
         <div style="display: flex;padding: 20px;">
-            <p style="margin-top: 35px">Date: {{date('d F Y')}}</p>
+            <<p style="margin-top: 35px">Date: {{date('d F Y',strtotime($practitioner->registration_date))}}</p>
             <p style="position: absolute; right: 78px;">{!! $html !!}</p>
         </div>
     </div>

@@ -233,6 +233,8 @@ Route::post('/admin/practitioner_renewals/{renewal}/sign_off', 'RenewalControlle
 Route::get('/admin/practitioners/renewals/{renewal}/create_payment', 'RenewalController@createPayment');
 Route::post('/admin/practitioners/renewals/{renewal}/make_payment', 'RenewalController@makePayment');
 Route::get('/admin/practitioners/renewals/{practitioner}/practitionerBalances', 'RenewalController@practitionerBalances');
+Route::get('/admin/practitioners/renewals/{renewal}/edit_certificate', 'RenewalController@edit_certificate');
+Route::patch('/admin/practitioners/renewals/{renewal}/update_certificate', 'RenewalController@update_certificate');
 
 //auto renewal
 Route::get('/admin/auto_renew/{practitioner}/', 'RenewalController@auto_renew');

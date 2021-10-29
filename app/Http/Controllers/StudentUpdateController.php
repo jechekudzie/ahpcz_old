@@ -25,6 +25,7 @@ use App\Practitioner;
 use App\ProfessionApprover;
 use App\RegisterCategory;
 use App\RenewalCategory;
+use App\StudentNumber;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -258,25 +259,24 @@ class StudentUpdateController extends Controller
 
                 if ($practitioner->renewals) {
                     $renewal = $practitioner->renewals->first();
-                    $current_certificate_number = CertificateNumber::where('renewal_period_id', $renewal->renewal_period_id)
+                    $current_certificate_number = StudentNumber::where('renewal_period_id', $renewal->renewal_period_id)
                         ->first();
                     if ($current_certificate_number == null) {
-                        $current_certificate_number = CertificateNumber::create([
+                        $current_certificate_number = StudentNumber::create([
                             'renewal_period_id' => $renewal->renewal_period_id,
-                            'certificate_number' => 0,
+                            'student_number' => 0,
                         ]);
                     }
                     $certificate_number = $current_certificate_number->certificate_number + 1;
                     $current_certificate_number->update([
-                        'certificate_number' => $certificate_number
+                        'student_number' => $certificate_number
                     ]);
                     $practitioner_id = $renewal->practitioner->id;
                     $renewal->update([
                         'certificate' => 2,
-                        'certificate_number' => $certificate_number
+                        'student_number' => $certificate_number
                     ]);
                 }
-
 
                 $registration_officer = User::where('role_id', 4)->first();
                 $registration_officer->notify(

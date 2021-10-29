@@ -237,7 +237,7 @@ class PractitionerUpdateController extends Controller
                 //$notification->markAsRead();
             /*}*/
         /*}*/
-        if ($practitioner->renewals) {
+        /*if ($practitioner->renewals) {
             $renewal = $practitioner->renewals->first();
             $current_certificate_number = CertificateNumber::where('renewal_period_id', $renewal->renewal_period_id)
                 ->first();
@@ -256,7 +256,7 @@ class PractitionerUpdateController extends Controller
                 'certificate' => 2,
                 'certificate_number' => $certificate_number
             ]);
-        }
+        }*/
 
         $registration_officer = User::whereRole_id(4)->first();//registration officer
         $accountant = User::whereRole_id(5)->first();//accountant

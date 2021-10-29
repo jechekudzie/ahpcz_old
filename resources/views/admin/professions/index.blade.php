@@ -144,7 +144,8 @@
                                                 <tbody>
                                                 @foreach($prefixes as $prefix)
                                                     <tr>
-                                                        <td>{{$prefix->profession->name}}</td>
+                                                        <td>@if($prefix->profession)
+                                                                {{$prefix->profession->name}}@endif</td>
                                                         <td>{{$prefix->name}}</td>
                                                         <td>{{str_pad($prefix->last_reg, 4, '0', STR_PAD_LEFT) }}</td>
                                                         <td>{{$prefix->updated_at}}</td>
@@ -198,7 +199,8 @@
                                                 <tbody>
                                                 @foreach($cdpoints as $cdpoint)
                                                     <tr>
-                                                        <td>{{$cdpoint->profession->name}}</td>
+                                                        <td>@if($cdpoint->profession)
+                                                                {{$cdpoint->profession->name}}@endif</td>
                                                         <td>{{$cdpoint->points}}</td>
                                                         <td>
                                                             @if($cdpoint->placement == 1)

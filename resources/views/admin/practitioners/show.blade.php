@@ -878,6 +878,7 @@
                                                             <th>Preview</th>
                                                             <th>Verify</th>
                                                             <th>Record Payment</th>
+                                                            <th>Certificate</th>
                                                             <th>All</th>
 
                                                         </tr>
@@ -892,6 +893,7 @@
                                                             <th>Preview</th>
                                                             <th>Verify</th>
                                                             <th>Record Payment</th>
+                                                            <th>Certificate</th>
                                                             <th>All</th>
 
                                                         </tr>
@@ -917,7 +919,8 @@
                                                                     <td>@if($renewal->created_at !=null){{$renewal->created_at->format('d F Y')}}@endif</td>
                                                                     <td>
                                                                         <a href="/certificate/{{$renewal->id}}"
-                                                                           target="_blank">Certificate </a> |
+                                                                           target="_blank">Certificate
+                                                                            ({{str_pad($renewal->certificate_number, 4, '0', STR_PAD_LEFT)}}) </a> |
                                                                         <a href="/id_card/{{$renewal->id}}"
                                                                            target="_blank">ID Card </a>
                                                                     </td>
@@ -940,6 +943,11 @@
                                                                         <a
                                                                             href="/admin/practitioners/renewals/{{$renewal->id}}/create_payment">Record
                                                                             Payment </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a
+                                                                            href="/admin/practitioners/renewals/{{$renewal->id}}/edit_certificate">
+                                                                             Certificate Number </a>
                                                                     </td>
                                                                     <td>
                                                                         <a href="/admin/practitioner_renewals/{{$renewal->id}}/index">Payments </a>
@@ -1028,10 +1036,10 @@
                         <div class="tab-pane p-20" id="approval" role="tabpanel">
                             @if($practitioner->renewals->count() > 0)
                                 <a class="btn btn-success"
-                                   href="/certificate/{{$practitioner->renewals->first()->id}}"
+                                   href="/certificate/{{$practitioner->renewals->last()->id}}"
                                    target="_blank">Preview Certificate</a> |
                                 <a class="btn btn-success"
-                                   href="/id_card/{{$practitioner->renewals->first()->id}}"
+                                   href="/id_card/{{$practitioner->renewals->last()->id}}"
                                    target="_blank">ID Card</a>
 
                             @endif
