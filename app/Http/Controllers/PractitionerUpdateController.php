@@ -258,6 +258,17 @@ class PractitionerUpdateController extends Controller
             ]);
         }*/
 
+        if ($practitioner->renewals) {
+            $renewal = $practitioner->renewals->first();
+            $renewal->update([
+                'placement'=>1,
+                'cdpoints'=>1,
+                'certificate'=>2,
+
+            ]);
+        }
+
+
         $registration_officer = User::whereRole_id(4)->first();//registration officer
         $accountant = User::whereRole_id(5)->first();//accountant
 

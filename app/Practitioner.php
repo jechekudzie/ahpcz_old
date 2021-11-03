@@ -72,23 +72,20 @@ class Practitioner extends Model
     }
 
 
-
-
-    public function employment_status(){
+    public function employment_status()
+    {
         return $this->belongsTo(EmploymentStatus::class);
     }
 
-    public function employment_location(){
+    public function employment_location()
+    {
         return $this->belongsTo(EmploymentLocation::class);
     }
-
-
 
     public function employer()
     {
         return $this->hasOne(PractitionerEmployer::class);
     }
-
 
 
     public function registration()
@@ -129,7 +126,8 @@ class Practitioner extends Model
         return $this->hasMany(PractitionerRequirement::class);
     }
 
-    public function practitioner_student_approval(){
+    public function practitioner_student_approval()
+    {
         return $this->hasOne(PractitionerStudentApproval::class);
     }
 
@@ -252,9 +250,20 @@ class Practitioner extends Model
                 ->orWhere('registration_number', 'like', '%' . $search . '%')
                 ->orWhereDoesntHave('profession')->orWhereHas('profession', function ($query) use ($search) {
                     $query->where('name', 'like', '%' . $search . '%');
+
                 })
                 ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", "%{$search}%")
                 ->orWhereRaw("CONCAT(prefix, '', registration_number) LIKE ?", "%{$search}%");
+    }
+
+    public function scopeSort($query, $certificate)
+    {
+        if ($certificate == 1) {
+            return $query->orWhereDoesntHave('currentRenewal')->whereHas('currentRenewal', function ($query) use
+                ($certificate) {
+                $query->orderBy('certificate_number','desc');
+            });
+        }
     }
 
     public function scopeCheckCompliance($query, $compliance)
@@ -270,12 +279,12 @@ class Practitioner extends Model
 
         if ($compliance == 2) {
 
-                return $query->orWhereDoesntHave('currentRenewal')->orWhereHas('currentRenewal', function ($query) use ($compliance) {
-                    $query
-                        ->where('renewal_status_id', '!=', 1)
-                        ->orWhere('cdpoints', '=', 0)
-                        ->orWhere('placement', '=', 0);
-                });
+            return $query->orWhereDoesntHave('currentRenewal')->orWhereHas('currentRenewal', function ($query) use ($compliance) {
+                $query
+                    ->where('renewal_status_id', '!=', 1)
+                    ->orWhere('cdpoints', '=', 0)
+                    ->orWhere('placement', '=', 0);
+            });
 
 
         }

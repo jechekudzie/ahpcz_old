@@ -1247,7 +1247,7 @@ class RenewalController extends Controller
                             'month' => date('m'),
                             'day' => date('d'),
                             'payment_channel_id' => 1,
-                            'amount_invoiced' => 0,
+                            'amount_invoiced' =>0,
                             'amount_paid' => 0,
                             'payment_item_id' => 33,
                             'payment_item_category_id' => 1,

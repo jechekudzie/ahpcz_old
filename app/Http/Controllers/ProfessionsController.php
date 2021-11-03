@@ -21,7 +21,6 @@ class ProfessionsController extends Controller
         $prefixes = Prefix::all()->sortBy('name');
         $professions = Profession::all()->sortBy('name');
 
-
         return view('admin.professions.index',
             compact('professions','prefixes','cdpoints'));
     }

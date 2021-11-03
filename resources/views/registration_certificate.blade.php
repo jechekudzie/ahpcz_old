@@ -23,7 +23,7 @@
         <div style="text-align: center;">
             <img style="margin-top: -40px" height="120px" src="logo/logo.png">
         </div>
-        <h5 style="text-align:center;font-size: 15pt; color: black;font-weight: bolder;">ALLIED HEALTH PRACTITIONERS
+        <h5 style="text-align:center;font-size: 25pt; color: black;font-weight: bolder;">ALLIED HEALTH PRACTITIONERS
             COUNCIL OF ZIMBABWE</h5>
         <p style="text-align: center;font-size: 15px; margin-top: -25px;">Number 20 Worcester Road, Eastlea, Harare.
             Phone +263 242 747282/3, +263 771 056 413</p>

@@ -21,6 +21,19 @@
             </div>
         </div>
         <div class="w-1/6 relative mx-1">
+            <select wire:model="certificate"
+                    class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                    id="grid-state">
+                <option value="0">General {{$certificate}}</option>
+                <option value="1">With Certificate Number</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="w-1/6 relative mx-1">
             <select wire:model="compliance"
                     class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="grid-state">
@@ -68,11 +81,12 @@
         <thead>
         <tr>
             <th class="px-4 py-2">Title</th>
-            <th class="px-4 py-2">Full Name</th>
+            <th class="px-4 py-2">Name</th>
             <th class="px-4 py-2">Registration Number</th>
             <th class="px-4 py-2">Profession</th>
             <th class="px-4 py-2">Register</th>
-            <th class="px-4 py-2">Renewal Status</th>
+            <th class="px-4 py-2">Status</th>
+            <th class="px-4 py-2">Certificate no.</th>
             <th class="px-4 py-2">Actions</th>
             @can('updatePractitioner')
                 <th class="px-4 py-2">Delete</th>
@@ -119,6 +133,12 @@
                     @else
                         {{'Non-Compliant'}}
                     @endif
+                </td>
+                <td>@if($practitioner->currentRenewal)({{str_pad($practitioner->currentRenewal->certificate_number,
+                4, '0', STR_PAD_LEFT)}})@else
+                    {{'No number'}}
+                        @endif
+
                 </td>
                 <td class="border px-4 py-2">
                     <a href="/admin/practitioners/{{$practitioner->id}}">View</a>

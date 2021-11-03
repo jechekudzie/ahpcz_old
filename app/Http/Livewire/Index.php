@@ -17,6 +17,9 @@ class Index extends Component
     public $orderBy = 'id';
     public $orderAsc = true;
     public $compliance;
+    public $certificate = 0;
+
+
 
 
     public function render()
@@ -25,6 +28,7 @@ class Index extends Component
         return view('livewire.index', [
             'practitioners' => Practitioner::search($this->search)
                 ->CheckCompliance($this->compliance)
+                ->Sort($this->certificate)
                 ->orderBy($this->orderBy, $this->orderAsc ? 'asc' : 'desc')
                 ->paginate($this->perPage)
         ]);

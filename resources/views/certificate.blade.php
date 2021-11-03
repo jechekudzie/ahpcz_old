@@ -18,7 +18,8 @@
     <div style="background-image:url('logo/back.png');background-size: contain;background-position: center;
         background-repeat:
     no-repeat; border: 2px dashed green; padding: 0 2% 6.12442rem">
-        <h6 style="text-align: right;"><span style="color: red">AHPCZ</span>{{substr($renewal->renewal_period_id, -2)}}/{{str_pad($renewal->certificate_number, 4, '0', STR_PAD_LEFT)}}</h6>
+        <h6 style="text-align: right;"><span style="color: red">AHPCZ</span>{{substr($practitioner->currentRenewal->renewal_period_id,
+         -2)}}/{{str_pad($practitioner->currentRenewal->certificate_number, 4, '0', STR_PAD_LEFT)}}</h6>
         <div style="text-align: center;">
             <img style="margin-top: -40px" height="120px" src="logo/logo.png">
         </div>
@@ -52,10 +53,11 @@
             </tr>
         </table>
         <p style="text-align: center;">This certificate expires on</p>
-        <p style="text-align: center; text-decoration: underline;margin-bottom: 40px;">{{'31 December ' .$renewal->renewal_period_id}}</p>
+        <p style="text-align: center; text-decoration: underline;margin-bottom: 40px;">{{'31 December '
+        .$practitioner->currentRenewal->renewal_period_id}}</p>
 
         <div style="display: flex;padding: 20px;">
-           <p style="margin-top: 35px">Date: {{date('d F Y',strtotime($renewal->updated_at))}}</p>
+           <p style="margin-top: 35px">Date: {{date('d F Y',strtotime($practitioner->currentRenewal->updated_at))}}</p>
             <p style="position: absolute; right: 78px;">{!! $html !!}</p>
         </div>
     </div>
