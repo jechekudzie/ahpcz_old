@@ -28,12 +28,13 @@
                 <div class="card">
                     <div class="card-body p-b-0">
                         <h4 class="card-title">{{$practitioner->title->name.' '.ucwords($practitioner->first_name).' '.ucwords($practitioner->last_name)}}</h4>
-                        <h4>Registration Number :
-                            @if($practitioner->registration_number == null)
-                                {{$practitioner->profession->prefix->name.' (No Registration Number)'}} <a
-                                    href="/admin/practitioners/generate_reg/{{$practitioner->profession_id}}/{{$practitioner->id}}">Generate</a>
+                        <h4>Student Number :
+                            @if($practitioner->student_number == null)
+                                {{'A/S (No Registration Number)'}} <a
+                                    href="/admin/students/generate_reg/{{$practitioner
+                                    ->id}}">Generate</a>
                             @else
-                                {{$practitioner->profession->prefix->name.str_pad($practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}
+                                {{str_pad($practitioner->student_number, 4, '0', STR_PAD_LEFT)}}
                             @endif
                         </h4>
                         <h6 style="font-size: 20px;" class="card-subtitle">Current Status:
@@ -194,14 +195,15 @@
                                             <p class="text-muted">@if($practitioner->profession){{$practitioner->profession->name}}@endif</p>
                                         </div>
 
-                                        <div class="col-md-4 col-xs-6 b-r"><strong>Registration Number</strong>
+                                        <div class="col-md-4 col-xs-6 b-r"><strong>Student Number</strong>
                                             <br>
                                             <p class="text-muted">
-                                                @if($practitioner->registration_number == null)
-                                                    {{$practitioner->prefix.' (No Registration Number)'}} <a
-                                                        href="/admin/practitioners/generate_reg/{{$practitioner->profession_id}}/{{$practitioner->id}}">Generate</a>
+                                                @if($practitioner->student_number == null)
+                                                    {{'A/S (No Registration Number)'}} <a
+                                                        href="/admin/students/generate_reg/{{$practitioner->id}}">Generate</a>
                                                 @else
-                                                    {{$practitioner->prefix.str_pad($practitioner->registration_number, 4, '0', STR_PAD_LEFT)}}
+                                                    {{str_pad($practitioner->student_number, 4, '0',
+                                                    STR_PAD_LEFT)}}
                                                 @endif
                                             </p>
                                         </div>

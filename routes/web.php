@@ -293,6 +293,7 @@ Route::get('/admin/get_districts_edit/{province_id}', 'DynamicDataController@dis
 
 //generate practitioner registration number
 Route::get('/admin/practitioners/generate_reg/{profession_id}/{practitioner}', 'GenerateRegistrationNumber@create');
+Route::get('/admin/students/generate_reg/{practitioner}', 'GenerateRegistrationNumber@student_create');
 
 //professional qualification
 Route::get('/admin/get_pq/{profession_id}', 'DynamicDataController@professionalQualifications');
