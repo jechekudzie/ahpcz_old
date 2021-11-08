@@ -32,19 +32,19 @@
                 href="www.ahpcz.co.zw">www.ahpcz.co.zw</a></p>
         <h3 style="text-align: center;">Health Professions Act</h3>
         <h3 style="text-align: center;margin-top: -14px;">(Chapter 27:19)</h3>
-        <h1 style="text-align: center;margin-top: 40px;">PRACTISING CERTIFICATE</h1>
+        <h1 style="text-align: center;margin-top: 30px;">PRACTISING CERTIFICATE</h1>
         <table style="table-layout: fixed; width: 100%; ">
             <tr>
-                <td style="padding: 20px">This is to certify that</td>
-                <td style="padding: 20px">{{$practitioner->first_name.' '.$practitioner->last_name}}</td>
+                <td style="padding: 15px">This is to certify that</td>
+                <td style="padding: 15px">{{$practitioner->first_name.' '.$practitioner->last_name}}</td>
             </tr>
             <tr>
-                <td style="padding: 20px">Registration Number</td>
-                <td style="padding: 20px">{{$practitioner->prefix.''.$practitioner->registration_number}}</td>
+                <td style="padding: 15px">Registration Number</td>
+                <td style="padding: 15px">{{$practitioner->prefix.''.$practitioner->registration_number}}</td>
             </tr>
             <tr>
-                <td style="padding: 20px">Is Authorised to practice as a/an</td>
-                <td style="padding: 20px">{{$practitioner->profession->name}}</td>
+                <td style="padding: 15px">Is Authorised to practice as a/an</td>
+                <td style="padding: 15px">{{$practitioner->profession->name}}</td>
             </tr>
             <tr>
                 <td style="text-align: center;padding: 20px;" colspan="2">Condition/s<br/>

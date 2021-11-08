@@ -238,7 +238,7 @@ class PractitionerUpdateController extends Controller
             /*}*/
         /*}*/
         if ($practitioner->renewals) {
-            $renewal = $practitioner->renewals->first();
+            $renewal = $practitioner->renewals->where('renewal_period_id',date('Y'))->first();
             $current_certificate_number = CertificateNumber::where('renewal_period_id', $renewal->renewal_period_id)
                 ->first();
             if ($current_certificate_number == null) {
@@ -259,8 +259,9 @@ class PractitionerUpdateController extends Controller
         }
 
         if ($practitioner->renewals) {
-            $renewal = $practitioner->renewals->first();
+            $renewal = $practitioner->renewals->where('renewal_period_id',date('Y'))->first();
             $renewal->update([
+                'renewal_status_id'=>1,
                 'placement'=>1,
                 'cdpoints'=>1,
                 'certificate'=>2,
@@ -334,11 +335,9 @@ class PractitionerUpdateController extends Controller
     }
 
 
-
     /** Disapproval logic*/
 //Read notification and view application
-    public
-    function viewNotification(Practitioner $practitioner, $notification_id)
+    public function viewNotification(Practitioner $practitioner, $notification_id)
     {
         //
         foreach (auth()->user()->unreadNotifications as $notification) {
@@ -351,9 +350,8 @@ class PractitionerUpdateController extends Controller
     }
 
 
-//registration officer disapproval
-    public
-    function registrationOfficerDisApproval(Practitioner $practitioner)
+    //registration officer disapproval
+    public function registrationOfficerDisApproval(Practitioner $practitioner)
     {
         $comment = request('comment');
         foreach (auth()->user()->notifications as $notification) {

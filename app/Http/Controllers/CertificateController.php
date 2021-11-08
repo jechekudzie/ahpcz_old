@@ -18,7 +18,13 @@ class CertificateController extends Controller
     //
     public function certificate(Renewal $renewal)
     {
+
         $practitioner = $renewal->practitioner;
+
+        if($practitioner->currentRenewal == null){
+            redirect('/admin/practitioners/'.$practitioner->id)->with('message','This practitioner is not fully compliant, check if the renewal status is in order.');
+        }
+
         $register_category = '';
         if($practitioner->practitioner_payment_information){
             if($practitioner->practitioner_payment_information->register_category){
