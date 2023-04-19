@@ -230,7 +230,6 @@ class PractitionersController extends Controller
 
     public function show(Practitioner $practitioner)
     {
-
         $portal_activate = 0;
         $portal_de_activate = 1;
         $registration_fee = 0;

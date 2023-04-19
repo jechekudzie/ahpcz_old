@@ -28,10 +28,7 @@
                 <div class="card">
                     <div class="card-body p-b-0">
                         <h4 class="card-title">@if($practitioner->title){{$practitioner->title->name}}@endif
-                            {{ucwords($practitioner->first_name)
-                        .' '
-                        .ucwords
-                            ($practitioner->last_name)}}</h4>
+                            {{ucwords($practitioner->first_name).' ' .ucwords  ($practitioner->last_name)}}</h4>
                         <h4>Registration Number :
                             @if($practitioner->registration_number == null)
                                 {{$practitioner->profession->prefix->name.' (No Registration Number)'}} <a
