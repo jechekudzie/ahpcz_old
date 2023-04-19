@@ -1,0 +1,167 @@
+Received: from PAXPR02MB7800.eurprd02.prod.outlook.com (2603:10a6:102:223::10)
+ by VI1PR02MB6478.eurprd02.prod.outlook.com with HTTPS; Thu, 16 Feb 2023
+ 09:52:45 +0000
+Received: from AS9PR05CA0230.eurprd05.prod.outlook.com (2603:10a6:20b:494::17)
+ by PAXPR02MB7800.eurprd02.prod.outlook.com (2603:10a6:102:223::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.26; Thu, 16 Feb
+ 2023 09:52:44 +0000
+Received: from AM7EUR06FT027.eop-eur06.prod.protection.outlook.com
+ (2603:10a6:20b:494:cafe::30) by AS9PR05CA0230.outlook.office365.com
+ (2603:10a6:20b:494::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6111.13 via Frontend
+ Transport; Thu, 16 Feb 2023 09:52:44 +0000
+Authentication-Results: spf=pass (sender IP is 209.85.160.172)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.160.172 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.160.172; helo=mail-qt1-f172.google.com; pr=C
+Received: from mail-qt1-f172.google.com (209.85.160.172) by
+ AM7EUR06FT027.mail.protection.outlook.com (10.233.255.143) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6111.13 via Frontend Transport; Thu, 16 Feb 2023 09:52:44 +0000
+Received: by mail-qt1-f172.google.com with SMTP id h24so1472995qta.12
+        for <registrations@ahpcz.co.zw>; Thu, 16 Feb 2023 01:52:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iuVi4gZ0NxrE/n/5K2PBCVD8XTWgeQEqwO3l1LR8qpc=;
+        b=Qb+RZk6Iwba984fnwdPfRW/gpUGTc97tgpGItaTDQhuzGygcWosAdHaPgmIrCQN3pb
+         q6+eNDMcnasa4cIcjqTE/6OnACGsG/EUTBKztutOxM7Vh9fm89SKbo5HzDPvQA9tSz1S
+         mGQ21CN7YEO8sPmAdz6JMFvuUpTV7wtbSPesOEaMQBiVM7lyACq0SySLaW53Olr34oHR
+         QALtS9wV9j9hdKbiO6kON369AhKtGO5X74hxZyq0JQYmBNkiIn3yQYrJr+/XRFbFg7h0
+         j0o9K05eUyBEWJGI3KwcQKNbrWnohSGCRsdp0teYI7tUBSIS77o3SlRfCRZt1X5rmCEB
+         srBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iuVi4gZ0NxrE/n/5K2PBCVD8XTWgeQEqwO3l1LR8qpc=;
+        b=jGKmCapbBx4F7Vg9X/C8yg+pHf+PcO2S7JlyIjYaGROy/6Xx2KMSdfM2IWNgtiLu6p
+         8UPI9+Ya6/RS1rAUSzRGnF4pJVmxCRRvyc+mue/dbunk8V0xgYO2alCQ9md2HrObtnwI
+         1qCF6LUJRAsnf3nV3P8HdNubgG1keqo9BniR0ucReeE8uuNnNPQmGt1WZSEDZ3GfE5dv
+         +Ym+22lzvsx15OngIk6oytTMyHjGP7ASDHrUOkZVwvC1ICunqLF41U0ibKqCKVnNbI8Y
+         Y+PjR6JnagpfBqu5NfHqMh+eJF//PnY0BbjktaYG3gpDVTDPVJawjRRHMT74g9y4a1Kg
+         JDoA==
+X-Gm-Message-State: AO0yUKUXFhYGMOYsrqWO7iiH2HtgEandmaYmi1hUF/tYEZpxEwSuoIU8
+	qORJKhbRf7UPsgQWhq1F8HUTyRoAeZBBqAIRVv4eogf4
+X-Google-Smtp-Source: AK7set/iPNe4CNH7BdUQ89EeYXh/M6Ktxntzt/mRn8WxzuS0i8Sl8VguW6iu7a8u4+8IjBYLI7X6g7w/bvQm4h4waWw=
+X-Received: by 2002:ac8:5a41:0:b0:3ba:1ef3:a494 with SMTP id
+ o1-20020ac85a41000000b003ba1ef3a494mr412729qta.409.1676541162544; Thu, 16 Feb
+ 2023 01:52:42 -0800 (PST)
+From: Tendai Gopito <tendaigopito@gmail.com>
+Date: Thu, 16 Feb 2023 11:52:30 +0200
+Message-ID: <CACw9X=gtm5rj9LkHFm=_phZB-mRF8BUMs6309zu13KKr6+-t4g@mail.gmail.com>
+Subject: Proof of Payment Tendai Gopito HIMP
+To: registrations@ahpcz.co.zw
+Content-Type: multipart/alternative; boundary="00000000000071e25205f4ce28e9"
+Return-Path: tendaigopito@gmail.com
+X-MS-Exchange-Organization-ExpirationStartTime: 16 Feb 2023 09:52:44.1391
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ ec9e2fa3-394b-445d-7910-08db10038d1b
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 7a75352c-4db7-4331-b4a9-fc79e1bd8edb:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7EUR06FT027:EE_|PAXPR02MB7800:EE_
+X-MS-Exchange-Organization-AuthSource:
+ AM7EUR06FT027.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id: ec9e2fa3-394b-445d-7910-08db10038d1b
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:209.85.160.172;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail-qt1-f172.google.com;PTR:mail-qt1-f172.google.com;CAT:NONE;SFS:(13230025)(84050400002)(451199018)(86362001)(55446002)(76482006)(26005)(33964004)(1096003)(73392003)(22186003)(5660300002)(8676002)(6916009)(336012)(6666004)(82202003)(58800400005)(356005)(7636003)(42186006)(7596003);DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2023 09:52:44.1235
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec9e2fa3-394b-445d-7910-08db10038d1b
+X-MS-Exchange-CrossTenant-Id: 7a75352c-4db7-4331-b4a9-fc79e1bd8edb
+X-MS-Exchange-CrossTenant-AuthSource:
+ AM7EUR06FT027.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR02MB7800
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.9006380
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6111.013
+X-Microsoft-Antispam-Mailbox-Delivery:
+	ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?REIwK1hHaStiZytONUxoWGU4R1lzVG5aSS9UMHR4bWEwQlBPRW8xTThKeXRh?=
+ =?utf-8?B?LzR6WUl0N1pIRzNib0JiaEpBWTg5dE5hdHRsTURvdmZkWWdJc0EzZDlTdVJn?=
+ =?utf-8?B?M0RjRkhJbUYvNnhSRWJHRmxQNmRvNm4xR3hJaFZlb0cyK1pDK1ZDQURxUGl1?=
+ =?utf-8?B?QU5zcjlhSXUyRFB5eTdvMHBYZUx1d0xkY1pRRzYzcnM0MVRDbThTRkVBaTU4?=
+ =?utf-8?B?WTRuYkxycGVaaXpaSHZJTWo1bmthZ3Y4bFRLYlhmRFliSXY1WGlBQ0M4KzFZ?=
+ =?utf-8?B?L3lTaitGMThxbXZFZFc3azBZZCtmME1Fak1yM1ZoNVVSWTh3UjV3K1N1c0d6?=
+ =?utf-8?B?L0ZDRkNaUFJSaktxYkJCTEFZdENONC8zUDdqU3gwdE5sUTNaRzNMRTI4Wm1B?=
+ =?utf-8?B?TVVLRVYwNm1RVk9OaFNKZzlGb2VXUVdDTkpydEdHV1Y5WTVqOWx3cldubm16?=
+ =?utf-8?B?N0M1cjBRc0x1U2tjbnBDSkNKQ1lhMXB6ZzlBbEk4V1g2UDZEMkJkMUliQ0NY?=
+ =?utf-8?B?d2wrWFZpMGxlWm9LQ05YNzd3WHAyZXNMeUV3TnJNdTJ6Q0pCNFZrY0RJcUky?=
+ =?utf-8?B?WXdPVzBZYlV5bmk4S1cyZU5OUW5vMXBuVkpVVWUxZzNFd0F5SXJONURTQ2tZ?=
+ =?utf-8?B?ekJsUHhtN3BINXQ4elZSU3ZtK2FIZXplb294aU5EZnF3c1pEb0FLZ0VRMTNV?=
+ =?utf-8?B?SVBPOURqbFlWTC9NSTlVRVRiVjRrL3RTQzVhOVI2Y3FmaUpoOHR4RTZlbmhE?=
+ =?utf-8?B?cHgrbWhONVdKRUlud0FzRnphZGpEU0VNYWZLdTRVaG5ZWS8ybHg1MGd0STBx?=
+ =?utf-8?B?OS91eDNqVnFiOFRMSFlodXpiOERvdUV0dVJvQ0hUaisrSVgrSXFlK3FFV3k5?=
+ =?utf-8?B?RFZSRFd2K280Qm5rL0VucjNJT2RpNEZ4aFhCUUc0UkVLSnhGVXRNVUR6U2NC?=
+ =?utf-8?B?bkk2VUNGYVZkNGFISTNxRE9mdXo0ekZYeHBMZU01V3hiNWJybzlmZ1hNT3ov?=
+ =?utf-8?B?NU91dGJ4T0NudFRWVmc1SXVhT003T0JQUVB3U0ZObXROQXJCUzBOZG5PSE1X?=
+ =?utf-8?B?YlRJK0FNbVl5by9Ga3dydnBaOWh3VHR5MkhVcXhscWoyTys2a0F0VGkxcmFI?=
+ =?utf-8?B?QmpMNitPOFQ2MGhDbkx4R25SSXBwMGxjS2tRMDhqWjV0eG5YcWNMWHNJUmdS?=
+ =?utf-8?B?SjkvN1prRzFpZ0s3TWlOQ2N1bENoWnA0UlNNQ09TTFhsNThnNTgrTVEzSDB2?=
+ =?utf-8?B?emkyK2szemgyTjJDOWk3TnZRZDh0akdiMEVNZCtKbmdnSXlNVG00VS9zT0hy?=
+ =?utf-8?B?aU4xZEh3Qjg0K3o0djVlN1dZWjIzNWwrVGRyS1hYOHJtUmFXNmdUUEI0MWE0?=
+ =?utf-8?B?d3lIbTZGa2lwVmJBYWtIWW5YaVFROFFvc01WSlNZaVMvSVYwZlQvNzYva0NF?=
+ =?utf-8?B?b3g4Rzlmc3h0My9mUUVjNVFKVUJtVFJmbkg4aHB5N1dkcDJaNFpuRUc4b3pr?=
+ =?utf-8?B?ZThzbm1UNkE0V3g1SHlhN0JGTUUvaW5qL21mR0U5RGZRcUY4SU0wT1M4V2Jw?=
+ =?utf-8?B?M3dLT2xKSlVzRjhvZ21BV1ZhckwzUlVhcC9sZFFIVXdFNkcvalpObGFlQlBF?=
+ =?utf-8?B?V3dUNEY1WWJUTFVPQXEydXREVUcra0s4ekJjLy8zaGRHV1FMRHcyaWROSHp6?=
+ =?utf-8?B?Ny94SGl1aVBHRngyRmZhTnFSNHdGS0s5WmRNcUpWUzVPL1drbGllbEVqUHpm?=
+ =?utf-8?B?dWNCN3g5cjZqbFRFVzJmTDM3SE1VVzR1VlpGZElyUnFYeG9zbjV6MlE0czRT?=
+ =?utf-8?B?aVVhMVlYSXRKdmNwU3NPSWxLV05sRW94UWFoQzFKUXdORWFPTFk3cDZ1Q3Z6?=
+ =?utf-8?B?VlVjNnA4SHVXZmI1WGwwTXlZK0x5YXlOM0Q2bHhSQVVOaW5yckw4a1VJTDha?=
+ =?utf-8?B?MDA1MDVsSDgrVmxCdDlUUk9KZHpNRGRPUCtFWGs0THZuc1NSb3JVSkZ4a2E5?=
+ =?utf-8?B?NHMxY2xVRldRN3ZRSHloazVjanp1d01mazNScDNQMWtnbXpWYUNGTk5qV3RL?=
+ =?utf-8?B?L3VBc1ZRamFPK3FtU3VVSXZPb2NUNk9PTm95RzlTaGpvWjY1MWFKcERvSzFh?=
+ =?utf-8?B?Qkdmc3hlSkNqaDlTcDFDZnA3MnFUTk1jai8zREtKR25hODZRS2NrZW05T1ZR?=
+ =?utf-8?B?WHVyRDIrV0ZZU2w4ejBza3RLc2hTUnV5aW5EK1pQdnFBTnNLcFFHRFlRQTE3?=
+ =?utf-8?B?aG1SRzJHN2kwSHROc05oTWJ4b3M3TmtDRE5DSkZUUnFjcm5rMUxTMHZwRjFu?=
+ =?utf-8?B?MFQvNU1HM3Bmeno2WGU5VzhydGFUZklqQVgvOE8zc2xJL3JIdjlXaSthUGM1?=
+ =?utf-8?B?MXlET05wM2dsQ1lNUEdrVUVNWlFuaE1uOTJNMFc1WlpJUWtnT09iRlZlVHZv?=
+ =?utf-8?B?eEVraGVORU1Sc1BxSlR0K3pUeTk0dkZRR2VvL2JPcTRTVzM1VDBDWHh3eE5V?=
+ =?utf-8?B?dUNhLzE1NnYwaURFcml4YnBhTnFleGRvL0luQkJabFBMMjY2VGNVZ0tvdU9U?=
+ =?utf-8?Q?nE/ENnU2c=3D?=
+MIME-Version: 1.0
+
+--00000000000071e25205f4ce28e9
+Content-Type: text/plain; charset="UTF-8"
+
+Your Acc ending 0185 has been debited with ZWL30,000.00 ZIPIT Credit Push
+Send on 15.02.23:14.02HRS ref:ZIP090FBC Econet Mobile MoolaHarare. Bal
+ZWL110,902.37.
+
+
+
+Your Acc ending 0185 has been debited with ZWL32,578.00 ZIPIT Credit Push
+Send on 15.02.23:15.02HRS ref:ZIP090FBC Econet Mobile MoolaHarare. Bal
+ZWL20,388.47.
+
+--00000000000071e25205f4ce28e9
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"auto">Your Acc ending 0185 has been debited with ZWL30,000.00 ZIP=
+IT Credit Push Send on 15.02.23:14.02HRS ref:ZIP090FBC Econet Mobile MoolaH=
+arare. Bal ZWL110,902.37.<div dir=3D"auto"><br></div><div dir=3D"auto"><br>=
+</div><div dir=3D"auto"><br></div><div dir=3D"auto">Your Acc ending 0185 ha=
+s been debited with ZWL32,578.00 ZIPIT Credit Push Send on 15.02.23:15.02HR=
+S ref:ZIP090FBC Econet Mobile MoolaHarare. Bal ZWL20,388.47.<br></div></div=
+>
+
+--00000000000071e25205f4ce28e9--

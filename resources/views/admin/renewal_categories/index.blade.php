@@ -120,7 +120,8 @@
                                 <tbody>
                                 @foreach($renewal_criteria as $criteria)
                                     <tr>
-                                        <td>{{$criteria->renewal_category->name}}</td>
+                                        <td>@if($criteria->renewal_category)
+                                                {{$criteria->renewal_category->name}}@endif</td>
                                         <td>{{$criteria->employment_status->name}}</td>
                                         <td>{{$criteria->employment_location->name}}</td>
                                         <td>
@@ -183,7 +184,7 @@
                                 <tbody>
                                 @foreach($cpd_criterias as $cpd_criteria)
                                     <tr>
-                                        <td>{{$cpd_criteria->profession->name}}</td>
+                                        <td>@if($cpd_criteria->profession){{$cpd_criteria->profession->name}}@endif</td>
                                         <td>{{$cpd_criteria->standard}}</td>
                                         <td>{{$cpd_criteria->employment_status->name}}</td>
                                         <td>{{$cpd_criteria->points}}</td>

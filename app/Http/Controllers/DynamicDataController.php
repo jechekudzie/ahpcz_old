@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 
 class DynamicDataController extends Controller
 {
-    /**
+    /**php
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -43,7 +43,6 @@ class DynamicDataController extends Controller
 
 
     }
-
 
     public function districtEdit($province_id,$my_id)
     {
@@ -98,7 +97,6 @@ class DynamicDataController extends Controller
 
     }
 
-
     public function accreditedInstitutions($professional_qualification_id)
     {
 
@@ -113,8 +111,6 @@ class DynamicDataController extends Controller
         echo $response;
 
     }
-
-
 
     public function accreditedInstitutionsEdit($professional_qualification_id,$accreInst_id)
     {

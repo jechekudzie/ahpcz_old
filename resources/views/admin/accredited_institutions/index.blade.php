@@ -214,9 +214,14 @@
                                                 <tbody>
                                                 @foreach($professionalQualifications as $professionalQualification)
                                                     <tr>
-                                                        <td>{{$professionalQualification->profession->name}}</td>
-                                                        <td>{{$professionalQualification->name}}</td>
-                                                        <td>{{$professionalQualification->updated_at}}</td>
+                                                        <td>@if($professionalQualification->profession)
+                                                                {{$professionalQualification->profession->name}}@endif
+                                                        </td>
+                                                        <td>
+                                                            @if($professionalQualification)
+                                                                {{$professionalQualification->name}}@endif</td>
+                                                        <td>@if($professionalQualification)
+                                                                {{$professionalQualification->updated_at}}@endif</td>
                                                         <td>
                                                             <a href="/admin/professional_qualifications/{{$professionalQualification->id}}/edit"><i
                                                                         class="fa fa-pencil"></i> Edit</a></td>

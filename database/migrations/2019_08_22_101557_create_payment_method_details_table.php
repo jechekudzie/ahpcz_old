@@ -16,7 +16,7 @@ class CreatePaymentMethodDetailsTable extends Migration
         Schema::create('payment_method_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('practitioner_id');
-            $table->string('company_name');
+            $table->string('company_name')->nullable();
             $table->timestamps();
         });
     }

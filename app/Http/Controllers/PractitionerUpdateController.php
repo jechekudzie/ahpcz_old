@@ -72,10 +72,11 @@ class PractitionerUpdateController extends Controller
         $notes = '';
         //check if the application has not bee approved already
         if ($practitioner->registration_officer == 0) {
-            foreach (auth()->user()->notifications as $notification) {
+           /* foreach (auth()->user()->notifications as $notification) {
                 //dd((auth()->user()->notifications));
                 //check if id is same as practitioner id and at stage ApplicationSubmitted
                 if ($practitioner->id == $notification->data['id'] && $notification->type == 'App\Notifications\ApplicationSubmitted') {
+                  */
                     $practitioner->update(['registration_officer' => 1]);
                     if ($ec_member) {
                         $profession_approver = ProfessionApprover::
@@ -100,26 +101,27 @@ class PractitionerUpdateController extends Controller
 
                     }
                     //mark notification as read
-                    $notification->markAsRead();
+                    /*$notification->markAsRead();
                 }
-            }
+            }*/
             return back()->with('message', 'Application has been approved successfully.');
         }
 
         if ($practitioner->registration_officer == 1) {
-            foreach (auth()->user()->notifications as $notification) {
+           /* foreach (auth()->user()->notifications as $notification) {*/
                 //check if id is same as practitioner id and at stage ApplicationSubmitted
-                if ($practitioner->id == $notification->data['id'] && $notification->type == 'App\Notifications\MemberApproval') {
+/*                if ($practitioner->id == $notification->data['id'] && $notification->type == 'App\Notifications\MemberApproval') {*/
+
                     $practitioner->update(['registration_officer' => 2]);
                     //mark notification as read
-                    $notification->markAsRead();
+                    /*$notification->markAsRead();*/
                     $user = User::where('role_id', 7)->first();
                     $user->notify(
                         new OfficerApproval($practitioner, $comment)
                     );
-                }
+                /*}
 
-            }
+            }*/
             return back()->with('message', 'Application has been approved successfully.');
         }
 
@@ -133,13 +135,14 @@ class PractitionerUpdateController extends Controller
     {
         $comment = request('comment');
         $notes = '';
-        foreach (auth()->user()->notifications as $notification) {
+       /* foreach (auth()->user()->notifications as $notification) {
 
             if ($practitioner->id == $notification->data['id'] && $notification->type == 'App\Notifications\OfficerApproval') {
+             */
                 $practitioner->update(['member' => 1]);
-                $notification->markAsRead();
+               /* $notification->markAsRead();
             }
-        }
+        }*/
 
         if ($practitioner->registration_officer == 1 && $practitioner->accountant == 0) {
             $notes = 'Make sure the account has approved the payment from their end.';
@@ -174,12 +177,13 @@ class PractitionerUpdateController extends Controller
         $comment = request('comment');
         $notes = '';
         if ($practitioner->accountant == 0) {
-            foreach (auth()->user()->notifications as $notification) {
+           /* foreach (auth()->user()->notifications as $notification) {
                 if ($practitioner->id == $notification->data['id'] && $notification->type == 'App\Notifications\RegistrationPayment') {
+                 */
                     $practitioner->update(['accountant' => 1]);
-                    $notification->markAsRead();
-                }
-            }
+                   /* $notification->markAsRead();*/
+               /* }
+            }*/
 
             $registration_officer = User::where('role_id', 4)->first();//send notification to registration officer
             if ($comment == null) {
@@ -232,7 +236,8 @@ class PractitionerUpdateController extends Controller
                 $practitioner->update([
                     'registrar' => 1,
                     'registration_officer' => 2,
-                    'approval_status' => 1
+                    'approval_status' => 1,
+                    'registration_date' => date('Y-m-d')
                 ]);
                 //$notification->markAsRead();
             /*}*/
@@ -265,7 +270,6 @@ class PractitionerUpdateController extends Controller
                 'placement'=>1,
                 'cdpoints'=>1,
                 'certificate'=>2,
-
             ]);
         }
 

@@ -716,12 +716,12 @@ class PortalApiController extends Controller
             $paynow = new Paynow
             (
             //usd account
-                /*'11778',
-                '02f69090-68e9-427b-9838-966385aa0541',*/
-                '5865',
-                '23962222-9610-4f7c-bbd5-7e12f19cdfc6',
-                'http://localhost:8000/check_payment/' . $practitioner_id,
-                'http://localhost:8000/check_payment/' . $practitioner_id
+            /*'11778',
+            '02f69090-68e9-427b-9838-966385aa0541',*/
+                '13181',
+                '9353d79f-5675-4797-89d8-aaa0eb440c3c',
+                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id,
+                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id
 
             );
         }
@@ -730,16 +730,15 @@ class PortalApiController extends Controller
             $paynow = new Paynow
             (
             //local account
-                '11777',
-                '739d23ae-f8c5-45e0-ac0a-a481f615c813',
+                '13180',
+                'e8591887-3bf1-445c-a4b8-e7776923063f',
                 /*'5865',
                 '23962222-9610-4f7c-bbd5-7e12f19cdfc6',*/
-                'http://localhost:8000/check_payment/' . $practitioner_id,
-                'http://localhost:8000/check_payment/' . $practitioner_id
+                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id,
+                'http://portal.ahpcz.co.zw/check_payment/' . $practitioner_id
 
             );
         }
-
         //create a payment and add items required
         $payment = $paynow->createPayment($id, 'accounts@ahpcz.co.zw');
         $payment->add('Sub', $amount);
@@ -793,8 +792,8 @@ class PortalApiController extends Controller
             //usd account
                 '11778',
                 '02f69090-68e9-427b-9838-966385aa0541',
-                'http://localhost:8000/check_payment/' . $practitioner_id,
-                'http://localhost:8000/check_payment/' . $practitioner_id
+                'http://database.ahpcz.co.zw/check_payment/' . $practitioner_id,
+                'http://database.ahpcz.co.zw/check_payment/' . $practitioner_id
 
             );
         }
@@ -805,8 +804,8 @@ class PortalApiController extends Controller
             //local account
                 '11777',
                 '739d23ae-f8c5-45e0-ac0a-a481f615c813',
-                'http://localhost:8000/check_payment/' . $practitioner_id,
-                'http://localhost:8000/check_payment/' . $practitioner_id
+                'http://database.ahpcz.co.zw/check_payment/' . $practitioner_id,
+                'http://database.ahpcz.co.zw/check_payment/' . $practitioner_id
 
             );
         }
@@ -1057,7 +1056,6 @@ class PortalApiController extends Controller
         ]);
 
     }
-
 
     public function verify_certificate(Practitioner $practitioner)
     {

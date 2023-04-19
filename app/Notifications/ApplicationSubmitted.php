@@ -54,7 +54,6 @@ class ApplicationSubmitted extends Notification
                 .$this->practitioner->last_name. ', awaiting review:')
             ->line('You can view application details on the link below.')
             ->action('View Application Details', url('/admin/practitioners/' . $this->practitioner->id));
-
     }
 
     /**

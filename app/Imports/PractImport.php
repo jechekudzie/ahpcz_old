@@ -17,13 +17,28 @@ class PractImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return new Pract([
-            'first_name' => $row['first_name'],
-            'last_name'  =>  $row['last_name'],
-            'reg_number' => $row['reg_number'],
-            'profession' => $row['profession'],
-            'register' => $row['register'],
-            'prefix' => $row['prefix'],
-            'number' => $row['number'],
+            'idd' => $row['idd'],
+            'case_number'  =>  $row['case_number'],
+            'date' => date("Y-m-d h:i:s", strtotime($row['date'])),
+            'block' => $row['block'],
+            'iucr' => $row['iucr'],
+            'primary_type' => $row['primary_type'],
+            'description' => $row['description'],
+            'location_description' => $row['location_description'],
+            'arrest' => $row['arrest'],
+            'domestic' => $row['domestic'],
+            'beat' => $row['beat'],
+            'district' => $row['district'],
+            'ward' => $row['ward'],
+            'community_area' => $row['community_area'],
+            'fbi_code' => $row['fbi_code'],
+            'x_coordinate' => $row['x_coordinate'],
+            'y_coordinate' => $row['y_coordinate'],
+            'year' => $row['year'],
+            'updated_on' => date("Y-m-d h:i:s", strtotime($row['updated_on'])),
+            'latitude' => $row['latitude'],
+            'longitude' => $row['longitude'],
+            'location' => $row['location'],
         ]);
     }
 }

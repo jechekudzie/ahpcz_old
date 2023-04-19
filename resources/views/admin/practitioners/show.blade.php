@@ -409,73 +409,29 @@
                                     <div class="row">
                                         <div class="col-md-4 col-xs-12">
                                             <div class="box-content card">
-                                                <h4 class="box-title"><i class="fa fa-user"> </i> Personal Documents
+                                                <h4 class="box-title"><i class="fa fa-user"> </i>  Documents
                                                 </h4>
                                                 <div class="card-content">
                                                     <ul class="dot-list">
-                                                        @foreach($identifications as $identification)
-                                                            <li>
-                                                                <a href="/{{$identification->path}}"
-                                                                   target="_blank">{{$identification->documentCategory->name}}</a>
-                                                                <span
-                                                                    class="date">{{$identification->documentCategory->group}}</span>
-                                                                <span class="">
-<a href="/admin/practitioners/documents/{{$identification->id}}/edit">
-<i class="fa fa-pencil"></i> Edit
-</a>
 
-</span>
-                                                            </li>
-                                                        @endforeach
+                                                            @foreach($practitioner_docs as $identification)
+                                                                <li>
+                                                                    <a href="{{asset($identification->path)}}"
+                                                                       target="_blank">{{$identification->documentCategory->name}}</a>
+                                                                    <span
+                                                                        class="date">{{$identification->documentCategory->group}}</span>
+                                                                    <span class="">
+                                                                    <a href="/admin/practitioners/documents/{{$identification->id}}/edit">
+                                                                    <i class="fa fa-pencil"></i> Edit</a>
+                                                                    </span>
+                                                                </li>
+                                                            @endforeach
+
                                                     </ul>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4 col-xs-12">
-                                            <div class="box-content card">
-                                                <h4 class="box-title"><i class="fa fa-certificate"></i> Educational
-                                                    Documents</h4>
-                                                <div class="card-content">
-                                                    <ul class="dot-list">
-                                                        @foreach($educations as $education)
-                                                            <li>
-                                                                <a href="/{{$education->path}}"
-                                                                   target="_blank">{{$education->documentCategory->name}}</a>
-                                                                <span
-                                                                    class="date">{{$education->documentCategory->group}}</span>
-                                                                <span class=""><a
-                                                                        href="/admin/practitioners/documents/{{$education->id}}/edit"><i
-                                                                            class="fa fa-pencil"></i>Edit</a> </span>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-4 col-xs-12">
-                                            <div class="box-content card">
-                                                <h4 class="box-title"><i class="fa fa-trophy ico"></i> Professional
-                                                    Documents</h4>
-                                                <div class="card-content">
-                                                    <ul class="dot-list">
-                                                        @foreach($professionals as $professional)
-                                                            <li>
-                                                                <a href="/{{$professional->path}}"
-                                                                   target="_blank">{{$professional->documentCategory->name}}</a>
-                                                                <span
-                                                                    class="date">{{$professional->documentCategory->group}}</span>
-                                                                <span class=""><a
-                                                                        href="/admin/practitioners/documents/{{$professional->id}}/edit"><i
-                                                                            class="fa fa-pencil"></i> Edit</a>
-</span>
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -665,8 +621,8 @@
                                         </div>
                                     </div>
                                 @endif
-<br/>
-<br/>
+                                <br/>
+                                <br/>
                                 @if($practitioner->renewals->count() > 0)
                                     <a class="btn btn-success"
                                        href="/certificate/{{$practitioner->renewals->first()->id}}"
@@ -920,7 +876,8 @@
                                                                     <td>
                                                                         <a href="/certificate/{{$renewal->id}}"
                                                                            target="_blank">Certificate
-                                                                            ({{str_pad($renewal->certificate_number, 4, '0', STR_PAD_LEFT)}}) </a> |
+                                                                            ({{str_pad($renewal->certificate_number, 4, '0', STR_PAD_LEFT)}}
+                                                                            ) </a> |
                                                                         <a href="/id_card/{{$renewal->id}}"
                                                                            target="_blank">ID Card </a>
                                                                     </td>
@@ -947,7 +904,7 @@
                                                                     <td>
                                                                         <a
                                                                             href="/admin/practitioners/renewals/{{$renewal->id}}/edit_certificate">
-                                                                             Certificate Number </a>
+                                                                            Certificate Number </a>
                                                                     </td>
                                                                     <td>
                                                                         <a href="/admin/practitioner_renewals/{{$renewal->id}}/index">Payments </a>

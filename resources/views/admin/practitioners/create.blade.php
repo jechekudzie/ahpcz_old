@@ -42,7 +42,8 @@
                                     @include('errors')
                                 @endif
                                 @if (session('message'))
-                                    <div class="alert alert-success alert-rounded col-md-6"><i
+                                    <div
+                                        style="color: white" class="alert alert-success alert-rounded col-md-6"><i
                                                 class="fa fa-check-circle"></i> {{ session('message') }}
                                         <button type="button" class="close" data-dismiss="alert"
                                                 aria-label="Close"><span

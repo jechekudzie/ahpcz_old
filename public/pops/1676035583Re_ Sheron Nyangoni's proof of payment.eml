@@ -1,0 +1,303 @@
+Received: from AS2PR02MB10194.eurprd02.prod.outlook.com
+ (2603:10a6:20b:64c::10) by VI1PR02MB6478.eurprd02.prod.outlook.com with
+ HTTPS; Thu, 9 Feb 2023 11:00:56 +0000
+Received: from FR3P281CA0008.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:1d::14)
+ by AS2PR02MB10194.eurprd02.prod.outlook.com (2603:10a6:20b:64c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.18; Thu, 9 Feb
+ 2023 11:00:55 +0000
+Received: from VI1EUR06FT017.eop-eur06.prod.protection.outlook.com
+ (2603:10a6:d10:1d:cafe::91) by FR3P281CA0008.outlook.office365.com
+ (2603:10a6:d10:1d::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6086.18 via Frontend
+ Transport; Thu, 9 Feb 2023 11:00:55 +0000
+Authentication-Results: spf=pass (sender IP is 209.85.218.50)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.218.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.218.50; helo=mail-ej1-f50.google.com; pr=C
+Received: from mail-ej1-f50.google.com (209.85.218.50) by
+ VI1EUR06FT017.mail.protection.outlook.com (10.13.7.46) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6086.18 via Frontend Transport; Thu, 9 Feb 2023 11:00:54 +0000
+Received: by mail-ej1-f50.google.com with SMTP id jg8so5171863ejc.6
+        for <registrations@ahpcz.co.zw>; Thu, 09 Feb 2023 03:00:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xO5JU68ZQowuY/RbneKBYqQsKH/ISRyvIGUU0sG3qjg=;
+        b=It1FIpIL/OSPn1YcANkqk+cr4CrTSTrgJ7kxDtgHBNxpp2RkE771koFCyvvqsEqThu
+         8pIVUxXsSTUSe/Kz6QlAYuSBdy7PvZGJG9dyCJ+yO1OUZJVPCI14Owr+jNarSUEMsW77
+         v0BcMIvDIX+aI+JsT5K8VTasT9I162OWxzezlJMINj7M7yRJbZN36+wA/5Egs7fi/e3e
+         I03qpI0ApCW6uS+yPnWzBW1r4UmGwPdxjitUNc6tTVrvbNnvU9TAdPNut/TLskWenKS7
+         nUH7Okv2yXEmaAz/GqYj3wLf0yZZj6BByDssCfI2LezcsbWmcV6SP2L8CdTswURGalCy
+         a3ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xO5JU68ZQowuY/RbneKBYqQsKH/ISRyvIGUU0sG3qjg=;
+        b=4Fijh5E00UOQVoYc/KY51IBS0mIqyCq4wFZFa7DiqGFGZxcuJixH34dLN8mwkVP5j5
+         gvUEbjJiOuCvtaMyEhBF8+yhZlcHhPpeIyCh/mRZsFEgPlaQXTboqIw390QA5fF9NIkh
+         ON4TiLSllGyizr1rTGd6s8obmtKX9kePYEa9hI9cURGJFwBb0N48w9qIQkrpBk+PJFun
+         c7snm16XmzI4ebG6Ircn4H7Nf0l4iFER83rSXFWZsXHzTj0m7D+HIVeiuNJxqzO3uhvY
+         MAG3tDUx03v7jL/OEcBFHyHoAcmKeO87/NvSduYoqkUpHjeWn6P72rJH4ndB1IWUpatN
+         Miaw==
+X-Gm-Message-State: AO0yUKWaOhyYk9JNKKBUb02+eVSZBmkl/PcNQPd00GSqog2PoB3HVo8Z
+	QRbVJENrZf+hdgZJZcXoYIBw2ltugM0auNMjshFINu47
+X-Google-Smtp-Source: AK7set969nEQ4Koze9rBzOlWI2XzHnKeMaMhzymhvMS59KXZPP+J/osSFGYwsjgV0AP2geumTgQVR2rw/r1gfb+luyo=
+X-Received: by 2002:a17:906:c801:b0:8ae:96f5:fbb0 with SMTP id
+ cx1-20020a170906c80100b008ae96f5fbb0mr420320ejb.7.1675940453941; Thu, 09 Feb
+ 2023 03:00:53 -0800 (PST)
+References: <CAEZDZ4q0KRhbHdP9-dPZWMWZjUmiFD2Q-DPg6pLRkomg+A8ayg@mail.gmail.com>
+ <VI1PR02MB6478269C2A0885C55AA94332F9C59@VI1PR02MB6478.eurprd02.prod.outlook.com>
+In-Reply-To: <VI1PR02MB6478269C2A0885C55AA94332F9C59@VI1PR02MB6478.eurprd02.prod.outlook.com>
+From: Sheron Nyangoni <nyangonisheron@gmail.com>
+Date: Thu, 9 Feb 2023 12:10:49 +0200
+Message-ID: <CAEZDZ4pEjkuaYyxQXf5vJPb72hybMAENd=E+qvdP24_2RKtZ+A@mail.gmail.com>
+Subject: Re: Sheron Nyangoni's proof of payment
+To: Registrations AHPCZ <registrations@ahpcz.co.zw>
+Content-Type: multipart/alternative; boundary="0000000000006c05f205f4424bb6"
+Return-Path: nyangonisheron@gmail.com
+X-MS-Exchange-Organization-ExpirationStartTime: 09 Feb 2023 11:00:54.9515
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 27f841ce-66d8-4876-a967-08db0a8cea87
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 7a75352c-4db7-4331-b4a9-fc79e1bd8edb:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1EUR06FT017:EE_|AS2PR02MB10194:EE_
+X-MS-Exchange-Organization-AuthSource:
+ VI1EUR06FT017.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-Office365-Filtering-Correlation-Id: 27f841ce-66d8-4876-a967-08db0a8cea87
+X-MS-Exchange-Organization-SCL: -1
+X-Microsoft-Antispam: BCL:0;
+X-Forefront-Antispam-Report:
+ CIP:209.85.218.50;CTRY:US;LANG:en;SCL:-1;SRV:;IPV:NLI;SFV:SFE;H:mail-ej1-f50.google.com;PTR:mail-ej1-f50.google.com;CAT:NONE;SFS:;DIR:INB;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Feb 2023 11:00:54.9203
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27f841ce-66d8-4876-a967-08db0a8cea87
+X-MS-Exchange-CrossTenant-Id: 7a75352c-4db7-4331-b4a9-fc79e1bd8edb
+X-MS-Exchange-CrossTenant-AuthSource:
+ VI1EUR06FT017.eop-eur06.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR02MB10194
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:01.5778895
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6086.017
+X-Microsoft-Antispam-Mailbox-Delivery:
+	wl:1;pcwl:1;ucf:0;jmr:0;auth:0;dest:I;ENG:(910001)(944506478)(944626604)(920097)(811239)(250001)(410001)(930097);
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TjZyTWhyY1FGN05UdW9SajhqSUxXaXpUZW4wL1JVVCtFbkFZWmhYdW5RM1ds?=
+ =?utf-8?B?bk9qWm9UOFhzVFJ0VVNjdUcvUktuMG1ZVVNZMWdFTDh6NEtKMGN6UEk1Umd4?=
+ =?utf-8?B?ZzluM2JWMUJ4cEl1UGVpcU82aFVRazZzNTdRZXlzdXhoUnFXS1ltNTJEclNU?=
+ =?utf-8?B?ZDFlcWdaOFBETkZHOTFWYzh5NldOa250SkVHRktnazl1U1hTaUU4QldPdjJ6?=
+ =?utf-8?B?T1ZsaGxsZjBpZk4wTTlDVDJzb0x2bnI4aVZmYTRBZUt6UjVBb1BFQnNLUXYr?=
+ =?utf-8?B?ZjhEdVpvelp5elNSM2w2YmNYSSs4UmdBcWw1VkdwamlneTV1RjlISVVoemVv?=
+ =?utf-8?B?dkJhdzhXc3lFVFlEdmRaM2lRR1FLWTZaalozM3JZaGY1Z2NaeDFLY3QxN0px?=
+ =?utf-8?B?TU1pdGlabkFkUUptdGwvb0I4UHMwVEZ3ZFZhaVArWGdyUjVHeDV3dmd0RzBk?=
+ =?utf-8?B?a3U5azI2b3Z1eFBkRjNDVGcxU1c1elZvQXBLQ1JmODhTT29UUlBJK2RzKzhB?=
+ =?utf-8?B?MzYwNHd2a1lqMWtJTmRuSjg5MngyZnFxV0J1U0M1aVN1YU1zQmNodEkxaTA5?=
+ =?utf-8?B?TEN4SEh6Smh5bEk4NFJ3ekFUT1Vjd3c3MjJSLzZobFU0bmRUWHhoUUlHNjAz?=
+ =?utf-8?B?SzdDYzlmeUdjVDBiRDFoZFErdlVIRDVzOWYybTZOUFY5V2xDciszYUovM3lL?=
+ =?utf-8?B?eXhlRUovdG5aTXJ1a3I3aGFRZS9hbmxLYklwSkhZVHhzRVYzbSs1Q0xNN0xo?=
+ =?utf-8?B?ZjNRTkJQZHdSN1BFdUxNcnJPTW04YlBXTXNGd3VvTDE3UUlPTkRiM05WZEE0?=
+ =?utf-8?B?Q25HSkExdnp2d09jdCtybjg5TmNQV1pBaUJwK21DRjMyRStDa0VIVTAwMVhO?=
+ =?utf-8?B?U2NFVTV2WXB6VTZUQ2RIZDlqNEFsZ1EzbE5tUVFCNkYwMS82cUVCanovQ2RK?=
+ =?utf-8?B?RzgxVmcvS0xIdzAxeGdjeGYvY0xMRUlOdVNzTEVNV0xDc2kzTDhpRTNxUjJk?=
+ =?utf-8?B?U0NwbG43ZndSdHE3ZFJLdU9UWm5UZ21IVXB0WnRraW9xbE44NlNoenk3bnBl?=
+ =?utf-8?B?ZDROZWowYjViYVM2L0J6R25pOG1haENFa0hpTi9pYWI3RWxIYkxFRU1RMVJV?=
+ =?utf-8?B?ZCtnV3d2RWFnSkttd1U1cUljOEIzQlRYRE1SWEU3VnJYSk93eTg4QVZHNjJE?=
+ =?utf-8?B?TXJLTjBwalUxdjQvK3FuRWtDNk5tNGNOeTJFN2VqcTRXN0NpQ2hqTzh6NytI?=
+ =?utf-8?B?K1VTZk96RmRyWjczaURyeWZCMlM0d0tNa2hqOU9GTnlvWWJuREMySThvSWRy?=
+ =?utf-8?B?bUVDWHhEeTAyWm1KNlVBcll6aVRRZTh2bHV6VFJkTktkWUthcVRmMWppdy9E?=
+ =?utf-8?B?dFF6bjZ4SklPL01WRGErQVRGeE9HZjJSdXlFd0J2ejdxSUVHUlZVYWFLOU8x?=
+ =?utf-8?B?TFZIQi9Tc09OS0JSUC91SE10NzRQUnJweFJRNmc4UlhlTzRLVHVabG5uemZy?=
+ =?utf-8?B?R09ETzBCYnhWckhobjRJZHVQb2FuT255VENJOWZsUko1THFOQnYrei83ZGYr?=
+ =?utf-8?B?bFpxbmx4QkZZSDZNN1J4V0hOd2szdmcyaFBBSXdUY2pPcGFYMlB5ZW9WVEVP?=
+ =?utf-8?B?cUVvQmI3K3RPN1QyOG5nczRwRXRQRW9nczE1RTFKZTJTdjlISktEc1dUVDlo?=
+ =?utf-8?B?S25zZTBLbXNaQWNpSlUwaXp5eHJHZzIwZThYOWNpK1lJdTRoc0VyYis4UWdv?=
+ =?utf-8?B?WFdBNlRuVG51S3NkN05DaWlQQkNhTmxGeENwNlpQTEJxUHhlN1huWlRVVk9j?=
+ =?utf-8?B?a0R5dy9KSDhJcXdXSWhTRWw3cVIyR2l0YkQ1cmtVWWhFV1Q1Sm5Yc01UbjAw?=
+ =?utf-8?B?dTA0d20wbVFrbkdteUtjeVM4QXEzT0pZNUJMRzg0M1JRM05SMWh6THBzelNj?=
+ =?utf-8?B?WThJVzg5aGpCNjZBQkZ3WVRnd1dMdkVjZWdkY2VqZk9CYnM0SlEraDRiNTdR?=
+ =?utf-8?B?aGo3dDB0MUJycGZEUkdPQmNQTGxrZVJqT0V3TFNRWVlZYWdHU0VzMzZqOHJk?=
+ =?utf-8?B?R1pZNTVxSHEyZWZuM215SzFQaUh1Tk03a2VlUkRUMytDWGlQRnlPVjRhcS9i?=
+ =?utf-8?B?dFBIM0JRalF5enZSUmJ4R3MyWVNoWGlWZ1ZVVnNETXlxMDU2SWdqWkdFNVhP?=
+ =?utf-8?B?S1hIRUIxVEY3NGlQTXczNnQzNVpLU1ZXV0lycTczRWZGKzQxUmVEY3VwSDFK?=
+ =?utf-8?B?N0RjZVRYK2taVUNGMDZwYnRBTnpVWVBKTVd1c1h0QnJlaEl0WGlaSHJSY0FG?=
+ =?utf-8?B?bTY2dE9YeEpTK1NVTENTTWw0dHBZRFhsa3o1a3YvV2tZcEJUMkQrOE9XN01F?=
+ =?utf-8?B?ZTQ3eWhBOENIZEo2djJHYWt4blZoN0V6OEEyQS9hZEkrckFRSHIyQW5jaUV2?=
+ =?utf-8?B?cC9Dc2lCakU5WW5EUC9ieHRJSzZsNFd5V2NJWk4yclJBRlAvbVhUTjIwZWtl?=
+ =?utf-8?B?bG1YY0QyN3J5SktVaGRPZkZoRkZiT3dKMGw3TVp0OUVvR2ViT0hwTlBXZkJy?=
+ =?utf-8?B?TUhLclVDRmx1cHduRkFPV0VDbDVjVlZ2Sk5jY202b1ducnNzQUF0SzF6Tk1H?=
+ =?utf-8?B?THlONndTbWFlRExTMjhBb0VxYWNCa0llUkJWRkZIT1h4bjRuTU02VStTR2ZT?=
+ =?utf-8?Q?QS+t?=
+MIME-Version: 1.0
+
+--0000000000006c05f205f4424bb6
+Content-Type: text/plain; charset="UTF-8"
+
+Your bill payment to ALLIED HEALTH PRACTITIONERS COUNCIL(36143) of ZWL60970
+to ATSHERONNYANGONI was successful. TxnID BP230209.1101.G45972.
+
+
+On Fri, Jan 20, 2023, 10:52 Registrations AHPCZ <registrations@ahpcz.co.zw>
+wrote:
+
+> Good morning
+>
+> POP received with thanks.   We await receipt of your 2023 renewal fees.
+>
+>
+>
+>
+>
+> ---
+>
+> Regards
+>
+>
+>
+> Telmore T. Mateka(Miss)
+>
+> Registrations and Education Officer
+>
+> 20 Worcester Road
+>
+> Eastlea, Harare
+>
+> Phone:+263-242-303027, +263-242-747482/3
+>
+> Cell:263-771832846
+>
+> Email:registrations@ahpcz.co.zw
+>
+> Website:www.ahpcz.co.zw
+>
+>
+> ------------------------------
+> *From:* Sheron Nyangoni <nyangonisheron@gmail.com>
+> *Sent:* Thursday, January 12, 2023 2:54 PM
+> *To:* Registrations AHPCZ <registrations@ahpcz.co.zw>
+> *Subject:* Sheron Nyangoni's proof of payment
+>
+> Below is the proof of payment for Sheron Nyangoni's application for
+> transfer from internship to main register of Ambulance technicians
+>
+>
+>
+
+--0000000000006c05f205f4424bb6
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8"><d=
+iv dir=3D"auto">Your bill payment to ALLIED HEALTH PRACTITIONERS COUNCIL(36=
+143) of ZWL60970 to ATSHERONNYANGONI was successful. TxnID BP230209.1101.G4=
+5972.&nbsp;<div dir=3D"auto"><br></div></div><br><div class=3D"gmail_quote"=
+><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Jan 20, 2023, 10:52 Registra=
+tions AHPCZ &lt;<a href=3D"mailto:registrations@ahpcz.co.zw">registrations@=
+ahpcz.co.zw</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+
+
+
+
+<div dir=3D"ltr">
+<div><span style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-siz=
+e:12pt;color:rgb(0,0,0);background-color:rgb(255,255,255)">Good morning</sp=
+an></div>
+<div><span style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-siz=
+e:12pt;color:rgb(0,0,0);background-color:rgb(255,255,255)"><br>
+</span></div>
+<div><span style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-siz=
+e:12pt;color:rgb(0,0,0);background-color:rgb(255,255,255)">POP received wit=
+h thanks.&nbsp; &nbsp;We await receipt of your 2023 renewal fees.</span></d=
+iv>
+<div><span style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-siz=
+e:12pt;color:rgb(0,0,0);background-color:rgb(255,255,255)"><br>
+</span></div>
+<div><span style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-siz=
+e:12pt;color:rgb(0,0,0);background-color:rgb(255,255,255)"><br>
+</span></div>
+<div>
+<div style=3D"font-family:Calibri,Arial,Helvetica,sans-serif;font-size:12pt=
+;color:rgb(0,0,0)">
+<br>
+</div>
+<div id=3D"m_4152894682638910869Signature">
+<div>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><u></=
+u>&nbsp;<u></u></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><a re=
+l=3D"noreferrer"><span>---<u></u>&nbsp;<u></u></span></a></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span>Regards<u></u>&nbsp;<u></u></span></span></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span><u></u>&nbsp;<u></u></span></span></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span>Telmore T.
+ Mateka(Miss)<u></u>&nbsp;<u></u></span></span></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span>Registrations
+ and Education Officer<u></u>&nbsp;<u></u></span></span></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span>20 Worcester
+ Road<u></u>&nbsp;<u></u></span></span></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span>Eastlea, Harare<u></u>&nbsp;<u></u></span></span></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span>Phone:+263-242-303027,
+ +263-242-747482/3<u></u>&nbsp;<u></u></span></span></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span>Cell:263-771832846</span></span></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span><a href=3D"mailto:Email%3Aregistrations@ahpcz.co.zw" target=3D"_blan=
+k" rel=3D"noreferrer">Email:registrations@ahpcz.co.zw</a><u></u>&nbsp;<u></=
+u></span></span></p>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><span=
+><span>Website:<a href=3D"http://www.ahpcz.co.zw" target=3D"_blank" rel=3D"=
+noreferrer">www.ahpcz.co.zw</a><u></u>&nbsp;<u></u></span></span></p>
+<span></span>
+<p style=3D"margin:0cm;font-size:11pt;font-family:Calibri,sans-serif"><u></=
+u>&nbsp;<u></u></p>
+</div>
+</div>
+</div>
+<div id=3D"m_4152894682638910869appendonsend"></div>
+<hr style=3D"display:inline-block;width:98%">
+<div id=3D"m_4152894682638910869divRplyFwdMsg" dir=3D"ltr"><font face=3D"Ca=
+libri, sans-serif" style=3D"font-size:11pt" color=3D"#000000"><b>From:</b> =
+Sheron Nyangoni &lt;<a href=3D"mailto:nyangonisheron@gmail.com" target=3D"_=
+blank" rel=3D"noreferrer">nyangonisheron@gmail.com</a>&gt;<br>
+<b>Sent:</b> Thursday, January 12, 2023 2:54 PM<br>
+<b>To:</b> Registrations AHPCZ &lt;<a href=3D"mailto:registrations@ahpcz.co=
+.zw" target=3D"_blank" rel=3D"noreferrer">registrations@ahpcz.co.zw</a>&gt;=
+<br>
+<b>Subject:</b> Sheron Nyangoni's proof of payment</font>
+<div>&nbsp;</div>
+</div>
+<div>
+<div dir=3D"auto">Below is the proof of payment for Sheron Nyangoni's appli=
+cation for transfer from internship to main register of Ambulance technicia=
+ns
+<div dir=3D"auto"><br>
+</div>
+<div dir=3D"auto"><br>
+</div>
+</div>
+</div>
+</div>
+
+</blockquote></div>
+
+--0000000000006c05f205f4424bb6--

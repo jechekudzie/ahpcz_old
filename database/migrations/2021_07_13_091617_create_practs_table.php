@@ -15,11 +15,28 @@ class CreatePractsTable extends Migration
     {
         Schema::create('practs', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('reg_number')->nullable();
-            $table->string('profession')->nullable();
-            $table->string('register')->nullable();
+            $table->string('idd')->nullable();
+            $table->string('case_number')->nullable();
+            $table->string('date')->nullable();
+            $table->string('block')->nullable();
+            $table->string('iucr')->nullable();
+            $table->string('primary_type')->nullable();
+            $table->string('description')->nullable();
+            $table->string('location_description')->nullable();
+            $table->string('arrest')->nullable();
+            $table->string('domestic')->nullable();
+            $table->string('beat')->nullable();
+            $table->string('district')->nullable();
+            $table->string('ward')->nullable();
+            $table->string('community_area')->nullable();
+            $table->string('fbi_code')->nullable();
+            $table->string('x_coordinate')->nullable();
+            $table->string('y_coordinate')->nullable();
+            $table->string('year')->nullable();
+            $table->string('updated_on')->nullable();
+            $table->string('latitude')->nullable();
+            $table->string('longitude')->nullable();
+            $table->string('location')->nullable();
             $table->timestamps();
         });
     }

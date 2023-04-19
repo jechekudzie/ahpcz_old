@@ -84,6 +84,7 @@ class PaymentsController extends Controller
             'last_renewal_period' => 'nullable',
         ]);
 
+
         $total = 0;
         $balance = 0;
         $rate = Rate::find(1)->rate;
@@ -103,13 +104,16 @@ class PaymentsController extends Controller
 
         $renewal_category_id = $this->get_renewal_category($age, $employment_status_id, $employment_location_id, $certificate_request);
         $renewal_criteria = $this->get_renewal_criteria($renewal_category_id, $employment_status_id, $employment_location_id, $certificate_request);
+
+
         //check if selected criteria matches any of the existing
         if ($renewal_criteria == null) {
             return response()->json([
                 'status' => 2,
             ]);
         }
-        if (count($practitioner->renewals)) {
+
+        if ($practitioner->renewals->count() > 0) {
             $renewals = $practitioner->renewals;
             $size = sizeof($renewals);
             $last_renewal_period = $renewals[$size - 1]->renewal_period_id;
@@ -123,9 +127,13 @@ class PaymentsController extends Controller
                 'renewal_criteria' => $renewal_criteria,
             ]);
         }
+
         if (request('last_renewal_period') != null) {
+
             $last_renewal_period = request('last_renewal_period');
+
             $result = $this->check_restoration_penalties($practitioner, $last_renewal_period, $renewal_criteria);
+
             return response()->json([
                 'result' => $result,
                 'data' => $data,
@@ -282,7 +290,7 @@ class PaymentsController extends Controller
             ->where('renewal_period_id', $data['renewal_period_id'])->first();
 
         //add cpd points
-        if ($data['cpd_points'] >= $data['required_points']) {
+        if ($data['cpd_points'] >= $data['required_points'] && $renewal->certificate_request == 1) {
             if (request()->hasfile('file')) {
                 //get the file field data and name field from form submission
                 $file = request()->file('file');
@@ -315,9 +323,12 @@ class PaymentsController extends Controller
             ]);
         } else {
 
+            $renewal->update([
+                'cdpoints' => 1
+            ]);
+
             return response()->json([
-                'message' => 'Your Cpd Points submitted successfully.
-                You need to update your required cpd points in order to get a certificate.',
+                'message' => ' Your renewal payment was successful. Your will be notified once your certificate is ready.',
             ]);
         }
     }
@@ -467,6 +478,7 @@ class PaymentsController extends Controller
 
     public function check_restoration_penalties(Practitioner $practitioner, $last_renewal_period, $renewal_criteria)
     {
+
         $tire = $practitioner->profession->profession_tire->tire;
         $profession = $practitioner->profession;
         $current_period = date('Y');
@@ -487,15 +499,12 @@ class PaymentsController extends Controller
             }
         }
 
-
         //step 1 - get cpd criterias
-        foreach ($cpd_criterias as $cpd_criteria) {
-            if ($cpd_criteria->profession_id == $profession->id) {
-                $cpd_points = $cpd_criteria;
-            }
-        }
+        $cpd_points = CpdCriteria::where('profession_id', $practitioner->profession->id)->get();
+
         //step 2 - check restoration or penalty first calculate result
         $result = $current_period - $last_renewal_period;
+
         if ($result == 1 && $current_month > 06) {
             $restoration_penalty_name = 'Restoration current year';
             if ($tire->id == 1) {
@@ -519,7 +528,9 @@ class PaymentsController extends Controller
             $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
             return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
 
-        } elseif ($result == 2) {
+        }
+
+        elseif ($result == 2) {
             $restoration_penalty_name = 'Restoration level 1';
             if ($tire->id == 1) {
                 $renewal_fee = ceil($tire->fee * 1.145);
@@ -532,11 +543,12 @@ class PaymentsController extends Controller
                 $amount_invoiced = ceil($renewal_fee * 2.314 + $balance);
                 $restoration_penalty_charge = 2.314;
             }
-            $cpd_points = $cpd_points->standard * 1.5;
-
+            $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
             return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
 
-        } elseif ($result >= 3 && $result <= 5) {
+        }
+
+        elseif ($result >= 3 && $result <= 5) {
             $restoration_penalty_name = 'Restoration level 2';
             if ($tire->id == 1) {
                 $renewal_fee = ceil($tire->fee * 1.145);
@@ -549,10 +561,11 @@ class PaymentsController extends Controller
                 $amount_invoiced = ceil($renewal_fee * 2.971 + $balance);
                 $restoration_penalty_charge = 2.971;
             }
-            $cpd_points = $cpd_points->standard * 2;
+            $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
             return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
 
-        } elseif ($result > 5) {
+        }
+        elseif ($result > 5) {
             $restoration_penalty_name = 'Restoration level 3';
             if ($tire->id == 1) {
                 $renewal_fee = ceil($tire->fee * 1.145);
@@ -564,10 +577,12 @@ class PaymentsController extends Controller
                 $amount_invoiced = ceil($renewal_fee * 3.6 + $balance);
                 $restoration_penalty_charge = 3.6;
             }
-            $cpd_points = $cpd_points->standard * 3;
+            $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
+
             return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
 
-        } elseif ($result == 1) {
+        }
+        elseif ($result == 1) {
             if ($current_month == 04) {
                 $restoration_penalty_name = 'Penalty level 1 = 5%';
                 $renewal_fee = ceil($tire->fee * 1.145);
@@ -579,8 +594,7 @@ class PaymentsController extends Controller
                 $restoration_penalty_charge = 1.05;
                 $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
                 return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
-            }
-            if ($current_month == 05) {
+            } elseif ($current_month == 05) {
                 $restoration_penalty_name = 'Penalty level 2 = 10%';
                 $renewal_fee = ceil($tire->fee * 1.145);
 
@@ -591,8 +605,7 @@ class PaymentsController extends Controller
                 $restoration_penalty_charge = 1.10;
                 $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
                 return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
-            }
-            if ($current_month == 06) {
+            } elseif ($current_month == 06) {
 
                 $restoration_penalty_name = 'Penalty level 3 = 15%';
                 $renewal_fee = ceil($tire->fee * 1.145);
@@ -605,8 +618,7 @@ class PaymentsController extends Controller
                 $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
                 return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
 
-            }
-            if ($current_month > 06) {
+            } elseif ($current_month > 06) {
                 if ($tire->id == 1) {
                     $restoration_penalty_name = 'Current Restoration = 39.7%';
                     $renewal_fee = ceil($tire->fee * 1.145);
@@ -623,11 +635,22 @@ class PaymentsController extends Controller
                 $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
                 return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
 
+            } else {
+                $restoration_penalty_name = 'No restoration no penalty';
+                $renewal_fee = ceil($tire->fee * 1.145);
+
+                //now multiply by renewal criteria %
+                $renewal_fee = ceil($renewal_fee * $renewal_criteria_percentage);
+
+                $amount_invoiced = ceil($renewal_fee + $balance);
+                $restoration_penalty_charge = 0;
+                $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
+                return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
+
             }
 
-
-        } else {
-
+        }
+        else {
             $restoration_penalty_name = 'No restoration no penalty';
             $renewal_fee = ceil($tire->fee * 1.145);
 
@@ -638,7 +661,9 @@ class PaymentsController extends Controller
             $restoration_penalty_charge = 0;
             $cpd_points = $cpd_points->where('employment_status_id', $practitioner->employment_status_id)->first()->points;
             return $this->store_restoration($restoration_penalty_name, $amount_invoiced, $cpd_points, $restoration_penalty_charge);
+
         }
+
 
     }
 
@@ -654,6 +679,4 @@ class PaymentsController extends Controller
         return $restoration;
 
     }
-
-
 }

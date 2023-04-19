@@ -31,10 +31,9 @@
             @livewire('create-renewal',
             [
             'practitioner'=>$practitioner,
-
             ])
-
         </div>
+
     </div>
 @stop
 

@@ -16,7 +16,7 @@
                 @can('admin')
                     <a href="/admin" class="btn btn-success"><i class="fa fa-gear"></i> Administration Dashboard</a>
                 @endcan
-                <a href="/admin/practitioners/{{$practitioner->id}}" class="btn btn-success"></i> Dash
+                <a href="/admin/practitioners/{{$practitioner->id}}" class="btn btn-success"> Dash
                     Board</a>
             </div>
 
@@ -40,9 +40,7 @@
                             <div class="col-2">
                             </div>
                             <div class="col-8">
-                                @if($errors->any())
-                                    @include('errors')
-                                @endif
+
                                 @if (session('message'))
                                     <div class="alert alert-success alert-rounded col-md-12"><i
                                                 class="fa fa-check-circle"></i> {{ session('message') }}
@@ -51,6 +49,10 @@
                                                     aria-hidden="true">&times;</span></button>
                                     </div>
                                 @endif
+
+                                    @if($errors->any())
+                                        @include('errors')
+                                    @endif
                             </div>
 
                         </div>
@@ -60,7 +62,7 @@
                                 <div class="card wizard-content">
                                     <div class="card-body">
                                         <h4 class="card-title">{{$practitioner->first_name.' '.$practitioner->last_name}}</h4>
-                                        <h5>CPD points should be {{$cdpoints->points}} </h5>
+                                        <h5>CPD points should be {{$cdpoints}} </h5>
                                         <form action="/admin/practitioners/{{$practitioner->id}}/storeCdpoints"
                                               method="post" id="" enctype="multipart/form-data">
                                             {{csrf_field()}}

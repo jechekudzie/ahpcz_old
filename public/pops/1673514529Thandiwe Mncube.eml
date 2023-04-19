@@ -1,0 +1,168 @@
+Received: from SJ0PR02MB7215.namprd02.prod.outlook.com (::1) by
+ BYAPR02MB5815.namprd02.prod.outlook.com with HTTPS; Thu, 12 Jan 2023 09:05:08
+ +0000
+Received: from FR3P281CA0168.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:a0::20)
+ by SJ0PR02MB7215.namprd02.prod.outlook.com (2603:10b6:a03:29a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Thu, 12 Jan
+ 2023 09:05:08 +0000
+Received: from VI1EUR03FT053.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:d10:a0:cafe::1f) by FR3P281CA0168.outlook.office365.com
+ (2603:10a6:d10:a0::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6023.6 via Frontend
+ Transport; Thu, 12 Jan 2023 09:05:06 +0000
+Authentication-Results: spf=pass (sender IP is 209.85.221.179)
+ smtp.mailfrom=gmail.com; dkim=pass (signature was verified)
+ header.d=gmail.com;dmarc=pass action=none header.from=gmail.com;compauth=pass
+ reason=100
+Received-SPF: Pass (protection.outlook.com: domain of gmail.com designates
+ 209.85.221.179 as permitted sender) receiver=protection.outlook.com;
+ client-ip=209.85.221.179; helo=mail-vk1-f179.google.com; pr=C
+Received: from mail-vk1-f179.google.com (209.85.221.179) by
+ VI1EUR03FT053.mail.protection.outlook.com (100.127.144.132) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5986.18 via Frontend Transport; Thu, 12 Jan 2023 09:05:06 +0000
+X-IncomingTopHeaderMarker:
+ OriginalChecksum:3F9BA80F7792570EAA01FB40E489E9B141FF32C8038E0F78DA253FDED1B43005;UpperCasedChecksum:25A527BBDAE9A32065981078B95473E87354E6F4FC2BABFC57A5FFFAE31D77F9;SizeAsReceived:2255;Count:13
+Received: by mail-vk1-f179.google.com with SMTP id w72so8446923vkw.7
+        for <dsbcdan@hotmail.com>; Thu, 12 Jan 2023 01:05:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SvBGXI6bqA+kZtydEhqZYRvSnaHu+BLfPT57xsNOHM4=;
+        b=CWSaAUXVT5cF+87pQO/gIu9lD2XAqFCYAMfQO+A4+k/Yww0NjrTymPXtXQsmSldjou
+         scDytuMlCkyQbeNTlTKHcgkVWlbY3s+2iK6zFOqg9aNetgKyJ46VBlfyNBVUuy5VhWwN
+         pB+Gt6TswcUbHNFdEJl+uI5DjiEw2KOauOdskYXM0vPlGuyFGXDustG0Mww4O32bVz/Z
+         BPAazOOpdQCrGDcosewyPi+AxSVmOw+AgXI2djhbyh+FpEn5LbYY4dI6wUKmnWU8im3e
+         stTNO09hqGVGBWbSVHkuJ0GFI2XJeeMWSEwvrc+bG+kjNx/oa6OxPyd/NZk+f09aWuIM
+         RAXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SvBGXI6bqA+kZtydEhqZYRvSnaHu+BLfPT57xsNOHM4=;
+        b=Xn1Idy0Sq8gccbZuyFW0p+6dJBi9XURHyYd3k2NtyNihdokBtgYOqgec97IDy304kt
+         QF0ug7HD5J3iVBJYIMazWS3I83KkSeDv9qPyiwVHEiI1ICf2YtKHl1RNYSZxlofIve52
+         mB787G4pdCT21Y7tCsjHViT5FkMpre+otqmAKRRTDtT59BEMw26/v2BDdfoEKLi9JZIQ
+         DmywxO83OCVEaI8ut0LF2dgukfzoWufZSqOv99rb9A8vLbSyAJf77rURBK+d9luRHPLS
+         grPPDuf0FI+oAsQ60bkUEGEw1xF9u0OfcA2b08cKhDju6PeVpZNDLUEOR+0WLGeTL3o4
+         bPyA==
+X-Gm-Message-State: AFqh2krkJchLIuV9w6/wOyw/QbCxXP3d9ygNgA21cxRY3qpbvTpwf3Sv
+	X9xcvz8qIo5wMH3ZVxSdOTeKcS6yOoSSmH3owIesxJ/p
+X-Google-Smtp-Source: AMrXdXvlvUSPIazpcChgABdT0xklDC28syy/IwYZ/EbGxqnePb6G1ZcCFbZ/PsAIfwSc8wwcC6ibVscVo/3w8C4OK/w=
+X-Received: by 2002:a05:6122:858:b0:3c0:f699:c363 with SMTP id
+ 24-20020a056122085800b003c0f699c363mr3200251vkk.13.1673514305976; Thu, 12 Jan
+ 2023 01:05:05 -0800 (PST)
+From: Dan Harding <danharding.zw@gmail.com>
+Date: Thu, 12 Jan 2023 11:04:54 +0200
+Message-ID: <CAN7YO_NtDsfEBSFUVtpYeCEycL3HpNErY01kmf1td-2dCDbcYg@mail.gmail.com>
+Subject: Thandiwe Mncube
+To: Dan Harding <dsbcdan@hotmail.com>
+Content-Type: multipart/alternative; boundary="000000000000bbfe0505f20d69a6"
+X-IncomingHeaderCount: 13
+Return-Path: danharding.zw@gmail.com
+X-MS-Exchange-Organization-ExpirationStartTime: 12 Jan 2023 09:05:06.7629
+ (UTC)
+X-MS-Exchange-Organization-ExpirationStartTimeReason: OriginalSubmit
+X-MS-Exchange-Organization-ExpirationInterval: 1:00:00:00.0000000
+X-MS-Exchange-Organization-ExpirationIntervalReason: OriginalSubmit
+X-MS-Exchange-Organization-Network-Message-Id:
+ 39953f76-de19-466a-35fa-08daf47c1985
+X-EOPAttributedMessage: 0
+X-EOPTenantAttributedMessage: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa:0
+X-MS-Exchange-Organization-MessageDirectionality: Incoming
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1EUR03FT053:EE_|SJ0PR02MB7215:EE_
+X-MS-Exchange-Organization-AuthSource:
+ VI1EUR03FT053.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-Organization-AuthAs: Anonymous
+X-MS-UserLastLogonTime: 1/11/2023 3:36:51 PM
+X-MS-Office365-Filtering-Correlation-Id: 39953f76-de19-466a-35fa-08daf47c1985
+X-MS-Exchange-EOPDirect: true
+X-Sender-IP: 209.85.221.179
+X-SID-PRA: DANHARDING.ZW@GMAIL.COM
+X-SID-Result: PASS
+X-MS-Exchange-Organization-PCL: 2
+X-MS-Exchange-AtpMessageProperties: SA|SL
+X-MS-Exchange-Organization-SCL: 1
+X-Microsoft-Antispam: BCL:0;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2023 09:05:06.7316
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 39953f76-de19-466a-35fa-08daf47c1985
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-AuthSource:
+ VI1EUR03FT053.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: Internet
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+ 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB7215
+X-MS-Exchange-Transport-EndToEndLatency: 00:00:02.1418302
+X-MS-Exchange-Processed-By-BccFoldering: 15.20.6002.013
+X-Microsoft-Antispam-Mailbox-Delivery:
+	abwl:0;wl:1;pcwl:1;kl:0;dwl:0;dkl:0;rwl:0;ucf:0;jmr:0;ex:1;auth:1;dest:I;OFR:TrustedSenderList;ENG:(5062000305)(90000117)(90011020)(91015020)(91040095)(5061607266)(5061608174)(9050020)(9060121)(9081003)(9100338)(4810004)(4910033)(8820095)(9930004)(9545005)(10172021)(9439006)(9310011)(9220031);
+X-Message-Info:
+	qZelhIiYnPlcICslm1amE1c3f6r+xDVCPSMu/0tvPDACf+oTWD5wQGZ+JuyNoaG2tQhjiAG+xKH+4C4VL1U95y3dJnyrmEm63WYTHwzZQWrID/xsKN8DvNOX9HLnlXQQ+pHxiqJ1PB6lU7JTfN4L4MJNXn7f4S8yrqF4tyP2efKuqZZhr61Nz2pefN9QijxgXoNUfOGEAwjhgRe19AzmTQ==
+X-Message-Delivery: Vj0xLjE7dXM9MDtsPTA7YT0wO0Q9MTtHRD0yO1NDTD0tMQ==
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?M1pBQTVSS29MSmF1RE1XM1RaeHMzY24xK3lMdTBIYlE4U1ZTZmtydy9aR0kz?=
+ =?utf-8?B?UjQ0V2piUVJCOTd6RTNvZnpjUWIwL0ZNOXc1MVlXM3NtU2JEQjd2MkxYVFRZ?=
+ =?utf-8?B?TVRZdHBOR0NGV2tDLy9NZ3MzeFY4dm1peWRVMTY3N0FweUFjZ3hoaTZNZk5Q?=
+ =?utf-8?B?OHFFK1g1SDN2Ti9VZkpzeVgyVzY5NXlYT1hoNlBqb2cyQjNLMG9tQXFWSTIw?=
+ =?utf-8?B?b2hmdi95d2xRbWJsSmVhSCt6N3pTYS8zeWdQKzh3MFVieVhjR25NTXlISnlx?=
+ =?utf-8?B?T0Jic0NKaG14ZTFlWHAvNURkMDRsdTNQU2twQml6S3lHSXpNM1A5WUpLQXlE?=
+ =?utf-8?B?elo5NG5CanBNOHlaL0QyM0xkaDRvVVhQVTF5dmU0SGlYYS9KTUUwV09mMFdH?=
+ =?utf-8?B?VEpPZS9GeUJzVFYrUVJrNnQybDM5RE1aNE52T1o3dGI5Q1ZxbUd0RDN0dEpY?=
+ =?utf-8?B?OGNmZlIxLzg2VzdGSnY1ZDNIeFErVzRHbXZ0RDZpclZ1ditib1ljUVZLdTk3?=
+ =?utf-8?B?bjFPc3RYazV6NjJteU1YeHhPaWxib3BwK05WSFluR3duYjRjQ1J1cGN6SmRo?=
+ =?utf-8?B?TUhIRWNkNk52QTA3WkJVRWNwUEVmN0ROYmxYK1poQURHR2FoZWJLM2N2WGxi?=
+ =?utf-8?B?TXZ1dkxqaXN5OTRnN05uYkVIZkVyMUU4dzBNU0NZdHlQL000cEFnUE1FTytZ?=
+ =?utf-8?B?Z3dCTTE5THBpdExaREFFWS9jYUxEYm4rSUx2TkxuaEVmM2tMRkt3K2VHZDJL?=
+ =?utf-8?B?WktZcXc2S2xzS0g0Q1V2UUFjMEFnRWZCSUFjbzZKdFRPYXV5S3BBVVppWVdZ?=
+ =?utf-8?B?d1NiZmZtd3FrdWlKOUNzSnE2UUNKcFoxczBDY2c3MDRydWdKaVRpa2RkMXhp?=
+ =?utf-8?B?Wm15K092c1RUMTZFRzNJNFFCY1FxcENGcTFjNndPTGZCYmo0MkJEQ1FFalBP?=
+ =?utf-8?B?cFNlRmxsUTREVnBqdkdsN3p0WmZwSGlPdFNGbzNaY2tzNVpWenNndThUaVN0?=
+ =?utf-8?B?ZUxzbGJQTUtwS3pZb3NBUGpndFJwd3BhMkEzWG1uK0tWWDNoYytFSXBJV2o3?=
+ =?utf-8?B?S1ZrbmpaN1cvS2UvMW4rakpTSjlYTWUyNEY3Wm5lb0JzU0toRHcvTHNMRnhm?=
+ =?utf-8?B?VVhVWjV5RGRadEZibUpBWlNwdHFpRVRBMHB0WE5kV0wveFY1dE1CQzdQTytN?=
+ =?utf-8?B?S0prUGthbmlNOTA3dDZrSVR6cW9QNkR2bjk5cmZOb25FTXB0cG9UWktUTldl?=
+ =?utf-8?B?Nkw2U3hDRGFmUTJ6U2k5UnpWRENMTUllQ0hINGFQUlU4a2hPcC8xVkI0RzRP?=
+ =?utf-8?B?Uk95YVFWSHNyeXUvSXlVVHU1VjlBQkJzckpQODRLVjhkTU1sRDlMWVk5eWpJ?=
+ =?utf-8?B?NzFiNWk4Rlk3cys2QzBoQmdydEtyVXVzbmFGaG1IZGE3VTNtL0dCL1d4SEJH?=
+ =?utf-8?B?QzNvUlBkS25sNjdNYXA0MS9uQlUvdjhmRHlkdGdONS9PS0o1KzkrY0pKOXg5?=
+ =?utf-8?B?RHpiS3Z5bklYRElTdzJTREdKUkVuem1Cc3Ntc2E5aG5FVnhDblo0R3c2TG9L?=
+ =?utf-8?B?OGtPQkNkYXVCSkUxS3pvaTdiMmpxTkg5QnRYU2Uxbyt4N3ltVmh5QS9yWVFR?=
+ =?utf-8?B?V3JuclpHL2traExXRU5ocmdKb3ZBUmpsY3JDSjZnR3VpNWhrLzg2QnFYTGVO?=
+ =?utf-8?B?QkZJZitTM1FPOVhEcFhqUkZLVk1iWlZsU3IwekduemVSdEVLc3N5OGN5a2Rr?=
+ =?utf-8?B?ZURUbWlrWHptTmlQUUVFa1o5N21vM2ZILzlRWU9iQVBmNnFRRHlwL09GWFpL?=
+ =?utf-8?B?aUxtTmZxci82MkwvUUhZeUtuR3hzK0N1bEkydFlZWkhPOUxLSDRodUI1Q0dM?=
+ =?utf-8?B?cTlzQXlQSWljOHp2c0s0TExsSzAzb3lPbWF0cnpxd1A2d09iTmZVQ3R4MGNq?=
+ =?utf-8?B?Y2lsMVhleU5JQlFGdkxObUhTT3hMcG5FT1FvaWlkaWsvMjlMY2lodFR1VGlB?=
+ =?utf-8?B?NVUyMFZqZGNQM1krUkpmQkxhSjVvOEpNZWVpS3M0MGxxVHIxdVdjT1VxWHhR?=
+ =?utf-8?B?MWZ0dmtMYzVCb2JnNC9hakdqbEpNalVTbnhRNzR6ZDgvSmZKaGFZcDEzaHBO?=
+ =?utf-8?B?bE5rWW1leTgrRjdEdGJZWEcrWkRrSEZ2QXVhMmZua1lkTUgyWXJlbHFoWkdY?=
+ =?utf-8?B?QldycHd4MXg3b3NWaFJSMUhQWEx4YnFjL3RIM0Q3U3F5RXl4bDZ3d1ZjT0Zy?=
+ =?utf-8?B?L0lOdDdDblVXcENwUmxOVm5sODg5K1dGVXRJV1ArUGdSR2MrNzZBVlRTYjlz?=
+ =?utf-8?B?ODQxQkFtR3BqYUVnWlpLNEpxRzBwUitLQUp0eXMwZnBMcGFaRGF1WGZ4akdR?=
+ =?utf-8?B?bzFSUE80R3A4MHJqcGp0dTN5U2JTeVo3SGUrTEViaERSZ1lLak1YQUlaa25l?=
+ =?utf-8?B?Y1YwVkJIbDlFRmZWK09rL1BLM0RMb2hZWExOaHJabzBCRXcxekxlekFFVUVI?=
+ =?utf-8?B?QzgwK1lQYzNhcjMwbDJvY1NxRUEwclJJSTVqUkVLMG84bEIyOTgxV2NkV05s?=
+ =?utf-8?B?Sk5WbElnNG8xVUNQZHpWMXhabjFFQkJLV2ljR2hBL09PcTdOemdPWkdleWov?=
+ =?utf-8?B?SlR5SmpvU1IyN3R6dmVDVkZPZmh3alhWODdwSUVWd1VwK1BEa0dTUVhWQXZx?=
+ =?utf-8?Q?594n?=
+MIME-Version: 1.0
+
+--000000000000bbfe0505f20d69a6
+Content-Type: text/plain; charset="UTF-8"
+
+Your bill payment to ALLIED HEALTH PRACTITIONERS COUNCIL(36143) of ZWL9228
+to 1018977757 was successful. TxnID BP230112.1018.G59861. Wallet balance
+ZWL119.2.
+
+--000000000000bbfe0505f20d69a6
+Content-Type: text/html; charset="UTF-8"
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><div dir="auto">Your bill payment to ALLIED HEALTH PRACTITIONERS COUNCIL(36143) of ZWL9228 to 1018977757 was successful. TxnID BP230112.1018.G59861. Wallet balance ZWL119.2.</div>
+
+--000000000000bbfe0505f20d69a6--

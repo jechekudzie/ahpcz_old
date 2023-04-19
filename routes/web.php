@@ -12,6 +12,8 @@
 */
 
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
 
     return view('auth.login');
@@ -24,9 +26,7 @@ Route::get('/upload', function () {
 
 });
 
-
 Route::get('/admin/emails','PractitionerContactsController@contacts');
-
 
 Route::get('/admin', 'AdminController@index');
 
@@ -220,6 +220,7 @@ Route::get('/admin/practitioners/experience/{practitionerExperience}/show', 'Pra
 
 //practitioner renewals payments
 //we redirect to the page where we get to create the new renewal
+//we redirect to the page where we get to create the new renewal
 Route::get('/admin/practitioner_renewals/{practitioner}/create', 'RenewalController@create');
 //display all the renewal payments for a specific period
 Route::get('/admin/practitioner_renewals/{renewal}/index', 'RenewalController@index');
@@ -235,6 +236,10 @@ Route::post('/admin/practitioners/renewals/{renewal}/make_payment', 'RenewalCont
 Route::get('/admin/practitioners/renewals/{practitioner}/practitionerBalances', 'RenewalController@practitionerBalances');
 Route::get('/admin/practitioners/renewals/{renewal}/edit_certificate', 'RenewalController@edit_certificate');
 Route::patch('/admin/practitioners/renewals/{renewal}/update_certificate', 'RenewalController@update_certificate');
+
+//
+Route::get('/admin/practitioners/{payment}/get_pop', 'RenewalController@get_pop');
+Route::post('/admin/practitioners/{payment}/store_pop', 'RenewalController@store_pop');
 
 //auto renewal
 Route::get('/admin/auto_renew/{practitioner}/', 'RenewalController@auto_renew');
@@ -272,7 +277,6 @@ Route::post('/make_restoration_payment', 'RenewalController@make_restoration_pay
 //renewal current
 Route::get('/renewals/new/initiate_step_1/{practitioner}', 'RenewalCurrentController@initiate_step_1');
 Route::post('/renewals/new/step_1/{practitioner}', 'RenewalCurrentController@step_1');
-
 
 Route::get('/admin/practitioners/{practitioner}/cdpoints', 'RenewalController@cdpoints');
 Route::post('/admin/practitioners/{practitioner}/storeCdpoints', 'RenewalController@storeCdpoints');
@@ -380,7 +384,6 @@ Route::get('/registration_certificate/{practitioner}', 'CertificateController@re
 
 //manual
 Route::get('/certificate/manual/{renewal}', 'CertificateController@manual_certificate');
-
 
 Route::get('/admin/practitioners/certificate/index', 'PractitionerCertificateController@index');
 Route::get('/admin/practitioners/certificate/pending', 'PractitionerCertificateController@pending');

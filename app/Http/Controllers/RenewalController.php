@@ -173,8 +173,8 @@ class RenewalController extends Controller
             //usd account
                 '11778',
                 '02f69090-68e9-427b-9838-966385aa0541',
-                'http://localhost:8000/check_payment/' . $practitioner_id,
-                'http://localhost:8000/check_payment/' . $practitioner_id
+                'http://database.ahpcz.co.zw/check_payment/' . $practitioner_id,
+                'http://database.ahpcz.co.zw/check_payment/' . $practitioner_id
 
             );
         }
@@ -185,8 +185,8 @@ class RenewalController extends Controller
             //local account
                 '11777',
                 '739d23ae-f8c5-45e0-ac0a-a481f615c813',
-                'http://localhost:8000/check_payment/' . $practitioner_id,
-                'http://localhost:8000/check_payment/' . $practitioner_id
+                'http://database.ahpcz.co.zw/check_payment/' . $practitioner_id,
+                'http://database.ahpcz.co.zw/check_payment/' . $practitioner_id
             );
         }
 
@@ -211,6 +211,7 @@ class RenewalController extends Controller
 
     public function check_restoration_penalties(Practitioner $practitioner)
     {
+
         $rate = Rate::find(1);
         $cpd_criterias = CpdCriteria::all();
         $renewal_criterias = RenewalCriteria::all();
@@ -229,16 +230,19 @@ class RenewalController extends Controller
         $total = 0;
         $balance = 0;
 
+
         foreach ($cpd_criterias as $cpd_criteria) {
             if ($cpd_criteria->profession_id == $profession->id) {
                 $cpd_points = $cpd_criteria->standard;
             }
         }
 
+
         if (count($practitioner->renewals)) {
 
             $renewals = $practitioner->renewals;
             $size = sizeof($renewals);
+
             $last_renewal_period = $renewals[$size - 1]->renewal_period_id;
 
             //calculate balances
@@ -256,7 +260,9 @@ class RenewalController extends Controller
             //check restoration or penalty
             $result = $current_period - $last_renewal_period;
 
+
             if ($result == 1 && $current_month > 06) {
+
                 $restoration_penalty_name = 'Restoration current year';
 
                 if ($tire->id == 1) {
@@ -277,6 +283,7 @@ class RenewalController extends Controller
                     $restoration_penalty_charge = 1.2;
 
                 }
+
                 $this->store_restoration($restoration_penalty_name, $restoration_penalty_fee, $balance, $cpd_points, $rate, $restoration_penalty_charge);
                 return view('confirm_restoration',
                     compact('practitioner', 'restoration_penalty_name', 'restoration_penalty_fee',
@@ -336,8 +343,8 @@ class RenewalController extends Controller
                 return view('confirm_restoration',
                     compact('practitioner', 'restoration_penalty_name', 'restoration_penalty_fee',
                         'cpd_points', 'balance', 'rate'));
-            } elseif ($result == 1) {
-
+            } //with penalty months
+            elseif ($result == 1) {
                 if ($current_month == 04) {
                     $restoration_penalty_name = 'Penalty level 1 = 5%';
                     $renewal_fee = ceil($tire->fee * 1.145);
@@ -350,8 +357,7 @@ class RenewalController extends Controller
                         'practitioner' => $practitioner,
                     ]);
 
-                }
-                if ($current_month == 05) {
+                } elseif ($current_month == 05) {
                     $restoration_penalty_name = 'Penalty level 2 = 10%';
                     $renewal_fee = ceil($tire->fee * 1.145);
                     $restoration_penalty_fee = $renewal_fee * 0.10;
@@ -363,8 +369,7 @@ class RenewalController extends Controller
                         'practitioner' => $practitioner,
                     ]);
 
-                }
-                if ($current_month == 06) {
+                } elseif ($current_month == 06) {
                     $restoration_penalty_name = 'Penalty level 3 = 15%';
                     $renewal_fee = ceil($tire->fee * 1.145);
                     $restoration_penalty_fee = $renewal_fee * 0.15;
@@ -376,8 +381,17 @@ class RenewalController extends Controller
                         'practitioner' => $practitioner,
                     ]);
 
-                }
+                } elseif ($current_month < 04) {
+                    $restoration_penalty_name = 'No restoration no penalty';
+                    $restoration_penalty_fee = 0;
+                    $restoration_penalty_charge = 0;
+                    $this->store_restoration($restoration_penalty_name, $restoration_penalty_fee, $balance, $cpd_points, $rate, $restoration_penalty_charge);
 
+                    //return redirect('/create_renewal');
+                    return view('renewals.create')->with([
+                        'practitioner' => $practitioner,
+                    ]);
+                }
 
             } else {
                 $restoration_penalty_name = 'No restoration no penalty';
@@ -399,6 +413,7 @@ class RenewalController extends Controller
 
     public function manual_restoration_penalties(Practitioner $practitioner)
     {
+
         $period = request()->validate([
             'period' => 'required'
         ]);
@@ -442,8 +457,11 @@ class RenewalController extends Controller
         //check restoration or penalty
         $last_renewal_period = $period['period'];
         $result = $current_period - $last_renewal_period;
+
         if ($result == 1 && $current_month > 06) {
+
             $restoration_penalty_name = 'Restoration current year';
+
             if ($tire->id == 1) {
                 $renewal_fee = ceil($tire->fee * 1.145);
                 $restoration_penalty_fee = ceil($renewal_fee * 1.397);
@@ -460,7 +478,13 @@ class RenewalController extends Controller
                 $renewal_fee = ceil($tire->fee * 1.145);
                 $restoration_penalty_fee = ceil($renewal_fee * 1.2);
                 $restoration_penalty_charge = 1.2;
+
             }
+
+            $this->store_restoration($restoration_penalty_name, $restoration_penalty_fee, $balance, $cpd_points, $rate, $restoration_penalty_charge);
+            return view('confirm_restoration',
+                compact('practitioner', 'restoration_penalty_name', 'restoration_penalty_fee',
+                    'cpd_points', 'balance', 'rate'));
 
         } elseif ($result == 2) {
             $restoration_penalty_name = 'Restoration level 1';
@@ -493,12 +517,9 @@ class RenewalController extends Controller
                 $renewal_fee = ceil($tire->fee * 1.145);
                 $restoration_penalty_fee = ceil($renewal_fee * 2.971);
                 $restoration_penalty_charge = 2.971;
-
-                //dd($restoration_penalty_fee);
             }
             $cpd_points = $cpd_points * 2;
             $this->store_restoration($restoration_penalty_name, $restoration_penalty_fee, $balance, $cpd_points, $rate, $restoration_penalty_charge);
-
             return view('confirm_restoration',
                 compact('practitioner', 'restoration_penalty_name', 'restoration_penalty_fee',
                     'cpd_points', 'balance', 'rate'));
@@ -519,7 +540,8 @@ class RenewalController extends Controller
             return view('confirm_restoration',
                 compact('practitioner', 'restoration_penalty_name', 'restoration_penalty_fee',
                     'cpd_points', 'balance', 'rate'));
-        } elseif ($result == 1) {
+        } //with penalty months
+        elseif ($result == 1) {
             if ($current_month == 04) {
                 $restoration_penalty_name = 'Penalty level 1 = 5%';
                 $renewal_fee = ceil($tire->fee * 1.145);
@@ -532,8 +554,7 @@ class RenewalController extends Controller
                     'practitioner' => $practitioner,
                 ]);
 
-            }
-            if ($current_month == 05) {
+            } elseif ($current_month == 05) {
                 $restoration_penalty_name = 'Penalty level 2 = 10%';
                 $renewal_fee = ceil($tire->fee * 1.145);
                 $restoration_penalty_fee = $renewal_fee * 0.10;
@@ -545,8 +566,7 @@ class RenewalController extends Controller
                     'practitioner' => $practitioner,
                 ]);
 
-            }
-            if ($current_month == 06) {
+            } elseif ($current_month == 06) {
                 $restoration_penalty_name = 'Penalty level 3 = 15%';
                 $renewal_fee = ceil($tire->fee * 1.145);
                 $restoration_penalty_fee = $renewal_fee * 0.15;
@@ -557,23 +577,13 @@ class RenewalController extends Controller
                 return view('renewals.create')->with([
                     'practitioner' => $practitioner,
                 ]);
-            }
-            if ($current_month == 07) {
-                if ($tire->id == 1) {
-                    $restoration_penalty_name = 'Current Restoration = 39.7%';
-                    $renewal_fee = ceil($tire->fee * 1.145);
-                    $restoration_penalty_fee = ceil($renewal_fee * 1.397);
-                    $restoration_penalty_charge = 1.397;
-                }
 
-                if ($tire->id == 2) {
-                    $restoration_penalty_name = 'Current Restoration = 65.7%';
-                    $renewal_fee = ceil($tire->fee * 1.145);
-                    $restoration_penalty_fee = ceil($renewal_fee * 1.657);
-                    $restoration_penalty_charge = 1.657;
-                }
-
+            } elseif ($current_month < 04) {
+                $restoration_penalty_name = 'No restoration no penalty';
+                $restoration_penalty_fee = 0;
+                $restoration_penalty_charge = 0;
                 $this->store_restoration($restoration_penalty_name, $restoration_penalty_fee, $balance, $cpd_points, $rate, $restoration_penalty_charge);
+
                 //return redirect('/create_renewal');
                 return view('renewals.create')->with([
                     'practitioner' => $practitioner,
@@ -590,7 +600,6 @@ class RenewalController extends Controller
             return view('renewals.create')->with([
                 'practitioner' => $practitioner,
             ]);
-
         }
         //dd(Session::get('restoration'));
         return redirect('/admin/practitioner_renewals/' . $practitioner->id . '/create');
@@ -760,7 +769,6 @@ class RenewalController extends Controller
         }
     }
 
-
     //list all renewal yearly payments
     public function index(Renewal $renewal)
     {
@@ -774,12 +782,9 @@ class RenewalController extends Controller
         /**Check for practitioner payment information
          *renewal_category(which category do you belong to), register_category(which register do you belong to), payment_method(who is paying for you)
          */
-
-
         return view('renewals.create')->with([
             'practitioner' => $practitioner,
         ]);
-
 
     }
 
@@ -874,7 +879,6 @@ class RenewalController extends Controller
                         }
                     }
                 }
-
             }
 
             //update approval statuses
@@ -910,8 +914,6 @@ class RenewalController extends Controller
                 not that if this a regular payment click the payment link to proceed');
         }
     }
-
-
     //Create renewal payments (fetch form)
     public function createPayment(Renewal $renewal)
     {
@@ -984,6 +986,31 @@ class RenewalController extends Controller
         return redirect('/admin/practitioner_renewals/' . $renewal->id . '/index')->with('message', 'Payment was successful.');
     }
 
+    public function get_pop(Payment $payment){
+        return view('admin.practitioner_payments.pop',compact('payment'));
+    }
+    public function store_pop(Payment $payment){
+        $path = '';
+        if (request()->hasfile('pop')) {
+
+            $file = request()->file('pop');
+
+            //get file original name
+            $name = $file->getClientOriginalName();
+
+            //create a unique file name using the time variable plus the name
+            $file_name = time() . $name;
+
+            //upload the file to a directory in Public folder
+            $path = $file->move('pops', $file_name);
+
+        }
+        $payment->update([
+            'proof'=>$path
+        ]);
+
+        return redirect('/admin/practitioners/'.$payment->practitioner->id);
+    }
 
     public function practitionerBalances(Practitioner $practitioner)
     {
@@ -1009,22 +1036,9 @@ class RenewalController extends Controller
 
     public function verify_renewal(Renewal $renewal)
     {
-        $current_certificate_number = CertificateNumber::where('renewal_period_id', $renewal->renewal_period_id)
-            ->first();
-        if ($current_certificate_number == null) {
-            $current_certificate_number = CertificateNumber::create([
-                'renewal_period_id' => $renewal->renewal_period_id,
-                'certificate_number' => 0,
-            ]);
-        }
-        $certificate_number = $current_certificate_number->certificate_number + 1;
-        $current_certificate_number->update([
-            'certificate_number' => $certificate_number
-        ]);
-        $practitioner_id = $renewal->practitioner->id;
+
         $renewal->update([
             'certificate' => 1,
-            'certificate_number' => $certificate_number
         ]);
 
         return redirect('/admin/practitioners/' . $renewal->practitioner->id)
@@ -1042,6 +1056,23 @@ class RenewalController extends Controller
              $email = $practitioner->contact->email;
              Mail::to($email)->send(new SignOff($renewal));
          }*/
+        $current_certificate_number = CertificateNumber::where('renewal_period_id', $renewal->renewal_period_id)
+            ->first();
+        if ($current_certificate_number == null) {
+            $current_certificate_number = CertificateNumber::create([
+                'renewal_period_id' => $renewal->renewal_period_id,
+                'certificate_number' => 0,
+            ]);
+        }
+        $certificate_number = $current_certificate_number->certificate_number + 1;
+        $current_certificate_number->update([
+            'certificate_number' => $certificate_number
+        ]);
+        $practitioner_id = $renewal->practitioner->id;
+        $renewal->update([
+            'certificate' => 2,
+            'certificate_number' => $certificate_number
+        ]);
         return redirect('/admin/practitioners/' . $renewal->practitioner->id)
             ->with('message', 'Renewal for ' . $renewal->renewal_period_id . ' has been ceritified and practitioner will have right to print certificate. ');
     }
@@ -1050,8 +1081,20 @@ class RenewalController extends Controller
     //check cd points
     public function cdpoints(Practitioner $practitioner)
     {
-        $cdpoints = $practitioner->profession->cdpoint;
-        return view('admin.practitioner_payments.cdpoints', compact('practitioner', 'cdpoints'));
+        $cdpoints = 0;
+            if ($practitioner->employment_status_id == 1) {
+                $cdpoints = $practitioner->profession->cpd_criterias->where('employment_status_id', 1)->first()->points;
+                return view('admin.practitioner_payments.cdpoints', compact('practitioner', 'cdpoints'));
+
+            }
+            if ($practitioner->employment_status_id == 2) {
+                $cdpoints = $practitioner->profession->cpd_criterias->where('employment_status_id', 2)->first()->points;
+                return view('admin.practitioner_payments.cdpoints', compact('practitioner', 'cdpoints'));
+            }
+            else{
+            return back()->with('message',
+                'Please update employment status first');
+        }
     }
 
     //check placement
@@ -1065,6 +1108,7 @@ class RenewalController extends Controller
     public function storeCdpoints(Practitioner $practitioner)
     {
         $path = '';
+        $renewal = $practitioner->renewals->where('renewal_period_id', request('renewal_period_id'))->first();
         $renewal_period_id = request('renewal_period_id');
 
         $checkExist = PractitionerCpdpoint::wherePractitioner_idAndRenewal_period_id($practitioner->id, $renewal_period_id)->first();
@@ -1092,21 +1136,34 @@ class RenewalController extends Controller
             $yearly_cdpoints['points'] = request('points');
             $yearly_cdpoints['path'] = $path;
             //get set cd points
-            $cdpoints = $practitioner->profession->cdpoint;
+
+            if ($practitioner->employment_status_id == 1) {
+                $cdpoints = $practitioner->profession->cpd_criterias->where('employment_status_id', 1)->first();
+            }
+            if ($practitioner->employment_status_id == 2) {
+                $cdpoints = $practitioner->profession->cpd_criterias->where('employment_status_id', 2)->first();
+            }
+
             //get submitted cd points
             $points = request('points');
-            if ($points == $cdpoints->points) {
+
+            if ($points >= $cdpoints->points) {
                 $practitioner->addCdPoints($yearly_cdpoints);
                 //now check if cpd points renewal_period_id matches with a renewal_period_id
                 //in the renewals table
 
                 $checkRenewalExist = Renewal::wherePractitioner_idAndRenewal_period_id($practitioner->id, $renewal_period_id)->first();
-                if ($checkRenewalExist) {
+                if ($checkRenewalExist != null) {
                     $checkRenewalExist->update([
                         'cdpoints' => 1,
                     ]);
+                    $update_cpd = $checkRenewalExist->payments->where('renewal_period_id', $renewal_period_id)->first();
+                    $update_cpd->update([
+                        'pop' => $path
+                    ]);
+                    return back()->with('message', 'Cd Points added successfully');
                 }
-                return back()->with('message', 'Cd Points added successfully');
+
             } else {
                 return back()->with('message', 'Cd Points do not match the required CPD Points');
 
@@ -1211,63 +1268,80 @@ class RenewalController extends Controller
     public function auto_renew_store(Practitioner $practitioner)
     {
 
-            if ($practitioner != null) {
+        if ($practitioner != null) {
 
-                    //first update practitioner contents
-                    $practitioner->update([
-                        'registration_officer' => 1,
-                        'member' => 1,
-                        'accountant' => 2,
-                        'registrar' => 1,
-                    ]);
+            //first update practitioner contents
+            $practitioner->update([
+                'registration_officer' => 1,
+                'member' => 1,
+                'accountant' => 2,
+                'registrar' => 1,
+            ]);
 
-                    if(Renewal::where('practitioner_id',$practitioner->id)->where('renewal_period_id',date('Y'))
-                        ->first()){
-                        return back()->with('message','This practitioner has already been renewed for this period.');
-                    }else{
-                        $renewal = $practitioner->addRenewal([
-                            'renewal_period_id' => date('Y'),
-                            'practitioner_id' => $practitioner->id,
-                            'payment_method_id' => 1,
-                            'renewal_category_id' => 1,
-                            'renewal_status_id' => 1,
-                            'placement' => 1,
-                            'cdpoints' => 1,
-                            'certificate' => 2,
-                            'balance' => 0,
-                            'certificate_request' => 1,
-                            'currency' => 0,
-                            'payment_type_id' => 1,
+            if ($check = Renewal::where('practitioner_id', $practitioner->id)->where('renewal_period_id', date('Y'))
+                ->first()) {
+                $check->update([
+                    'renewal_period_id' => date('Y'),
+                    'practitioner_id' => $practitioner->id,
+                    'payment_method_id' => 1,
+                    'renewal_category_id' => 1,
+                    'renewal_status_id' => 1,
+                    'placement' => 1,
+                    'cdpoints' => 1,
+                    'certificate' => 2,
+                    'balance' => 0,
+                    'certificate_request' => 1,
+                    'currency' => 0,
+                    'payment_type_id' => 1,
+                ]);
+                return back()->with('message', 'Practitioner has been successfully renewed');
+            } else {
+                $renewal = $practitioner->addRenewal([
+                    'renewal_period_id' => date('Y'),
+                    'practitioner_id' => $practitioner->id,
+                    'payment_method_id' => 1,
+                    'renewal_category_id' => 1,
+                    'renewal_status_id' => 1,
+                    'placement' => 1,
+                    'cdpoints' => 1,
+                    'certificate' => 2,
+                    'balance' => 0,
+                    'certificate_request' => 1,
+                    'currency' => 0,
+                    'payment_type_id' => 1,
 
-                        ]);
-                        $renewal->addPayments([
-                            'renewal_period_id' => 2021,
-                            'practitioner_id' => $practitioner->id,
-                            'payment_date' => now(),
-                            'month' => date('m'),
-                            'day' => date('d'),
-                            'payment_channel_id' => 1,
-                            'amount_invoiced' =>0,
-                            'amount_paid' => 0,
-                            'payment_item_id' => 33,
-                            'payment_item_category_id' => 1,
-                            'balance' => 0,
-                        ]);
-                        return back()->with('message','Practitioner has been successfully renewed');
-                    }
+                ]);
+                $renewal->addPayments([
+                    'renewal_period_id' => date('Y'),
+                    'practitioner_id' => $practitioner->id,
+                    'payment_date' => now(),
+                    'month' => date('m'),
+                    'day' => date('d'),
+                    'payment_channel_id' => 1,
+                    'amount_invoiced' => 0,
+                    'amount_paid' => 0,
+                    'payment_item_id' => 33,
+                    'payment_item_category_id' => 1,
+                    'balance' => 0,
+                ]);
+                return back()->with('message', 'Practitioner has been successfully renewed');
+            }
 
-                }
+        }
     }
 
-    public function edit_certificate(Renewal $renewal){
-        return view('admin.practitioner_payments.edit_certificate',compact('renewal'));
+    public function edit_certificate(Renewal $renewal)
+    {
+        return view('admin.practitioner_payments.edit_certificate', compact('renewal'));
     }
-    public function update_certificate(Renewal $renewal){
+
+    public function update_certificate(Renewal $renewal)
+    {
         $renewal->update([
-            'certificate_number'=>request('certificate_number')
+            'certificate_number' => request('certificate_number')
         ]);
 
-        return redirect('/admin/practitioners/'.$renewal->practitioner->id)->with('message','Certificate number updated');
+        return redirect('/admin/practitioners/' . $renewal->practitioner->id)->with('message', 'Certificate number updated');
     }
 
 

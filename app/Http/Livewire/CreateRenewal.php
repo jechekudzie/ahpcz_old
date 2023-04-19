@@ -79,16 +79,13 @@ class CreateRenewal extends Component
     //save payment
     public function make_payment()
     {
+
         $data = $this->validate([
             'amount_invoiced' => 'required',
             'amount_paid' => 'required',
-            'receipt_number' => ['required', 'digits_between:4,8', 'numeric', 'unique:payments'],
+            'receipt_number' => 'nullable',
             'payment_date' => 'required',
             'payment_channel_id' => 'required',
-            'pop' => 'nullable',
-
-            'points' => 'required',
-            'file' => 'nullable',
 
             'dob' => 'required',
             'employment_status_id' => 'required',
@@ -100,19 +97,25 @@ class CreateRenewal extends Component
             'employment_status_id.required' => 'Employment status is required',
             'employment_location_id.required' => 'Country of residence is required',
             'certificate_request.required' => 'Please specify if you need a certificate or note.',
-            'points.required' => 'Points are required',
             'amount_paid.required' => 'Amount required is required',
             'receipt_number.required' => 'Must contain only numbers and a length between 4 and 8',
             'payment_date.required' => 'Payment date is required',
             'payment_channel_id.required' => 'Payment channel is required',
         ]);
 
-        $this->file_name = $this->path->store('cpdpoints');
+        //$this->file_name = $this->path->store('cpdpoints');
 
-        $data['temp'] = $this->file_name;
+        //update practitioner DOB
+        $this->practitioner->update([
+            'dob' => $this->dob,
+            'employment_status_id' => $this->employment_status_id,
+            'employment_location_id' => $this->employment_location_id,
+        ]);
+
+        //$data['temp'] = $this->file_name;
         $data['period'] = $this->period;
         $data['renewal_category_id'] = $this->renewal_category_id;
-        $data['cpd_criteria'] = $this->cpd_criteria;
+        //$data['cpd_criteria'] = $this->cpd_criteria;
         $data['renewal_criteria_id'] = $this->renewal_criteria['id'];
         $data['practitioner_id'] = $this->practitioner->id;
         $data['rate'] = $this->rate;
@@ -125,8 +128,8 @@ class CreateRenewal extends Component
                 $paynow = new Paynow
                 (
                 //usd account
-                '11778',
-                '02f69090-68e9-427b-9838-966385aa0541',
+                    '13181',
+                    '02f69090-68e9-427b-9838-966385aa0541',
                     /*'5865',
                     '23962222-9610-4f7c-bbd5-7e12f19cdfc6',*/
                     'http://database.ahpcz.co.zw/check_payment/' . $this->practitioner->id,
@@ -139,8 +142,8 @@ class CreateRenewal extends Component
                 $paynow = new Paynow
                 (
                 //local account
-                    '11777',
-                    '739d23ae-f8c5-45e0-ac0a-a481f615c813',
+                    '13180',
+                    '9353d79f-5675-4797-89d8-aaa0eb440c3c',
                     /*'5865',
                     '23962222-9610-4f7c-bbd5-7e12f19cdfc6',*/
                     'http://database.ahpcz.co.zw/check_payment/' . $this->practitioner->id,
@@ -167,13 +170,11 @@ class CreateRenewal extends Component
                 $data['poll_url'] = $pollUrl;
                 session()->put('payment', $data);
                 Redirect::away($payment_link);
-            }
-            else {
+            } else {
                 $status = 0;
                 return redirect('/dashboard_manager/' . $this->practitioner->id);
             }
-        }
-        else {
+        } else {
             //first step check to see if the amount invoice was full paid or there is a balance
             $this->renewal_balance = $this->amount_invoiced - $this->amount_paid;
             $this->renewals['renewal_period_id'] = $this->period;
@@ -185,27 +186,11 @@ class CreateRenewal extends Component
             $this->renewals['payment_type_id'] = 1; //a renewal payment type
             $this->renewals['certificate_request'] = $this->certificate_request;
             $this->renewals['placement'] = 1;
+
             if ($this->renewal_balance > 0) {
                 $this->renewals['renewal_status_id'] = 3;
             } else {
                 $this->renewals['renewal_status_id'] = 1;
-            }
-
-            if ($this->points >= $this->cpd_criteria) {
-                $this->renewals['cdpoints'] = 1;
-                $this->cpd_points['practitioner_id'] = $this->practitioner->id;
-                $this->cpd_points['renewal_period_id'] = $this->period;
-                $this->cpd_points['points'] = $this->points;
-
-                $file = Storage::path($this->file_name);
-                $storageName = basename($file);
-                File::move($file,public_path('cpdpoints/'.$storageName));
-                $path = 'cpdpoints/'.$storageName;
-
-                $this->cpd_points['path'] = $path;
-                $this->practitioner->addCdPoints($this->cpd_points);
-            } else {
-                $this->renewals['cdpoints'] = 0;
             }
 
             //now check if the practitioner already for this current year
@@ -238,7 +223,7 @@ class CreateRenewal extends Component
                 $this->payments['payment_item_category_id'] = 1;
                 $this->payments['payment_date'] = $this->payment_date;
                 $this->payments['payment_item_id'] = 33;
-                $this->payments['pop'] = $path;
+
                 $this->add_renewal_payment = $this->add_renewal->addPayments($this->payments);
 
                 //update previous balances to 0
@@ -264,8 +249,33 @@ class CreateRenewal extends Component
                     }
 
                 }
-                session()->flash('message', 'Renewal payment was successful!.');
-                return redirect('/admin/practitioners/' . $this->practitioner->id);
+
+                $cpd = $this->practitioner->cdPoints->where('renewal_period_id', $this->renewals['renewal_period_id'])
+                    ->first();
+
+                if ($cpd != null) {
+                    $this->add_renewal->update([
+                        'cdpoints' => 1
+                    ]);
+
+                    $this->add_renewal_payment->update([
+                        'pop' => $cpd->path
+                    ]);
+                }
+
+                if ($this->add_renewal_payment->payment_channel_id == 1
+                    || $this->add_renewal_payment->payment_channel_id == 2
+                    || $this->add_renewal_payment->payment_channel_id == 3
+                    || $this->add_renewal_payment->payment_channel_id == 4
+                ) {
+
+                    return redirect('/admin/practitioners/' . $this->add_renewal_payment->id . '/get_pop');
+
+                } else {
+                    session()->flash('message', 'Renewal payment was successful!.');
+                    return redirect('/admin/practitioners/' . $this->practitioner->id);
+                }
+
 
             }
         }
@@ -291,17 +301,6 @@ class CreateRenewal extends Component
 
         if ($this->step == 1) {
             $this->validate([
-                'points' => 'required',
-                'file' => 'nullable',
-            ],
-                [
-                    'points.required' => 'Points are required',
-                ]);
-
-        }
-
-        if ($this->step == 2) {
-            $this->validate([
                 'amount_paid' => 'required',
                 'receipt_number' => ['required', 'digits_between:4,8', 'numeric', 'unique:payments'],
                 'payment_date' => 'required',
@@ -317,7 +316,7 @@ class CreateRenewal extends Component
 
         }
         $this->step++;
-    //dd($this->cpd_criteria);
+        //dd($this->cpd_criteria);
 
     }
 
@@ -331,8 +330,9 @@ class CreateRenewal extends Component
 
     public function save_cpd_file()
     {
-        if($this->file !=null){
-            $this->path = $this->file->store('cpdpoints','public');
+        if ($this->file != null) {
+
+            $this->path = $this->file->store('cpdpoints', 'public');
         }
     }
 
@@ -380,14 +380,15 @@ class CreateRenewal extends Component
     {
         $this->cpd_criteria = CpdCriteria::where('profession_id', $this->profession->id)
             ->where('employment_status_id', $this->employment_status_id)->first();
-        if ($this->cpd_criteria == null){
+        if ($this->cpd_criteria == null) {
             $this->cpd_criteria = 0;
-        }else{
+        } else {
             $this->cpd_criteria = $this->cpd_criteria->points;
         }
     }
 
-    public function get_renewal_criteria(){
+    public function get_renewal_criteria()
+    {
         $this->renewal_criteria = RenewalCriteria::where('renewal_category_id', $this->renewal_category_id)
             ->where('employment_status_id', $this->employment_status_id)
             ->where('employment_location_id', $this->employment_location_id)
@@ -402,20 +403,23 @@ class CreateRenewal extends Component
 
     }
 
-   /* public function calculate_renewal_fee()
-    {
-        $this->renewal_fee = $this->profession_tire_fee * $this->renewal_criteria_percentage;
-        if($this->currency == 0){
-            $this->amount_invoiced = $this->renewal_fee + $this->balance;
-        }
-        if($this->currency == 1){
-            $this->amount_invoiced = $this->renewal_fee + $this->balance;
-            $this->amount_invoiced = round($this->amount_invoiced / $this->rate,3);
-        }
+    /* public function calculate_renewal_fee()
+     {
+         $this->renewal_fee = $this->profession_tire_fee * $this->renewal_criteria_percentage;
+         if($this->currency == 0){
+             $this->amount_invoiced = $this->renewal_fee + $this->balance;
+         }
+         if($this->currency == 1){
+             $this->amount_invoiced = $this->renewal_fee + $this->balance;
+             $this->amount_invoiced = round($this->amount_invoiced / $this->rate,3);
+         }
 
-    }*/
+     }*/
     public function calculate_renewal_fee()
     {
+        /*if(Session::get('restoration') == null){
+            dd('nothing in session');
+        }*/
         $this->renewal_fee = $this->profession_tire_fee * 1.145 * $this->renewal_criteria_percentage;//1
         $this->restoration_penalty_charge = Session::get('restoration')['restoration_penalty_charge'] + 1;
         $this->balance = Session::get('restoration')['balance'];
@@ -443,7 +447,6 @@ class CreateRenewal extends Component
         $this->rate = Rate::find(1)->rate;
         $this->get_renewal_category();
         $this->get_renewal_criteria();
-        $this->get_cpd_criteria();
         $this->get_percentage_and_balance();
         $this->calculate_renewal_fee();
         //initializing step
@@ -458,7 +461,6 @@ class CreateRenewal extends Component
 
         $this->get_renewal_category();
         $this->get_renewal_criteria();
-        $this->get_cpd_criteria();
         $this->get_percentage_and_balance();
         $this->calculate_renewal_fee();
     }

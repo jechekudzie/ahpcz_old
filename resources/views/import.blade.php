@@ -5,5 +5,6 @@
         <input type="file" name="file" class="form-control-file" id="exampleFormControlFile1">
     </div>
 
+    {{date('Y-m-d h:m:s')}}
     <button type="submit">Submit</button>
 </form>

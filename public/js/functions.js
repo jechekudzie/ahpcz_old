@@ -2,7 +2,6 @@ $(document).ready(function () {
     $("#professions").change(function () {
         var profession_id = $(this).val();
         //var dataString = id;
-
         $.ajax
         ({
             type: "GET",
@@ -14,7 +13,6 @@ $(document).ready(function () {
             }
         });
     });
-
 });
 
 $(document).ready(function () {

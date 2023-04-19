@@ -17,46 +17,46 @@ function getDifference($created_at, $now)
 
 function countTasks()
 {
-    if(\Illuminate\Support\Facades\Auth::check()){
-    $user_role = auth()->user()->role_id;
-    $user = auth()->user();
-    $count = 0;
-    if ($user_role == 4) {
-        $count = Practitioner::where('registration_officer',0)->count();
-    }
-
-    if ($user_role == 6) {
-        $profession_approvers = ProfessionApprover::where('user_id',$user->id)->get();
-        foreach ($profession_approvers as $profession_approver){
-            $count = Practitioner::where('registration_officer',1)
-                ->where('member',0)
-                ->where('profession_id',$profession_approver->profession_id)
-                ->count();
+    if (\Illuminate\Support\Facades\Auth::check()) {
+        $user_role = auth()->user()->role_id;
+        $user = auth()->user();
+        $count = 0;
+        if ($user_role == 4) {
+            $count = Practitioner::where('registration_officer', 0)->count();
         }
-    }
 
-    if ($user_role == 7) {
-        $count = Practitioner::where('registration_officer',1)
-            ->where('member',1)
-            ->where('registrar',0)
-            ->count();
+        if ($user_role == 6) {
+            $profession_approvers = ProfessionApprover::where('user_id', $user->id)->get();
+            foreach ($profession_approvers as $profession_approver) {
+                $count = Practitioner::where('registration_officer', 1)
+                    ->where('member', 0)
+                    ->where('profession_id', $profession_approver->profession_id)
+                    ->count();
+            }
+        }
 
-    }
+        if ($user_role == 7) {
+            $count = Practitioner::where('registration_officer', 1)
+                ->where('member', 1)
+                ->where('registrar', 0)
+                ->count();
 
-    if ($user_role == 3) {
+        }
 
-        $count = 0;
-    }
-    if ($user_role == 2) {
+        if ($user_role == 3) {
 
-        $count = 0;
-    }
-    if ($user_role == 1) {
+            $count = 0;
+        }
+        if ($user_role == 2) {
 
-        $count = 0;
-    }
+            $count = 0;
+        }
+        if ($user_role == 1) {
 
-    echo $count;
+            $count = 0;
+        }
+
+        echo $count;
     }
 }
 
@@ -126,7 +126,8 @@ function countPendingItems()
     <!-- Dashboard 1 Page CSS -->
     <link href="{{asset('dist/css/pages/dashboard1.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/style-horizontal.min.css')}}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     @yield('plugins-css')
 
@@ -217,9 +218,12 @@ function countPendingItems()
                                                                 class="fa fa-link"></i>
                                                         </div>
                                                         <div class="mail-contnet">
-                                                            <h5> @if($notification->data['sender'])
+                                                            <h5>
+                                                                @if($notification->data['sender'])
                                                                     {{$notification->data['sender']['name']}}
-                                                            @endif</h5> <span
+                                                                @endif
+                                                            </h5>
+                                                            <span
                                                                 class="mail-desc">
                                                          @if($notification->data['comment'] != null){{$notification->data['comment']}}@else{{'No comment on this notification'}}@endif
                                                      </span>

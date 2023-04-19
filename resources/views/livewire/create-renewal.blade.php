@@ -169,53 +169,8 @@
                             <hr/>
                         @endif
 
+
                         @if($step == 1)
-
-                            <div class="card ">
-                                <div class="card-header card-primary">
-                                    CPD Points
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Required CPD Points
-                                        : {{$cpd_criteria}} </h5>
-
-                                    <p class="card-text" style="color: yellowgreen">Please note that, you are required
-                                        to submit the copy
-                                        of
-                                        CPD book, if you are foreign you may submit your current registration
-                                        from
-                                        your country of residents.</p>
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-6 col-lg-6">
-                                            <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text">CPD Points </span>
-                                                </div>
-                                                <input wire:model="points" type="text" class="form-control"
-                                                       aria-label="CPD Points">
-                                            </div>
-                                            @if ($errors->any())<span
-                                                style="color: red;">@error('points'){{$message}}@enderror</span>@endif
-                                        </div>
-                                        <div class="col-sm-12 col-md-6 col-lg-6">
-                                            <div class="input-group mb-3">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="fa fa-book-open"></i> CPD Book </span>
-                                                </div>
-                                                <input wire:model="path" type="file" required class="form-control"
-                                                       aria-label="CPD Points">
-                                            </div>
-                                            @if ($errors->any())<span
-                                                style="color: red;">@error('file'){{$message}}@enderror</span>@endif
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr/>
-                        @endif
-
-                        @if($step == 2)
 
                             <div class="card ">
                                 <div class="card-header card-primary">
@@ -362,6 +317,8 @@
 
                                         </div>
 
+
+
                                     </div>
                                 </div>
                             </div>
@@ -373,7 +330,7 @@
                                 <a href="#" wire:click.prevent="decrease_step" class="btn btn-primary btn-block"
                                    style="color: white;">Previous</a>
                             </div>
-                            @if($step == 2)
+                            @if($step == 1)
                                 <div class="col-sm-12 col-md-6 col-lg-6">
                                     <button class="btn btn-success btn-block">Submit</button>
                                 </div>

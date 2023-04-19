@@ -9,7 +9,6 @@ class Practitioner extends Model
     //
     protected $guarded = [];
 
-
     public function currentRenewal()
     {
         $year = date('Y');
@@ -67,7 +66,6 @@ class Practitioner extends Model
 
     public function documents()
     {
-
         return $this->hasMany(Document::class, 'document_owner');
     }
 
@@ -238,7 +236,6 @@ class Practitioner extends Model
         $this->applicationComments()->create($comments);
     }
 
-
     /** Live wire functions */
     public static function search($search)
     {
@@ -285,7 +282,6 @@ class Practitioner extends Model
                     ->orWhere('cdpoints', '=', 0)
                     ->orWhere('placement', '=', 0);
             });
-
 
         }
 

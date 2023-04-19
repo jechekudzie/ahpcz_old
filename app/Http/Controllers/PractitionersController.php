@@ -230,6 +230,7 @@ class PractitionersController extends Controller
 
     public function show(Practitioner $practitioner)
     {
+
         $portal_activate = 0;
         $portal_de_activate = 1;
         $registration_fee = 0;
@@ -270,13 +271,21 @@ class PractitionersController extends Controller
             $applications = $practitioner->applications;
         }
 
+        //$identifications = $practitioner->practitionerRequirements;
+        $practitioner_docs = Document::where('document_owner',$practitioner->id)->get();
+
+
+        //dd($identifications);
+
         /*foreach ($applications as $application){
            dd( $application->payment_item->name);
         }*/
 
+        //dd($practitioner->documents);
+
         return view('admin.practitioners.show', compact(
             'practitioner', 'educations', 'identifications', 'professionals',
-            'internship', 'registration_fee', 'registration_fee',
+            'internship', 'registration_fee', 'registration_fee','practitioner_docs',
             'current_status', 'portal_activate', 'portal_de_activate', 'applications'));
     }
 

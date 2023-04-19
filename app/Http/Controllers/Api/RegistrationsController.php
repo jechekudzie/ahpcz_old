@@ -114,7 +114,7 @@ class RegistrationsController extends Controller
 
             return response()->json([
                 'response_status' => 0,
-                'message' => 'Practitioner with the same ID/Passport number already exist in our system. If you want to add an additional application, use our portal at localhost:8000/login',
+                'message' => 'Practitioner with the same ID/Passport number already exist in our system. If you want to add an additional application, use our portal at database.ahpcz.co.zw/login',
 
             ]);
         } else {

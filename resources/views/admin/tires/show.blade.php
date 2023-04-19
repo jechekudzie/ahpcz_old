@@ -77,7 +77,9 @@
                                                        value="{{$profession_tire->id}}"
                                                        id="defaultCheck1">
                                                 <label class="form-check-label" for="defaultCheck1">
-                                                    {{$profession_tire->profession->name}}
+                                                    @if($profession_tire->profession)
+                                                        {{$profession_tire->profession->name}}
+                                                    @endif
                                                 </label>
                                             </div>
                                         @endforeach

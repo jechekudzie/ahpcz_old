@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Str;
+
 //Use Barryvdh\DomPDF\PDF;
 use PDF;
 
@@ -21,18 +22,20 @@ class CertificateController extends Controller
 
         $practitioner = $renewal->practitioner;
 
-        if($practitioner->currentRenewal == null){
-            redirect('/admin/practitioners/'.$practitioner->id)->with('message','This practitioner is not fully compliant, check if the renewal status is in order.');
+        if ($practitioner->currentRenewal == null) {
+            redirect('/admin/practitioners/' . $practitioner->id)->with('message', 'This practitioner is not fully compliant, check if the renewal status is in order.');
         }
 
         $register_category = '';
-        if($practitioner->practitioner_payment_information){
-            if($practitioner->practitioner_payment_information->register_category){
-               $register_category = $practitioner->practitioner_payment_information->register_category->description;
-            }else{
+        if ($practitioner->practitioner_payment_information) {
+            if ($practitioner->practitioner_payment_information->register_category) {
+                $register_category = $practitioner->practitioner_payment_information->register_category->description;
+            } else {
                 $register_category = 'Nill';
             }
         }
+        $name = $practitioner->first_name . $practitioner->last_name .'_'. $renewal->renewal_period_id.'.pdf';
+
         $qr_code = QrCode::size(150)->generate('http://ahpcz.co.zw/verify_certificate/' . $practitioner->id);
         $html = '<img src="data:image/svg+xml;base64,' . base64_encode($qr_code) . '"  width="100" height="100" />';
         $pdf = App::make('dompdf.wrapper');
@@ -42,17 +45,18 @@ class CertificateController extends Controller
             ->with('register_category', $register_category)
             ->with('renewal', $renewal))
             ->setPaper('a4', 'portrait');
-        return $pdf->stream();
+
+        return $pdf->stream($name);
     }
 
     public function manual_certificate(Renewal $renewal)
     {
         $practitioner = $renewal->practitioner;
         $register_category = '';
-        if($practitioner->practitioner_payment_information){
-            if($practitioner->practitioner_payment_information->register_category){
-               $register_category = $practitioner->practitioner_payment_information->register_category->description;
-            }else{
+        if ($practitioner->practitioner_payment_information) {
+            if ($practitioner->practitioner_payment_information->register_category) {
+                $register_category = $practitioner->practitioner_payment_information->register_category->description;
+            } else {
                 $register_category = 'Nill';
             }
         }
@@ -70,26 +74,22 @@ class CertificateController extends Controller
 
     public function registration_certificate(Practitioner $practitioner)
     {
-
         $register_category = '';
-        if($practitioner->practitioner_payment_information){
-            if($practitioner->practitioner_payment_information->register_category){
-               $register_category = $practitioner->practitioner_payment_information->register_category->description;
-               $register_name = $practitioner->practitioner_payment_information->register_category->name;
+        if ($practitioner->practitioner_payment_information) {
+            if ($practitioner->practitioner_payment_information->register_category) {
+                $register_category = $practitioner->practitioner_payment_information->register_category->description;
+                $register_name = $practitioner->practitioner_payment_information->register_category->name;
                 $register_prefix = $practitioner->practitioner_payment_information->register_category->registration;
-                //$plural_profession = Str::plural($practitioner->profession->name);
-
-            }else{
+            } else {
                 $register_category = 'Nill';
                 $register_name = 'Nill';
                 $register_prefix = 'Nill';
-                //$plural_profession = '';
             }
         }
         $qr_code = QrCode::size(150)->generate('http://ahpcz.co.zw/verify_certificate/' . $practitioner->id);
         $html = '<img src="data:image/svg+xml;base64,' . base64_encode($qr_code) . '"  width="100" height="100" />';
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(view('registration_certificate')
+        $pdf->loadHTML(view('registration')
             ->with('html', $html)
             ->with('practitioner', $practitioner)
             ->with('register_category', $register_category)
@@ -103,17 +103,17 @@ class CertificateController extends Controller
     {
         $practitioner = $renewal->practitioner;
         $register_category = '';
-        if($practitioner->practitioner_payment_information){
-            if($practitioner->practitioner_payment_information->register_category){
-               $register_category = $practitioner->practitioner_payment_information->register_category->description;
-            }else{
+        if ($practitioner->practitioner_payment_information) {
+            if ($practitioner->practitioner_payment_information->register_category) {
+                $register_category = $practitioner->practitioner_payment_information->register_category->description;
+            } else {
                 $register_category = 'Nill';
             }
         }
         $qr_code = QrCode::size(150)->generate('http://ahpcz.co.zw/verify_certificate/' . $practitioner->id);
         $html = '<img src="data:image/svg+xml;base64,' . base64_encode($qr_code) . '"  width="50" height="50" />';
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(view('id_card')
+        $pdf->loadHTML(view('idcard')
             ->with('html', $html)
             ->with('practitioner', $practitioner)
             ->with('register_category', $register_category)
@@ -126,21 +126,21 @@ class CertificateController extends Controller
     {
         $qualification = '';
         $university = '';
-       if($practitioner->practitionerQualifications){
+        if ($practitioner->practitionerQualifications) {
             $qualification_details = $practitioner->practitionerQualifications->first();
             $qualification = $qualification_details->professionalQualification->name;
 
-            if($qualification_details->qualification_category_id == 1){
+            if ($qualification_details->qualification_category_id == 1) {
 
                 $university = $qualification_details->accreditedInstitution->name;
 
             }
         }
         $register_category = '';
-        if($practitioner->practitioner_payment_information){
-            if($practitioner->practitioner_payment_information->register_category){
-               $register_category = $practitioner->practitioner_payment_information->register_category->description;
-            }else{
+        if ($practitioner->practitioner_payment_information) {
+            if ($practitioner->practitioner_payment_information->register_category) {
+                $register_category = $practitioner->practitioner_payment_information->register_category->description;
+            } else {
                 $register_category = 'Nill';
             }
         }
@@ -157,19 +157,19 @@ class CertificateController extends Controller
         return $pdf->stream();
     }
 
-   /* public function certificate(Renewal $renewal)
-    {
-        $practitioner = $renewal->practitioner;
-        $qr_code = QrCode::size(150)->generate('http://portal.ahpcz.co.zw/verify_certificate/' . $practitioner->id);
-        $html = '<img src="data:image/svg+xml;base64,' . base64_encode($qr_code) . '"  width="100" height="100" />';
-        $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(view('certificate')
-            ->with('html', $html)
-            ->with('practitioner', $practitioner)
-            ->with('renewal', $renewal))
-            ->setPaper('a4', 'portrait');
-        return $pdf->stream();
-    }*/
+    /* public function certificate(Renewal $renewal)
+     {
+         $practitioner = $renewal->practitioner;
+         $qr_code = QrCode::size(150)->generate('http://portal.ahpcz.co.zw/verify_certificate/' . $practitioner->id);
+         $html = '<img src="data:image/svg+xml;base64,' . base64_encode($qr_code) . '"  width="100" height="100" />';
+         $pdf = App::make('dompdf.wrapper');
+         $pdf->loadHTML(view('certificate')
+             ->with('html', $html)
+             ->with('practitioner', $practitioner)
+             ->with('renewal', $renewal))
+             ->setPaper('a4', 'portrait');
+         return $pdf->stream();
+     }*/
 
 
 }

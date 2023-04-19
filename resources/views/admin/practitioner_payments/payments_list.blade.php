@@ -131,15 +131,21 @@
                                                                     @if($payment->payment_channel_id == 5)
                                                                         {{'reference: '.$payment->proof}}
                                                                     @else
-                                                                        <a href="{{asset($payment->proof)}}"
-                                                                           target="_blank">POP</a>
+                                                                        @if($payment->proof !=null)
+                                                                            <a href="{{asset($payment->proof)}}"
+                                                                               target="_blank">POP</a>
+                                                                        @else
+                                                                            <a href="{{url('admin/practitioners/'
+                                                                            .$payment->id.'/get_pop')}}"
+                                                                               target="_blank">ADD POP</a>
+                                                                        @endif
                                                                     @endif
                                                                 </td>
                                                                 <td>
                                                                     <a href="{{asset($payment->pop)}}"
                                                                        target="_blank">CPDs</a>
                                                                 </td>
-                                                                </td>
+
                                                                 <td>{{date("d M Y", strtotime( $payment->payment_date))}}</td>
                                                             </tr>
                                                         @endforeach

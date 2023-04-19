@@ -5,7 +5,7 @@
 Go to the account using the link below, Payments tab, on the period listed, click on payments. Look for the
 registration payment and click verify if all is in order.
 
-@component('mail::button', ['url' => url('http://localhost:8000/admin/practitioners/'.$practitioner->id)])
+@component('mail::button', ['url' => url('http://database.ahpcz.co.zw/admin/practitioners/'.$practitioner->id)])
     View payment and Approved
 @endcomponent
 
